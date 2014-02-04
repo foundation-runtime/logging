@@ -68,7 +68,7 @@ abstract class AbstractRoller implements FileRollable {
     }
   }
 
-  private final CABFileRollingAppender appender;
+  private final FoundationFileRollingAppender appender;
 
   private final AppenderRollingProperties properties;
 
@@ -76,7 +76,7 @@ abstract class AbstractRoller implements FileRollable {
 
   private final List fileRollEventListeners;
 
-  AbstractRoller(final CABFileRollingAppender rollingAppender,
+  AbstractRoller(final FoundationFileRollingAppender rollingAppender,
       final AppenderRollingProperties properties) {
     super();
     this.fileRollEventListeners = Collections.synchronizedList(new ArrayList());
@@ -124,7 +124,7 @@ abstract class AbstractRoller implements FileRollable {
     }
   }
 
-  public final CABFileRollingAppender getAppender() {
+  public final FoundationFileRollingAppender getAppender() {
     return this.appender;
   }
 

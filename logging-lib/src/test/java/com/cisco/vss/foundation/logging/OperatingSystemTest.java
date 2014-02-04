@@ -16,20 +16,20 @@ public class OperatingSystemTest {
 	@Test
 	public void opTest(){
 		OperatingSystem operatingSystem = OperatingSystem.getOperatingSystem();
-//		CABLogger.init();
+//		FoundationLogger.init();
 //		assertTrue(operatingSystem.equals(OperatingSystem.Windows) || operatingSystem.equals(OperatingSystem.Linux));
 		
 		System.setProperty("os.name", "hp-ux");
 		operatingSystem = OperatingSystem.getOperatingSystem();
 		assertEquals(OperatingSystem.HPUX, operatingSystem);
 		assertEquals(OperatingSystem.HPUX.toString(), operatingSystem.toString());
-//		CABLogger.init();
+//		FoundationLogger.init();
 		
 		
 		System.setProperty("os.name", "linux");
 		operatingSystem = OperatingSystem.getOperatingSystem();
 		assertEquals(OperatingSystem.Linux, operatingSystem);
-//		CABLogger.init();
+//		FoundationLogger.init();
 	}
 
 }

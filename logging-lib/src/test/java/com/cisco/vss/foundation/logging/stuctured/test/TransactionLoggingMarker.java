@@ -6,7 +6,7 @@ import com.cisco.vss.foundation.logging.stuctured.*;
 @DefaultFormat(TransactionLoggingMarker.DEFAULT_FORMAT)
 @ConditionalFormats({ @ConditionalFormat(format = "start message format", criteria = { @FieldCriterion(name = "transactionState", value = "START") }), @ConditionalFormat(format = "end message format", criteria = { @FieldCriterion(name = "transactionState", value = "END") }),
 		@ConditionalFormat(format = "error message format", criteria = { @FieldCriterion(name = "transactionState", value = "ERROR") }) })
-public class TransactionLoggingMarker extends AbstractCabLoggingMarker {
+public class TransactionLoggingMarker extends AbstractFoundationLoggingMarker {
 
 	public enum TransactionState {
 

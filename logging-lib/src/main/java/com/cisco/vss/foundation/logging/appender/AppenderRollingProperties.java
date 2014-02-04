@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.zip.Deflater;
 
 /**
- * Configuration properties used by the {@link CABFileRollingAppender}.
+ * Configuration properties used by the {@link FoundationFileRollingAppender}.
  * 
  * @author <a href="mailto:simon_park_mail AT yahoo DOT co DOT uk">Simon
  *         Park</a>

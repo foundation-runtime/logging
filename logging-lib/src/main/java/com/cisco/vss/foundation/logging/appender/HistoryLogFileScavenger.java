@@ -27,7 +27,7 @@ public class HistoryLogFileScavenger implements LogFileScavenger {
 	 */
 	protected static final double SECONDS_RANGE_WAIT = 30;
 	private Timer timer; 
-	private CABFileRollingAppender appender = null;
+	private FoundationFileRollingAppender appender = null;
 	private File file = null;
 	private AppenderRollingProperties properties = null;
 	
@@ -153,14 +153,14 @@ public class HistoryLogFileScavenger implements LogFileScavenger {
 	}
 
 	@Override
-	public final void init(final CABFileRollingAppender appender,
+	public final void init(final FoundationFileRollingAppender appender,
 			final AppenderRollingProperties properties) {
 		this.appender = appender;
 		this.properties = properties;
 	
 	}
 
-	final CABFileRollingAppender getAppender() {
+	final FoundationFileRollingAppender getAppender() {
 		return this.appender;
 	}
 

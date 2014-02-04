@@ -30,7 +30,7 @@ import java.io.File;
  */
 final class FileSizeRoller extends AbstractRoller implements FileRollable {
 
-  FileSizeRoller(final CABFileRollingAppender rollingAppender,
+  FileSizeRoller(final FoundationFileRollingAppender rollingAppender,
       final AppenderRollingProperties appenderRollingProperties) {
     super(rollingAppender, appenderRollingProperties);
     this.initActualBytesWrittenCount();

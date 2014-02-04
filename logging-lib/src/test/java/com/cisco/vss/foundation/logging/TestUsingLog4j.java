@@ -5,7 +5,7 @@ package com.cisco.vss.foundation.logging;
 
 import com.cisco.vss.foundation.application.exception.ApplicationException;
 import com.cisco.vss.foundation.application.exception.ErrorCode;
-import com.cisco.vss.foundation.logging.appender.CABFileRollingAppender;
+import com.cisco.vss.foundation.logging.appender.FoundationFileRollingAppender;
 import org.apache.log4j.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -23,7 +23,7 @@ public class TestUsingLog4j {
 
 	@BeforeClass
 	public static void init() {
-		// CABLogger.init();
+		// FoundationLogger.init();
 	}
 
 	@Test
@@ -66,31 +66,31 @@ public class TestUsingLog4j {
 
 	@Test
 	@Ignore
-	public void testCABHierarchyEventListener() {
-		CABHierarchyEventListener eventListener = new CABHierarchyEventListener();
-		CABFileRollingAppender appender = (CABFileRollingAppender) LogManager.getRootLogger().getAppender("rollingfile");
+	public void testFoundationHierarchyEventListener() {
+		FoundationHierarchyEventListener eventListener = new FoundationHierarchyEventListener();
+		FoundationFileRollingAppender appender = (FoundationFileRollingAppender) LogManager.getRootLogger().getAppender("rollingfile");
 		appender.setMaxRollFileCount(0);
 		appender.setLayout(new PatternLayout());
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
 		appender.setMaxRollFileCount(12);
 		appender.setLayout(new SimpleLayout());
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
-		CABLogger.log4jConfigProps.remove(CABLoggerConstants.CAB_FILE_ARCHIVE.toString());
+		FoundationLogger.log4jConfigProps.remove(FondationLoggerConstants.Foundation_FILE_ARCHIVE.toString());
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
-		CABLogger.log4jConfigProps.setProperty(CABLoggerConstants.CAB_FILE_ARCHIVE.toString(), "true");
+		FoundationLogger.log4jConfigProps.setProperty(FondationLoggerConstants.Foundation_FILE_ARCHIVE.toString(), "true");
 		System.setProperty("os.name", "windows");
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
 		System.setProperty("os.name", "linux");
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
-		CABLogger.log4jConfigProps.setProperty(CABLoggerConstants.CAB_FILE_ARCHIVE.toString(), "false");
+		FoundationLogger.log4jConfigProps.setProperty(FondationLoggerConstants.Foundation_FILE_ARCHIVE.toString(), "false");
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
 	}
 
 	@Test
-	public void testCABLogger() {
+	public void testFoundationLogger() {
 		LogManager.getRootLogger().setLevel(null);
 		System.setProperty("os.name", "hp-ux");
-		CABLogger.init();
+		FoundationLogger.init();
 	}
 
 	@Test
@@ -122,7 +122,7 @@ public class TestUsingLog4j {
 
 	private void run(String conversionPattern) {
 		FileAppender appender = (FileAppender) Logger.getRootLogger().getAppender("rollingfile");
-		CABLoggingPatternLayout layout = new CABLoggingPatternLayout();
+		FoundationLoggingPatternLayout layout = new FoundationLoggingPatternLayout();
 		layout.setConversionPattern(conversionPattern);
 		appender.setLayout(layout);
 		appender.activateOptions();

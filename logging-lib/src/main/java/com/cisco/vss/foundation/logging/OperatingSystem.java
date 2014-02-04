@@ -3,7 +3,7 @@ package com.cisco.vss.foundation.logging;
 import java.util.Locale;
 
 /**
- * Enumeration of operating systems supported by the CAB Logging Library.
+ * Enumeration of operating systems supported by the Foundation Logging Library.
  * @author Jethro Revill
  */
 enum OperatingSystem {

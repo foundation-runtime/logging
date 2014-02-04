@@ -43,9 +43,9 @@ public class TransactionMarker extends BaseTransactionLoggingMarker {
 	}
 
 	@UserField(suppressNull = true)
-	private CABLoggingEventType eventType;
+	private FoundationLoggingEventType eventType;
 	@UserField
-	private  CABLoggingTransMsgType transMsgType;
+	private FoundationLoggingTransMsgType transMsgType;
 	@UserField
 	private  String sessionId;
 	@UserField
@@ -60,11 +60,11 @@ public class TransactionMarker extends BaseTransactionLoggingMarker {
 	private  String messagePayload;
 
 
-	public TransactionMarker setEventType(CABLoggingEventType eventType) {
+	public TransactionMarker setEventType(FoundationLoggingEventType eventType) {
 		this.eventType = eventType;
 		return this;
 	}
-	public TransactionMarker setTransMsgType(CABLoggingTransMsgType transMsgType) {
+	public TransactionMarker setTransMsgType(FoundationLoggingTransMsgType transMsgType) {
 		this.transMsgType = transMsgType;
 		return this;
 	}
@@ -108,10 +108,10 @@ public class TransactionMarker extends BaseTransactionLoggingMarker {
 	public static String getCondFormat3() {
 		return COND_FORMAT_3;
 	}
-	public CABLoggingEventType getEventType() {
+	public FoundationLoggingEventType getEventType() {
 		return eventType;
 	}
-	public CABLoggingTransMsgType getTransMsgType() {
+	public FoundationLoggingTransMsgType getTransMsgType() {
 		return transMsgType;
 	}
 	public String getSessionId() {

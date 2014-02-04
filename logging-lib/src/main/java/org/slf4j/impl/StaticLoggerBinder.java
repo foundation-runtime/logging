@@ -1,6 +1,6 @@
 package org.slf4j.impl;
 
-import com.cisco.vss.foundation.logging.CabLoggingLoggerFactory;
+import com.cisco.vss.foundation.logging.FoundationLoggingLoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 
@@ -12,7 +12,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
 	   */
 	  private static final StaticLoggerBinder SINGLETON = new StaticLoggerBinder();
 	  
-	  private static final String loggerFactoryClassStr = CabLoggingLoggerFactory.class.getName();
+	  private static final String loggerFactoryClassStr = FoundationLoggingLoggerFactory.class.getName();
 
 	  /**
 	   * The ILoggerFactory instance returned by the {@link #getLoggerFactory}
@@ -30,7 +30,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
 	  }
 
 	  private StaticLoggerBinder() {
-	    loggerFactory = new CabLoggingLoggerFactory();	    
+	    loggerFactory = new FoundationLoggingLoggerFactory();
 	  }
 
 	  public ILoggerFactory getLoggerFactory() {

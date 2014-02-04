@@ -34,7 +34,7 @@ final class TimeBasedRollEnforcer implements Runnable {
    */
   private static final long TIME_OFFSET = 1000L;
 
-  private final CABFileRollingAppender appender;
+  private final FoundationFileRollingAppender appender;
 
   private final AppenderRollingProperties properties;
 
@@ -42,7 +42,7 @@ final class TimeBasedRollEnforcer implements Runnable {
 
   private long nextEnforcedRollTimeMillis = 0L;
 
-  TimeBasedRollEnforcer(final CABFileRollingAppender rollingAppender,
+  TimeBasedRollEnforcer(final FoundationFileRollingAppender rollingAppender,
       final AppenderRollingProperties appenderRollingProperties) {
     super();
     this.appender = rollingAppender;

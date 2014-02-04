@@ -40,6 +40,6 @@ interface LogFileScavenger {
 
   void scavenge();
 
-  void init(CABFileRollingAppender appender,
+  void init(FoundationFileRollingAppender appender,
             AppenderRollingProperties properties);
 }

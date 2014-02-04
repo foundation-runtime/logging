@@ -54,7 +54,7 @@ public class ApplicationStateTest {
 		assertTrue(applicationStateMessage5.hashCode() != 0);
 		assertEquals(applicationStateMessage, applicationStateMessage);
 		
-//		Properties log4jConfigProps = CABLogger.log4jConfigProps;
+//		Properties log4jConfigProps = FoundationLogger.log4jConfigProps;
 //		ApplicationState.logState(null);
 //		try {
 //			log4jConfigProps.put(ApplicationState.APPSTATE_ENABLED, Boolean.TRUE);

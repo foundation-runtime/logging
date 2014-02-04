@@ -58,7 +58,7 @@ final class TimeBasedRoller extends AbstractRoller implements FileRollable {
 
   private TimeSample previousSample;
 
-  TimeBasedRoller(final CABFileRollingAppender rollingAppender,
+  TimeBasedRoller(final FoundationFileRollingAppender rollingAppender,
       final AppenderRollingProperties appenderRollingProperties) {
     super(rollingAppender, appenderRollingProperties);
     TimeBasedRollStrategy rollStrategyEnum = TimeBasedRollStrategy

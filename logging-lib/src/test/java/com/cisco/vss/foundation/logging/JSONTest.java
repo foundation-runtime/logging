@@ -77,7 +77,7 @@ public class JSONTest {
 			} else {
 				EnvUtils.updateEnv("_RPM_SOFTWARE_NAME", COMPONENTS[0]);
 			}
-			CABLoggingCompNamePatternConverter.componentName = CABLoggingCompNamePatternConverter.getComponentName();
+			FoundationLoggingCompNamePatternConverter.componentName = FoundationLoggingCompNamePatternConverter.getComponentName();
 			FlowContextFactory.createFlowContext();
 			LOGGER.info("this is my first message");
 			LOGGER.warn("warning {}. be ware of {}", "two", "the monster");

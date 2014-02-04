@@ -37,7 +37,7 @@ final class LogFileCompressor implements Runnable, FileRollEventListener {
 
   private static final int QUEUE_LIMIT = 64;
 
-  private final CABFileRollingAppender appender;
+  private final FoundationFileRollingAppender appender;
 
   private final AppenderRollingProperties properties;
 
@@ -45,7 +45,7 @@ final class LogFileCompressor implements Runnable, FileRollEventListener {
   private AtomicBoolean keepRunning;
   private final List queue;
 
-  LogFileCompressor(final CABFileRollingAppender rollingAppender,
+  LogFileCompressor(final FoundationFileRollingAppender rollingAppender,
       final AppenderRollingProperties appenderRollingProperties) {
     super();
     this.appender = rollingAppender;

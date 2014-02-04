@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The application can register state values with the CAB logging library. The values are logged when first registered, when values are changed, and at roll-over. This facility can be used to log persistent messages, e.g. log an entry when a failure is encountered, and log the corresponding clearing
+ * The application can register state values with the Foundation logging library. The values are logged when first registered, when values are changed, and at roll-over. This facility can be used to log persistent messages, e.g. log an entry when a failure is encountered, and log the corresponding clearing
  * message.
  * 
  * @author Jethro Revill
@@ -146,7 +146,7 @@ public final class ApplicationState {
 
 //    /**
 //     * return true if presitent logging is enabled. can be turned on or off in log4j configuration file:<br>
-//     * CABLogger.applicationstateEnabled=true<br>
+//     * FoundationLogger.applicationstateEnabled=true<br>
 //     * Default is set to true
 //     *
 //     * @return
@@ -155,8 +155,8 @@ public final class ApplicationState {
 //
 //        boolean isApplicationStateEnabled = true;
 //
-//        if (CABLogger.log4jConfigProps != null && CABLogger.log4jConfigProps.containsKey(CABLoggerConstants.APPSTATE_ENABLED.toString())) {
-//            isApplicationStateEnabled = Boolean.valueOf(CABLogger.log4jConfigProps.getProperty(CABLoggerConstants.APPSTATE_ENABLED.toString()));
+//        if (FoundationLogger.log4jConfigProps != null && FoundationLogger.log4jConfigProps.containsKey(FondationLoggerConstants.APPSTATE_ENABLED.toString())) {
+//            isApplicationStateEnabled = Boolean.valueOf(FoundationLogger.log4jConfigProps.getProperty(FondationLoggerConstants.APPSTATE_ENABLED.toString()));
 //        }
 //
 //        return isApplicationStateEnabled;

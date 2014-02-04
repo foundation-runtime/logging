@@ -39,7 +39,7 @@ final class FileRollEvent extends LoggingEvent {
 
   private final File backupFile;
 
-  private transient CABFileRollingAppender source;
+  private transient FoundationFileRollingAppender source;
 
   private final String sourceName;
 
@@ -95,19 +95,19 @@ final class FileRollEvent extends LoggingEvent {
     return this.backupFile;
   }
 
-  CABFileRollingAppender getSource() {
+  FoundationFileRollingAppender getSource() {
     if (this.source == null) {
       final Appender appender = super.getLogger().getAppender(this.sourceName);
       if (appender == null) {
-        LogLog.error("Missing " + CABFileRollingAppender.class.getName()
+        LogLog.error("Missing " + FoundationFileRollingAppender.class.getName()
             + "; expected to be attached to the Logger that created this "
             + this.getClass().getName());
         return null;
       }
-      if (appender instanceof CABFileRollingAppender) {
-        this.source = (CABFileRollingAppender) appender;
+      if (appender instanceof FoundationFileRollingAppender) {
+        this.source = (FoundationFileRollingAppender) appender;
       } else {
-        LogLog.error("Expected " + CABFileRollingAppender.class.getName()
+        LogLog.error("Expected " + FoundationFileRollingAppender.class.getName()
             + " but was " + appender.getClass().getName());
       }
     }
@@ -123,7 +123,7 @@ final class FileRollEvent extends LoggingEvent {
    */
   final void dispatchToAppender(final String message) {
     // dispatch a copy, since events should be treated as being immutable
-    final CABFileRollingAppender appender = this.getSource();
+    final FoundationFileRollingAppender appender = this.getSource();
     if (appender != null) {
       appender.append(new FileRollEvent(this, message));
     }
@@ -134,7 +134,7 @@ final class FileRollEvent extends LoggingEvent {
    * will result in a default message being appended to the new file.
    */
   final void dispatchToAppender() {
-    final CABFileRollingAppender appender = this.getSource();
+    final FoundationFileRollingAppender appender = this.getSource();
     if (appender != null) {
       appender.append(this);
     }
@@ -149,7 +149,7 @@ final class FileRollEvent extends LoggingEvent {
    */
   final void dispatchToAppender(final LoggingEvent customLoggingEvent) {
     // wrap the LoggingEvent in a FileRollEvent to prevent recursion bug
-    final CABFileRollingAppender appender = this.getSource();
+    final FoundationFileRollingAppender appender = this.getSource();
     if (appender != null) {
       appender.append(new FileRollEvent(customLoggingEvent, this));
     }

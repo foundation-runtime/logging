@@ -112,7 +112,7 @@ public class Slf4JStructuresTest {
 	public void testStructure() throws Exception {
 
 		// TransactionMarker marker = new TransactionMarker(null,
-		// CABLoggingTransMsgType.REQ, null, "sourceId", "sourceType",
+		// FoundationLoggingTransMsgType.REQ, null, "sourceId", "sourceType",
 		// "destinationId", "destinationType", "messagePayload");
 		// for (int i = 0; i < 500; i++) {
 		marker.setSourceId("my source id");

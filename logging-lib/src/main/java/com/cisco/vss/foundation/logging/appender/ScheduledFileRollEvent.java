@@ -30,9 +30,9 @@ final class ScheduledFileRollEvent extends LoggingEvent {
 
   private static final long serialVersionUID = -2423899714190505565L;
 
-  private final CABFileRollingAppender appender;
+  private final FoundationFileRollingAppender appender;
 
-  ScheduledFileRollEvent(final CABFileRollingAppender appender,
+  ScheduledFileRollEvent(final FoundationFileRollingAppender appender,
       final long eventTime) {
     super(Logger.class.getName(), Logger.getRootLogger(), eventTime, Level.ALL,
         "Log4J scheduled file roll event", null);

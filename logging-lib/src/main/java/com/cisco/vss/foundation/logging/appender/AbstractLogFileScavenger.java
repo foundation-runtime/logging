@@ -14,7 +14,7 @@ import java.io.FilenameFilter;
  */
 abstract class AbstractLogFileScavenger implements LogFileScavenger, Runnable {
 
-  private CABFileRollingAppender appender = null;
+  private FoundationFileRollingAppender appender = null;
 
   private File file = null;
 
@@ -26,7 +26,7 @@ abstract class AbstractLogFileScavenger implements LogFileScavenger, Runnable {
     super();
   }
 
-  public final void init(final CABFileRollingAppender appender,
+  public final void init(final FoundationFileRollingAppender appender,
       final AppenderRollingProperties properties) {
     this.appender = appender;
     this.properties = properties;
@@ -95,7 +95,7 @@ abstract class AbstractLogFileScavenger implements LogFileScavenger, Runnable {
     return (this.threadRef != null) ? (!this.threadRef.isInterrupted()) : false;
   }
 
-  final CABFileRollingAppender getAppender() {
+  final FoundationFileRollingAppender getAppender() {
     return this.appender;
   }
 

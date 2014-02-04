@@ -31,9 +31,9 @@ final class CompositeRoller implements FileRollable {
 
   private final FileRollable[] fileRollables;
 
-  private final CABFileRollingAppender appender;
+  private final FoundationFileRollingAppender appender;
 
-  CompositeRoller(final CABFileRollingAppender rollingAppender,
+  CompositeRoller(final FoundationFileRollingAppender rollingAppender,
       final AppenderRollingProperties appenderRollingProperties) {
     super();
     this.appender = rollingAppender;
@@ -77,7 +77,7 @@ final class CompositeRoller implements FileRollable {
     }
   }
 
-  public final CABFileRollingAppender getAppender() {
+  public final FoundationFileRollingAppender getAppender() {
     return this.appender;
   }
 }

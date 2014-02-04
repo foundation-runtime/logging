@@ -2,7 +2,7 @@ package com.cisco.vss.foundation.logging.stuctured.test;
 
 import com.cisco.vss.foundation.logging.stuctured.*;
 
-public class TransactionMarker2 extends AbstractCabLoggingMarker {
+public class TransactionMarker2 extends AbstractFoundationLoggingMarker {
 	
 	public TransactionMarker2(String firstName, int emp_num) {
 		super();

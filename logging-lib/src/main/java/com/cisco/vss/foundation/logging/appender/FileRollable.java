@@ -32,5 +32,5 @@ interface FileRollable {
 
   void fireFileRollEvent(FileRollEvent fileRollEvent);
 
-  CABFileRollingAppender getAppender();
+  FoundationFileRollingAppender getAppender();
 }

@@ -26,7 +26,7 @@ import org.apache.log4j.spi.LoggingEvent;
  */
 final class OneShotStartupRoller extends AbstractRoller implements FileRollable {
 
-  public OneShotStartupRoller(final CABFileRollingAppender rollingAppender,
+  public OneShotStartupRoller(final FoundationFileRollingAppender rollingAppender,
       AppenderRollingProperties appenderRollingProperties) {
     super(rollingAppender, appenderRollingProperties);
   }
