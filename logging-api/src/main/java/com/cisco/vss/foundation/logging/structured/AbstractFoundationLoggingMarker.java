@@ -281,7 +281,7 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 
 			// Creating an instance of our compiled class and
 			// running its toString() method
-			Class<FoundationLoggingMarkerFormatter> clazz = (Class<FoundationLoggingMarkerFormatter>) AbstractFoundationLoggingMarker.class.getClassLoader().loadClass(newClassName);
+			Class<FoundationLoggingMarkerFormatter> clazz = (Class<FoundationLoggingMarkerFormatter>) fileManager.getClassLoader(null).loadClass(newClassName);
 
 			return clazz;
 		} catch (Exception e) {
