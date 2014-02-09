@@ -1,6 +1,6 @@
-package com.cisco.vss.foundation.logging.stuctured.test;
+package com.cisco.vss.foundation.logging.structured.test;
 
-import com.cisco.vss.foundation.logging.stuctured.*;
+import com.cisco.vss.foundation.logging.structured.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

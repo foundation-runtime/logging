@@ -1,7 +1,7 @@
-package com.cisco.vss.foundation.logging.stuctured.test;
+package com.cisco.vss.foundation.logging.structured.test;
 
 import java.net.URI;
-import com.cisco.vss.foundation.logging.stuctured.*;
+import com.cisco.vss.foundation.logging.structured.*;
 
 @DefaultFormat(TransactionLoggingMarker.DEFAULT_FORMAT)
 @ConditionalFormats({ @ConditionalFormat(format = "start message format", criteria = { @FieldCriterion(name = "transactionState", value = "START") }), @ConditionalFormat(format = "end message format", criteria = { @FieldCriterion(name = "transactionState", value = "END") }),

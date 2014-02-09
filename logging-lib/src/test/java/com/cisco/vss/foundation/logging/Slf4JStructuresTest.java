@@ -1,9 +1,7 @@
 package com.cisco.vss.foundation.logging;
 
-import com.cisco.vss.foundation.logging.stuctured.test.TransactionLoggingMarker;
-import com.cisco.vss.foundation.logging.stuctured.test.TransactionMarker;
-import org.junit.Before;
-import org.junit.Test;
+import com.cisco.vss.foundation.logging.structured.test.*;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

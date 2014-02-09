@@ -1,4 +1,4 @@
-package com.cisco.vss.foundation.logging.stuctured;
+package com.cisco.vss.foundation.logging.structured;
 
 import com.cisco.vss.foundation.logging.FondationLoggerConstants;
 import com.cisco.vss.foundation.logging.FoundationLoggingEvent;
@@ -92,7 +92,7 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 
 				synchronized (markerClass) {
 
-					LOGGER.trace("The genereated class is: {}", newClassSource);
+					LOGGER.trace("The generated class is: {}", newClassSource);
 					Class<FoundationLoggingMarkerFormatter> formatterClass = generateMarkerClass(newClassSource, markerClass.getName() + "Formatter");
 					markersMap.put(markerClass, formatterClass);
 					
@@ -281,7 +281,7 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 
 			// Creating an instance of our compiled class and
 			// running its toString() method
-			Class<FoundationLoggingMarkerFormatter> clazz = (Class<FoundationLoggingMarkerFormatter>) fileManager.getClassLoader(null).loadClass(newClassName);
+			Class<FoundationLoggingMarkerFormatter> clazz = (Class<FoundationLoggingMarkerFormatter>) AbstractFoundationLoggingMarker.class.getClassLoader().loadClass(newClassName);
 
 			return clazz;
 		} catch (Exception e) {

@@ -1,6 +1,6 @@
 package com.cisco.vss.foundation.logging;
 
-import com.cisco.vss.foundation.logging.stuctured.FoundationLoggingMarker;
+import com.cisco.vss.foundation.logging.structured.FoundationLoggingMarker;
 import org.apache.log4j.Layout;
 import org.apache.log4j.pattern.LoggingEventPatternConverter;
 import org.apache.log4j.pattern.MessagePatternConverter;
@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
  * @author ykasten
  * 
  */
-public class FoundationLoggingStucturedMessageConverter extends LoggingEventPatternConverter {
+public class FoundationLoggingStructuredMessageConverter extends LoggingEventPatternConverter {
 
 	private String key;
 
@@ -36,7 +36,7 @@ public class FoundationLoggingStucturedMessageConverter extends LoggingEventPatt
 	private static MessagePatternConverter messageConverter = MessagePatternConverter.newInstance(null);
 	private static FoundationLoggingMessagePatternConverter PrettyMessageConverter = FoundationLoggingMessagePatternConverter.newInstance(null);
 
-	private FoundationLoggingStucturedMessageConverter(String key) {
+	private FoundationLoggingStructuredMessageConverter(String key) {
 		super("StructuredMessages", "StructuredMessages");
 		if (key != null && !key.equals("pretty")) {
 			throw new IllegalArgumentException("key value should be \"pretty\"");
@@ -46,8 +46,8 @@ public class FoundationLoggingStucturedMessageConverter extends LoggingEventPatt
 
 	}
 
-	public static FoundationLoggingStucturedMessageConverter newInstance(final String[] options) {
-		return new FoundationLoggingStucturedMessageConverter(options.length > 0 ? options[0] : null);
+	public static FoundationLoggingStructuredMessageConverter newInstance(final String[] options) {
+		return new FoundationLoggingStructuredMessageConverter(options.length > 0 ? options[0] : null);
 	}
 
 	@Override

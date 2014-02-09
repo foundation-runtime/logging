@@ -1,4 +1,4 @@
-package com.cisco.vss.foundation.logging.stuctured.test;
+package com.cisco.vss.foundation.logging.structured.test;
 
 public enum FoundationLoggingEventType {
     START, // process start

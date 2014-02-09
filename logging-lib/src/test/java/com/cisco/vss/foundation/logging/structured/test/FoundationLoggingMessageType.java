@@ -1,4 +1,4 @@
-package com.cisco.vss.foundation.logging.stuctured.test;
+package com.cisco.vss.foundation.logging.structured.test;
 
 public enum FoundationLoggingMessageType {
     STATE_MESSAGE, // state message (start or stop)

@@ -59,7 +59,7 @@ public class FoundationLoggingPatternConverter extends org.apache.log4j.helpers.
 		newPatternLayoutRules.putAll(patternLayoutRules);
 		newPatternLayoutRules.put("throwable", FoundationLoggingThrowableInformationPatternConverter.class);
 		newPatternLayoutRules.put("pm", FoundationLoggingMessagePatternConverter.class);
-		newPatternLayoutRules.put("sl", FoundationLoggingStucturedMessageConverter.class);
+		newPatternLayoutRules.put("sl", FoundationLoggingStructuredMessageConverter.class);
 		newPatternLayoutRules.put("prettymessage", FoundationLoggingMessagePatternConverter.class);
 		newPatternLayoutRules.put("errorcode", FoundationLoggingErrorCodePatternConverter.class);
 		newPatternLayoutRules.put("audit", FoundationLoggingAuditPatternConverter.class);

@@ -3,7 +3,7 @@
  */
 package com.cisco.vss.foundation.logging;
 
-import com.cisco.vss.foundation.logging.stuctured.FoundationLoggingMarker;
+import com.cisco.vss.foundation.logging.structured.FoundationLoggingMarker;
 import org.apache.log4j.pattern.LoggingEventPatternConverter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.slf4j.Marker;

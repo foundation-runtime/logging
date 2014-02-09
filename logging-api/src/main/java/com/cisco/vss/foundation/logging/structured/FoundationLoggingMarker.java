@@ -1,4 +1,4 @@
-package com.cisco.vss.foundation.logging.stuctured;
+package com.cisco.vss.foundation.logging.structured;
 
 import org.slf4j.Marker;
 

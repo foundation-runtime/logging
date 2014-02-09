@@ -3,11 +3,10 @@
  */
 package com.cisco.vss.foundation.logging;
 
-import com.cisco.vss.foundation.logging.stuctured.AbstractFoundationLoggingMarker;
+import com.cisco.vss.foundation.logging.structured.AbstractFoundationLoggingMarker;
 import org.apache.log4j.*;
 import org.apache.log4j.helpers.Loader;
 import org.apache.log4j.helpers.OptionConverter;
-import org.apache.log4j.net.SyslogAppender;
 import org.apache.log4j.nt.NTEventLogAppender;
 import org.apache.log4j.spi.LoggerRepository;
 import org.apache.log4j.spi.LoggingEvent;
