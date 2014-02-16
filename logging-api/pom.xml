@@ -41,7 +41,10 @@
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/foundation-runtime/logging/tree/master/logging-api</url>
+        <connection>scm:git:ssh://github.com:foundation-runtime/logging.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:foundation-runtime/logging.git</developerConnection>
+        <url>https://github.com/foundation-runtime/logging.git</url>
+        <tag>HEAD</tag>
     </scm>
     <organization>
         <name>Cisco</name>
