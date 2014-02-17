@@ -7,11 +7,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cisco.vss.foundation</groupId>
-    <artifactId>logging-lib</artifactId>
-    <name>logging-lib</name>
+    <artifactId>logging-log4j</artifactId>
+    <name>logging-log4j</name>
     <version>0.0.0-2-SNAPSHOT</version>
     <description>This project is the logging log4j implementation library in the cisco vss foundation runtime</description>
-    <url>https://github.com/foundation-runtime/logging/tree/master/logging-lib</url>
+    <url>https://github.com/foundation-runtime/logging/tree/master/logging-log4j</url>
     <packaging>jar</packaging>
     <licenses>
         <license>
