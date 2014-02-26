@@ -1,6 +1,6 @@
 package org.slf4j.impl;
 
-import com.cisco.vss.foundation.logging.FoundationLoggingLoggerFactory;
+import com.cisco.oss.foundation.logging.FoundationLoggingLoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 
