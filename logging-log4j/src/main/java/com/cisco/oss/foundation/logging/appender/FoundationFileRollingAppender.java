@@ -15,7 +15,7 @@
  */
 package com.cisco.oss.foundation.logging.appender;
 
-import com.cisco.oss.foundation.logging.FoundationLoggingEvent;
+import com.cisco.oss.foundation.logging.FoundationLof4jLoggingEvent;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Layout;
 import org.apache.log4j.helpers.LogLog;
@@ -729,9 +729,9 @@ public class FoundationFileRollingAppender extends FileAppender {
 			super.subAppend(event);
 		} else {
 
-			if(event instanceof FoundationLoggingEvent){
-				FoundationLoggingEvent foundationLoggingEvent = (FoundationLoggingEvent)event;
-				foundationLoggingEvent.setAppenderName(this.getName());
+			if(event instanceof FoundationLof4jLoggingEvent){
+				FoundationLof4jLoggingEvent foundationLof4jLoggingEvent = (FoundationLof4jLoggingEvent)event;
+				foundationLof4jLoggingEvent.setAppenderName(this.getName());
 			}
 			
 			this.rollFile(event);

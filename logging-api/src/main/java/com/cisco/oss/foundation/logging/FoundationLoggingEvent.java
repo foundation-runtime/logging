@@ -16,44 +16,32 @@
 
 package com.cisco.oss.foundation.logging;
 
-import org.apache.log4j.Category;
-import org.apache.log4j.Priority;
-import org.apache.log4j.spi.LoggingEvent;
 import org.slf4j.Marker;
 
 @SuppressWarnings("serial")
-public class FoundationLoggingEvent extends LoggingEvent {
-	
-	private Marker marker = null;
-	private String appenderName;
-	
-	public FoundationLoggingEvent(String fqnOfCategoryClass, Category logger, Priority level, Object message, Throwable throwable) {
-		super(fqnOfCategoryClass, logger, level, message, throwable);
-	}
-	
-	public FoundationLoggingEvent(Marker marker, String fqnOfCategoryClass, Category logger, Priority level, Object message, Throwable throwable) {
-		super(fqnOfCategoryClass, logger, level, message, throwable);
-		this.marker = marker;
-	}
-	
-	public FoundationLoggingEvent(FoundationLoggingEvent event) {
-		
-		super(event.fqnOfCategoryClass,event.getLogger(),event.getLevel(),event.getMessage(),event.getThrowableInformation()!=null? event.getThrowableInformation().getThrowable():null);
-		this.marker=event.marker;
-	}
+/**
+ * common interface for logging events. used by implementations for the structured logging binding
+ */
+public interface FoundationLoggingEvent{
 
-	public Marker getMarker() {
-		return marker;
-	}
 
-	public void setAppenderName(String name) {
-		this.appenderName = name;
-		
-	}
+    /**
+     * get the marker implementation
+     * @return
+     */
+	Marker getMarker();
 
-	public String getAppenderName() {
-		return appenderName;
-	}
+    /**
+     * set the appender name correlated to this appender
+     * @param name
+     */
+	void setAppenderName(String name);
+
+    /**
+     * get the appender name. used by generated source for teh marker fomratter
+     * @return
+     */
+	String getAppenderName();
 	
 
 }

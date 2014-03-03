@@ -295,7 +295,7 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 		String maxFileSizeKey = "log4j.appender."+appender.getName()+".MaxFileSize";
 		appender.setMaxFileSize(FoundationLogger.log4jConfigProps.getProperty(maxFileSizeKey, FondationLoggerConstants.Foundation_MAX_FILE_SIZE.toString()));
 
-//		if (appender.getMaxFileSize() == null || appender.getMaxFileSize().equals(FondationLoggerConstants.DEFAULT_LOG4J_SIZE.toString())) {
+//		if (appender.getMaxFileSize() == null || appender.getMaxFileSize().equals(FondationLoggerConstants.DEFAULT_FILE_SIZE.toString())) {
 //			appender.setMaxFileSize(FondationLoggerConstants.Foundation_MAX_FILE_SIZE.toString());
 //		}
 

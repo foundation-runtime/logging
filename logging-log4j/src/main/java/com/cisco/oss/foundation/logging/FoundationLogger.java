@@ -1061,7 +1061,7 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 	 * further checks.
 	 */
 	protected void forcedLog(Marker marker, String fqcn, Priority level, Object message, Throwable t) {
-		callAppenders(new FoundationLoggingEvent(marker, fqcn, this, level, message, t));
+		callAppenders(new FoundationLof4jLoggingEvent(marker, fqcn, this, level, message, t));
 	}
 
 	@Override
@@ -1085,8 +1085,8 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 					// since we may update the appender layout we must sync so
 					// other threads won't use it by mistake
 					synchronized (appender) {
-						if(event instanceof FoundationLoggingEvent){
-							appender.doAppend(new FoundationLoggingEvent((FoundationLoggingEvent) event));
+						if(event instanceof FoundationLof4jLoggingEvent){
+							appender.doAppend(new FoundationLof4jLoggingEvent((FoundationLof4jLoggingEvent) event));
 						}else{
 							appender.doAppend(event);
 						}

@@ -160,10 +160,10 @@ public class FoundationLoggingDispatcher implements Runnable {
 	
 	private boolean udpateLayoutIfNeeded(Appender appender, LoggingEvent event) {
 
-		if (event instanceof FoundationLoggingEvent) {
+		if (event instanceof FoundationLof4jLoggingEvent) {
 
-			FoundationLoggingEvent foundationLoggingEvent = (FoundationLoggingEvent) event;
-			Marker marker = foundationLoggingEvent.getMarker();
+			FoundationLof4jLoggingEvent foundationLof4jLoggingEvent = (FoundationLof4jLoggingEvent) event;
+			Marker marker = foundationLof4jLoggingEvent.getMarker();
 
 			if (marker != null) {
 

@@ -69,10 +69,10 @@ public class FoundationLoggingStructuredMessageConverter extends LoggingEventPat
 	@Override
 	public void format(LoggingEvent event, StringBuffer toAppendTo) {
 		boolean appended = false;
-		if (event instanceof FoundationLoggingEvent) { // So we can call get marker
-			FoundationLoggingEvent foundationLoggingEvent = (FoundationLoggingEvent) event;
+		if (event instanceof FoundationLof4jLoggingEvent) { // So we can call get marker
+			FoundationLof4jLoggingEvent foundationLof4jLoggingEvent = (FoundationLof4jLoggingEvent) event;
 
-			Marker marker = foundationLoggingEvent.getMarker();
+			Marker marker = foundationLof4jLoggingEvent.getMarker();
 
 			if (marker instanceof FoundationLoggingMarker) { // So this converter may
 														// uses internal pattern
@@ -81,7 +81,7 @@ public class FoundationLoggingStructuredMessageConverter extends LoggingEventPat
 
 				FoundationLoggingMarker foundationMarker = (FoundationLoggingMarker) marker;
 
-				String pattern = foundationMarker.getFormatter().getFormat(foundationLoggingEvent);
+				String pattern = foundationMarker.getFormatter().getFormat(foundationLof4jLoggingEvent);
 				
 				if (pattern != null) { // only if we have pattern from one of
 										// two options
@@ -96,7 +96,7 @@ public class FoundationLoggingStructuredMessageConverter extends LoggingEventPat
 				}
 			}
 		}
-		if (!appended) { // not FoundationLoggingEvent, or not FoundationLoggingMarker, or no
+		if (!appended) { // not FoundationLof4jLoggingEvent, or not FoundationLoggingMarker, or no
 							// special pattern for marker composed from %u{}
 			if (key != null) {
 				// pretty message

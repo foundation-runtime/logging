@@ -61,10 +61,10 @@ public final class FoundationLoggingUserFieldPatternConverter extends LoggingEve
 	@Override
 	public void format(final LoggingEvent event, final StringBuffer toAppendTo) {
 		
-		if(event instanceof FoundationLoggingEvent){
-			FoundationLoggingEvent foundationLoggingEvent = (FoundationLoggingEvent)event;
+		if(event instanceof FoundationLof4jLoggingEvent){
+			FoundationLof4jLoggingEvent foundationLof4jLoggingEvent = (FoundationLof4jLoggingEvent)event;
 			
-			Marker marker = foundationLoggingEvent.getMarker();
+			Marker marker = foundationLof4jLoggingEvent.getMarker();
 			
 			marker.getName();
 			
