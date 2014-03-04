@@ -69,7 +69,7 @@ public class JSONTest {
 	public void testJsonString() {
 
 		// Object parse =
-		// JSON.parse("{loggerName:\"JSONTest\",thread:\"main\",compName:\"UNKNOWN\",compInstance:\"UNKNOWNInstance1\",host:\"yogenlt\",time:{ \"$date\":\"2012-07-24T13:02:34.582\"},level:\"INFO\",message:\"this is my first message\"}");
+		// JSON.parse("{loggerName:\"JSONTest\",thread:\"main\",compName:\"UNKNOWN\",compInstance:\"UNKNOWNInstance1\",host:\"Yair Ogenlt\",time:{ \"$date\":\"2012-07-24T13:02:34.582\"},level:\"INFO\",message:\"this is my first message\"}");
 
 		LOGGER.info("this is my first message");
 		LOGGER.warn("warning {}. be ware of {}", "two", "the monster");
