@@ -17,16 +17,21 @@
 /**
  * 
  */
-package com.cisco.oss.foundation.logging;
+package com.cisco.oss.foundation.logging.converters;
 
 import org.apache.log4j.pattern.LoggingEventPatternConverter;
 import org.apache.log4j.spi.LoggingEvent;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * @author Yair Ogen
  * 
  */
-public final class FoundationLoggingAuditPatternConverter extends LoggingEventPatternConverter {
+public final class FoundationLoggingHostPatternConverter extends LoggingEventPatternConverter {
+
+	public static final String hostName = initLocalHost();
 
 	/**
 	 * Private constructor.
@@ -34,21 +39,29 @@ public final class FoundationLoggingAuditPatternConverter extends LoggingEventPa
 	 * @param options
 	 *            options, may be null.
 	 */
-	private FoundationLoggingAuditPatternConverter() {
-		super("Audit", "audit");
+	private FoundationLoggingHostPatternConverter() {
+		super("Host", "host");
 
+	}
+
+	private static String initLocalHost() {
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			return addr.getHostName();
+		} catch (UnknownHostException e) {
+			throw new UnsupportedOperationException("Cannot resolve host name. Please check hosts file.", e);
+		}
 	}
 
 	/**
 	 * Gets an instance of the class.
 	 * 
 	 * @param options
-	 *            pattern options, may be null. If first element is "short",
-	 *            only the first line of the throwable will be formatted.
+	 *            pattern options, may be null. If first element is "short", only the first line of the throwable will be formatted.
 	 * @return instance of class.
 	 */
-	public static FoundationLoggingAuditPatternConverter newInstance(final String[] options) {
-		return new FoundationLoggingAuditPatternConverter();
+	public static FoundationLoggingHostPatternConverter newInstance(final String[] options) {
+		return new FoundationLoggingHostPatternConverter();
 	}
 
 	/**
@@ -56,10 +69,9 @@ public final class FoundationLoggingAuditPatternConverter extends LoggingEventPa
 	 */
 	@Override
 	public void format(final LoggingEvent event, final StringBuffer toAppendTo) {
-		String loggerName = event.getLoggerName();
-		if (loggerName.startsWith("audit.")) {
-			toAppendTo.append("AUDIT-");
-		}
+
+		toAppendTo.append(hostName);
+
 	}
 
 	/**

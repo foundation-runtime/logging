@@ -17,7 +17,7 @@
 /**
  * 
  */
-package com.cisco.oss.foundation.logging;
+package com.cisco.oss.foundation.logging.converters;
 
 import org.apache.log4j.helpers.PatternConverter;
 import org.apache.log4j.pattern.FormattingInfo;

@@ -17,7 +17,7 @@
 /**
  * 
  */
-package com.cisco.oss.foundation.logging;
+package com.cisco.oss.foundation.logging.converters;
 
 import com.cisco.oss.foundation.application.exception.ApplicationExceptionInterface;
 import org.apache.log4j.pattern.LoggingEventPatternConverter;

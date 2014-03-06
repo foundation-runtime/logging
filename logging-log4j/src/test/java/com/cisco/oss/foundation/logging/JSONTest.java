@@ -18,6 +18,7 @@ package com.cisco.oss.foundation.logging;
 
 import com.cisco.oss.foundation.environment.utils.EnvUtils;
 import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
+import com.cisco.oss.foundation.logging.converters.FoundationLoggingCompNamePatternConverter;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -93,7 +94,7 @@ public class JSONTest {
 			} else {
 				EnvUtils.updateEnv("_RPM_SOFTWARE_NAME", COMPONENTS[0]);
 			}
-			FoundationLoggingCompNamePatternConverter.componentName = FoundationLoggingCompNamePatternConverter.getComponentName();
+//			FoundationLoggingCompNamePatternConverter.componentName = FoundationLoggingCompNamePatternConverter.getComponentName();
 			FlowContextFactory.createFlowContext();
 			LOGGER.info("this is my first message");
 			LOGGER.warn("warning {}. be ware of {}", "two", "the monster");

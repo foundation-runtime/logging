@@ -17,7 +17,7 @@
 /**
  * 
  */
-package com.cisco.oss.foundation.logging;
+package com.cisco.oss.foundation.logging.converters;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.pattern.LoggingEventPatternConverter;
@@ -27,16 +27,16 @@ import org.apache.log4j.spi.LoggingEvent;
  * @author Yair Ogen
  * 
  */
-public final class FoundationLoggingCompVersionPatternConverter extends LoggingEventPatternConverter {
+public final class FoundationLoggingCompInstNamePatternConverter extends LoggingEventPatternConverter {
 	
-	private static String componentVersion = getComponentVersion();
+	public static String componentInstanceName = getComponentInstanceName();
 
 	/**
 	 * Private constructor.
 	 * 
 	 */
-	private FoundationLoggingCompVersionPatternConverter() {
-		super("compVersion", "compVersion");
+	private FoundationLoggingCompInstNamePatternConverter() {
+		super("compInstanceName", "compInstanceName");
 
 	}
 
@@ -48,8 +48,8 @@ public final class FoundationLoggingCompVersionPatternConverter extends LoggingE
 	 *            only the first line of the throwable will be formatted.
 	 * @return instance of class.
 	 */
-	public static FoundationLoggingCompVersionPatternConverter newInstance(final String[] options) {
-		return new FoundationLoggingCompVersionPatternConverter();
+	public static FoundationLoggingCompInstNamePatternConverter newInstance(final String[] options) {
+		return new FoundationLoggingCompInstNamePatternConverter();
 	}
 
 	/**
@@ -57,7 +57,8 @@ public final class FoundationLoggingCompVersionPatternConverter extends LoggingE
 	 */
 	@Override
 	public void format(final LoggingEvent event, final StringBuffer toAppendTo) {
-			toAppendTo.append(componentVersion);
+		toAppendTo.append(componentInstanceName);
+		
 	}
 
 	/**
@@ -70,13 +71,13 @@ public final class FoundationLoggingCompVersionPatternConverter extends LoggingE
 		return false;
 	}
 	
-	private static String getComponentVersion() {
-		String compVersion = System.getenv("_ARTIFACT_VERSION");
+	private static String getComponentInstanceName() {
+		String compInstName = System.getProperty("app.name");
 		
-		if(StringUtils.isBlank(compVersion)){
-			compVersion = "UNKNOWN";
+		if(StringUtils.isBlank(compInstName)){
+			compInstName = FoundationLoggingCompNamePatternConverter.componentName + "Instance1";
 		}
 		
-		return compVersion;
+		return compInstName;
 	}
 }

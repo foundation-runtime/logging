@@ -17,9 +17,8 @@
 /**
  * 
  */
-package com.cisco.oss.foundation.logging;
+package com.cisco.oss.foundation.logging.converters;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.pattern.LoggingEventPatternConverter;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -27,16 +26,16 @@ import org.apache.log4j.spi.LoggingEvent;
  * @author Yair Ogen
  * 
  */
-public final class FoundationLoggingCompNamePatternConverter extends LoggingEventPatternConverter {
-	
-	static String componentName = getComponentName();
+public final class FoundationLoggingAuditPatternConverter extends LoggingEventPatternConverter {
 
 	/**
 	 * Private constructor.
 	 * 
+	 * @param options
+	 *            options, may be null.
 	 */
-	private FoundationLoggingCompNamePatternConverter() {
-		super("compName", "compName");
+	private FoundationLoggingAuditPatternConverter() {
+		super("Audit", "audit");
 
 	}
 
@@ -48,8 +47,8 @@ public final class FoundationLoggingCompNamePatternConverter extends LoggingEven
 	 *            only the first line of the throwable will be formatted.
 	 * @return instance of class.
 	 */
-	public static FoundationLoggingCompNamePatternConverter newInstance(final String[] options) {
-		return new FoundationLoggingCompNamePatternConverter();
+	public static FoundationLoggingAuditPatternConverter newInstance(final String[] options) {
+		return new FoundationLoggingAuditPatternConverter();
 	}
 
 	/**
@@ -57,7 +56,10 @@ public final class FoundationLoggingCompNamePatternConverter extends LoggingEven
 	 */
 	@Override
 	public void format(final LoggingEvent event, final StringBuffer toAppendTo) {
-		toAppendTo.append(componentName);
+		String loggerName = event.getLoggerName();
+		if (loggerName.startsWith("audit.")) {
+			toAppendTo.append("AUDIT-");
+		}
 	}
 
 	/**
@@ -69,23 +71,4 @@ public final class FoundationLoggingCompNamePatternConverter extends LoggingEven
 	public boolean handlesThrowable() {
 		return false;
 	}
-	
-	public static String getComponentName() {
-		String compName = System.getenv("_RPM_SOFTWARE_NAME");
-		
-		if(StringUtils.isBlank(compName)){
-			compName = System.getProperty("app.name");
-		}
-		
-		
-		if(StringUtils.isBlank(compName)){
-			compName = "UNKNOWN";
-		}
-
-		return compName;
-	}
-	public static int getHashedComponentName() {
-		return getComponentName().hashCode();
-	}
-
 }

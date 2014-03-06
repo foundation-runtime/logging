@@ -20,6 +20,8 @@
 package com.cisco.oss.foundation.logging;
 
 
+import com.cisco.oss.foundation.logging.converters.FoundationLoggingPatternConverter;
+
 /**
  * @author Yair Ogen
  *

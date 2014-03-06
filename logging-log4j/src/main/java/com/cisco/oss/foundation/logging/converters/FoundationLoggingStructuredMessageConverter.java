@@ -14,8 +14,10 @@
  *  limitations under the License.
  */
 
-package com.cisco.oss.foundation.logging;
+package com.cisco.oss.foundation.logging.converters;
 
+import com.cisco.oss.foundation.logging.FoundationLof4jLoggingEvent;
+import com.cisco.oss.foundation.logging.FoundationLoggingPatternLayout;
 import com.cisco.oss.foundation.logging.structured.FoundationLoggingMarker;
 import org.apache.log4j.Layout;
 import org.apache.log4j.pattern.LoggingEventPatternConverter;
