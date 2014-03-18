@@ -19,7 +19,7 @@
     <parent>
 		<groupId>com.cisco.oss.foundation</groupId>
 		<artifactId>foundation-common-base</artifactId>
-		<version>0.0.0-3-SNAPSHOT</version>
+		<version>0.0.0-3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cisco.oss.foundation</groupId>
@@ -57,8 +57,8 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:ssh://github.com:foundation-runtime/logging.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:foundation-runtime/logging.git</developerConnection>
+        <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
+        <developerConnection>scm:git:git@github.com:foundation-runtime/logging.git</developerConnection>
         <url>https://github.com/foundation-runtime/logging.git</url>
         <tag>HEAD</tag>
     </scm>

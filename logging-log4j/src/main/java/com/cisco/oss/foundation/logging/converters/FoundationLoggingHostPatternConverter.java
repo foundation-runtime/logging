@@ -35,9 +35,6 @@ public final class FoundationLoggingHostPatternConverter extends LoggingEventPat
 
 	/**
 	 * Private constructor.
-	 * 
-	 * @param options
-	 *            options, may be null.
 	 */
 	private FoundationLoggingHostPatternConverter() {
 		super("Host", "host");
