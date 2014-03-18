@@ -1,0 +1,3 @@
+logging holds libraries that extends the slf4j and add many useful features
+
+You can read the user guide in [[../../wiki/Home|our Wiki]].
