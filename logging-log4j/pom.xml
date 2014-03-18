@@ -19,13 +19,13 @@
     <parent>
 		<groupId>com.cisco.oss.foundation</groupId>
 		<artifactId>foundation-common-base</artifactId>
-		<version>0.0.0-3</version>
+		<version>0.0.0-5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cisco.oss.foundation</groupId>
     <artifactId>logging-log4j</artifactId>
     <name>logging-log4j</name>
-    <version>0.0.0-3-SNAPSHOT</version>
+    <version>0.0.0-5-SNAPSHOT</version>
     <description>This project is the logging log4j implementation library in the cisco vss foundation runtime</description>
     <url>https://github.com/foundation-runtime/logging/tree/master/logging-log4j</url>
     <packaging>jar</packaging>
@@ -97,11 +97,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.cisco.oss.foundation</groupId>
-            <artifactId>commons</artifactId>
-            <version>${commons-version}</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
