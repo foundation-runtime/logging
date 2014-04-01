@@ -102,10 +102,5 @@
             <artifactId>joda-time</artifactId>
             <version>2.3</version>
         </dependency>
-        <dependency>
-            <groupId>org.joda</groupId>
-            <artifactId>joda-convert</artifactId>
-            <version>1.2</version>
-        </dependency>
     </dependencies>	
 </project>
