@@ -16,7 +16,7 @@
 
 package com.cisco.oss.foundation.logging.structured;
 
-import com.cisco.oss.foundation.logging.FondationLoggerConstants;
+import com.cisco.oss.foundation.logging.FoundationLoggerConstants;
 import com.cisco.oss.foundation.logging.FoundationLoggingEvent;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
@@ -167,9 +167,9 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 
 		String value = null;
 
-		if (FondationLoggerConstants.TRANSACTION_NAME.toString().equals(userFieldName)) {
+		if (FoundationLoggerConstants.TRANSACTION_NAME.toString().equals(userFieldName)) {
 			value = getName();
-		} else if (FondationLoggerConstants.ALL_VALUES.toString().equals(userFieldName)) {
+		} else if (FoundationLoggerConstants.ALL_VALUES.toString().equals(userFieldName)) {
 			value = buildAllValues();
 		} else {
 			value = userFields.get(userFieldName) != null ? userFields.get(userFieldName).toString() : null;

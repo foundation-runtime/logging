@@ -23,7 +23,7 @@ package com.cisco.oss.foundation.logging;
  * 
  * @author Yair Ogen
  */
-public enum FondationLoggerConstants {
+public enum FoundationLoggerConstants {
 
 	/**
 	 * the category term MDC key
@@ -75,7 +75,12 @@ public enum FondationLoggerConstants {
 
 	Foundation_ASYNC_BUFFER_SIZE("FoundationLogger.asyncAppenderBufferSize"),
 
-	TRANSACTION_NAME("transactionName"),
+    Foundation_JUL_SUPPORT_ENABLED("FoundationLogger.julSupportEnabled"),
+
+    Foundation_JUL_APPENDER_REF("FoundationLogger.julAppenderRef"),
+
+
+    TRANSACTION_NAME("transactionName"),
 
 	ALL_VALUES("allValues"),
 
@@ -83,7 +88,7 @@ public enum FondationLoggerConstants {
 
 	private String constant;
 
-	private FondationLoggerConstants(final String constant) {
+	private FoundationLoggerConstants(final String constant) {
 		this.constant = constant;
 	}
 

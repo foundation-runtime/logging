@@ -91,14 +91,14 @@ public class TestUsingLog4j {
 		appender.setMaxRollFileCount(12);
 		appender.setLayout(new SimpleLayout());
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
-		FoundationLogger.log4jConfigProps.remove(FondationLoggerConstants.Foundation_FILE_ARCHIVE.toString());
+		FoundationLogger.log4jConfigProps.remove(FoundationLoggerConstants.Foundation_FILE_ARCHIVE.toString());
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
-		FoundationLogger.log4jConfigProps.setProperty(FondationLoggerConstants.Foundation_FILE_ARCHIVE.toString(), "true");
+		FoundationLogger.log4jConfigProps.setProperty(FoundationLoggerConstants.Foundation_FILE_ARCHIVE.toString(), "true");
 		System.setProperty("os.name", "windows");
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
 		System.setProperty("os.name", "linux");
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
-		FoundationLogger.log4jConfigProps.setProperty(FondationLoggerConstants.Foundation_FILE_ARCHIVE.toString(), "false");
+		FoundationLogger.log4jConfigProps.setProperty(FoundationLoggerConstants.Foundation_FILE_ARCHIVE.toString(), "false");
 		eventListener.addAppenderEvent(LogManager.getRootLogger(), appender);
 	}
 

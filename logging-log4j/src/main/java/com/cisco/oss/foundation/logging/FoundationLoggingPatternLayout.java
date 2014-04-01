@@ -47,7 +47,7 @@ public final class FoundationLoggingPatternLayout extends EnhancedPatternLayout 
 	 * The default pattern just produces the application supplied message.
 	 */
 	public FoundationLoggingPatternLayout() {
-		this(FondationLoggerConstants.DEFAULT_CONV_PATTERN.toString());
+		this(FoundationLoggerConstants.DEFAULT_CONV_PATTERN.toString());
 	}
 
 	/**

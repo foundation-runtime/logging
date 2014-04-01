@@ -71,8 +71,8 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 
 			boolean rollOnStartup = true;
 
-			if (FoundationLogger.log4jConfigProps != null && FoundationLogger.log4jConfigProps.containsKey(FondationLoggerConstants.Foundation_ROLL_ON_STARTUP.toString())) {
-				rollOnStartup = Boolean.valueOf(FoundationLogger.log4jConfigProps.getProperty(FondationLoggerConstants.Foundation_ROLL_ON_STARTUP.toString()));
+			if (FoundationLogger.log4jConfigProps != null && FoundationLogger.log4jConfigProps.containsKey(FoundationLoggerConstants.Foundation_ROLL_ON_STARTUP.toString())) {
+				rollOnStartup = Boolean.valueOf(FoundationLogger.log4jConfigProps.getProperty(FoundationLoggerConstants.Foundation_ROLL_ON_STARTUP.toString()));
 			}
 
 			timeSizeRollingAppender.setRollOnStartup(rollOnStartup);
@@ -98,8 +98,8 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 
 			boolean rollOnStartup = true;
 
-			if (FoundationLogger.log4jConfigProps != null && FoundationLogger.log4jConfigProps.containsKey(FondationLoggerConstants.Foundation_ROLL_ON_STARTUP.toString())) {
-				rollOnStartup = Boolean.valueOf(FoundationLogger.log4jConfigProps.getProperty(FondationLoggerConstants.Foundation_ROLL_ON_STARTUP.toString()));
+			if (FoundationLogger.log4jConfigProps != null && FoundationLogger.log4jConfigProps.containsKey(FoundationLoggerConstants.Foundation_ROLL_ON_STARTUP.toString())) {
+				rollOnStartup = Boolean.valueOf(FoundationLogger.log4jConfigProps.getProperty(FoundationLoggerConstants.Foundation_ROLL_ON_STARTUP.toString()));
 			}
 
 			timeSizeRollingAppender.setRollOnStartup(rollOnStartup);
@@ -117,7 +117,7 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 
 	public void initiateAsyncSupport(final Appender appender) {
 
-		final String asyncAppenderReferencesKey = FondationLoggerConstants.Foundation_ASYNC_REF.toString();
+		final String asyncAppenderReferencesKey = FoundationLoggerConstants.Foundation_ASYNC_REF.toString();
 
 		// first check if we have some appender references. if not - do nothing.
 		if (FoundationLogger.log4jConfigProps != null && FoundationLogger.log4jConfigProps.containsKey(asyncAppenderReferencesKey)) {
@@ -189,7 +189,7 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 
 	private AsyncAppender createAsyncAppender() {
 		AsyncAppender asyncAppender = new AsyncAppender();
-		String bufferSize = FoundationLogger.log4jConfigProps.getProperty(FondationLoggerConstants.Foundation_ASYNC_BUFFER_SIZE.toString(), "2500");
+		String bufferSize = FoundationLogger.log4jConfigProps.getProperty(FoundationLoggerConstants.Foundation_ASYNC_BUFFER_SIZE.toString(), "2500");
 		try {
 			asyncAppender.setBufferSize(Integer.parseInt(bufferSize));
 		} catch (NumberFormatException e) {
@@ -266,7 +266,7 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 
 		boolean shouldArchive = true;
 
-		final String FoundationFileArchiveKey = FondationLoggerConstants.Foundation_FILE_ARCHIVE.toString();
+		final String FoundationFileArchiveKey = FoundationLoggerConstants.Foundation_FILE_ARCHIVE.toString();
 
 		if (FoundationLogger.log4jConfigProps != null && FoundationLogger.log4jConfigProps.containsKey(FoundationFileArchiveKey)) {
 			shouldArchive = Boolean.valueOf(FoundationLogger.log4jConfigProps.getProperty(FoundationFileArchiveKey));
@@ -274,9 +274,9 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 
 		if (shouldArchive) {
 			if (OperatingSystem.getOperatingSystem().equals(OperatingSystem.Windows)) {
-				timeSizeRollingAppender.setCompressionAlgorithm(FondationLoggerConstants.ZIP.toString());
+				timeSizeRollingAppender.setCompressionAlgorithm(FoundationLoggerConstants.ZIP.toString());
 			} else {
-				timeSizeRollingAppender.setCompressionAlgorithm(FondationLoggerConstants.GZIP.toString());
+				timeSizeRollingAppender.setCompressionAlgorithm(FoundationLoggerConstants.GZIP.toString());
 			}
 		}
 	}
@@ -289,14 +289,14 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 	private void updateDefaultTimeAndSizeRollingAppender(final FoundationFileRollingAppender appender) {
 
 		if (appender.getDatePattern().trim().length() == 0) {
-			appender.setDatePattern(FondationLoggerConstants.DEFAULT_DATE_PATTERN.toString());
+			appender.setDatePattern(FoundationLoggerConstants.DEFAULT_DATE_PATTERN.toString());
 		}
 		
 		String maxFileSizeKey = "log4j.appender."+appender.getName()+".MaxFileSize";
-		appender.setMaxFileSize(FoundationLogger.log4jConfigProps.getProperty(maxFileSizeKey, FondationLoggerConstants.Foundation_MAX_FILE_SIZE.toString()));
+		appender.setMaxFileSize(FoundationLogger.log4jConfigProps.getProperty(maxFileSizeKey, FoundationLoggerConstants.Foundation_MAX_FILE_SIZE.toString()));
 
-//		if (appender.getMaxFileSize() == null || appender.getMaxFileSize().equals(FondationLoggerConstants.DEFAULT_FILE_SIZE.toString())) {
-//			appender.setMaxFileSize(FondationLoggerConstants.Foundation_MAX_FILE_SIZE.toString());
+//		if (appender.getMaxFileSize() == null || appender.getMaxFileSize().equals(FoundationLoggerConstants.DEFAULT_FILE_SIZE.toString())) {
+//			appender.setMaxFileSize(FoundationLoggerConstants.Foundation_MAX_FILE_SIZE.toString());
 //		}
 
 		String maxRollCountKey = "log4j.appender."+appender.getName()+".MaxRollFileCount";
@@ -317,7 +317,7 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 			String conversionPattern = enhancedPatternLayout.getConversionPattern();
 
 			if (shouldUpdatePattern(conversionPattern)) {
-				conversionPattern = FondationLoggerConstants.DEFAULT_CONV_PATTERN.toString();
+				conversionPattern = FoundationLoggerConstants.DEFAULT_CONV_PATTERN.toString();
 				enhancedPatternLayout.setConversionPattern(conversionPattern);
 			}
 
@@ -327,7 +327,7 @@ public class FoundationHierarchyEventListener implements HierarchyEventListener 
 			String conversionPattern = patternLayout.getConversionPattern();
 
 			if (shouldUpdatePattern(conversionPattern)) {
-				conversionPattern = FondationLoggerConstants.DEFAULT_CONV_PATTERN.toString();
+				conversionPattern = FoundationLoggerConstants.DEFAULT_CONV_PATTERN.toString();
 				patternLayout.setConversionPattern(conversionPattern);
 			}
 

@@ -19,7 +19,9 @@
  */
 package com.cisco.oss.foundation.logging;
 
+import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
 import com.cisco.oss.foundation.logging.structured.AbstractFoundationLoggingMarker;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.*;
 import org.apache.log4j.helpers.Loader;
 import org.apache.log4j.helpers.OptionConverter;
@@ -30,6 +32,10 @@ import org.apache.log4j.spi.RepositorySelector;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 import org.slf4j.Marker;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
@@ -39,7 +45,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 /**
  * This Logger implementation is used for applying the Foundation Logging standards on
@@ -150,27 +161,157 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 			}
 		}).start();
 
-	}
+        setupJULSupport(resource);
 
-	// private static void parseMarkerPurePattern(Properties properties) {
-	// Set<String> markerMappingKeySet = new HashSet<String>();
-	// for(Object key:properties.keySet()){
-	// if (((String)key).startsWith("logevent")) {
-	// markerMappingKeySet.add((String)key);
-	// }
-	// }
-	// for(String key:markerMappingKeySet){
-	// String [] split=key.split("\\.");
-	// if (split.length != 3 || !split[2].equals(PATTERN_KEY)) {
-	// throw new IllegalArgumentException("the key " + key +
-	// " does not contain a three part mapping, or the third part is not "+PATTERN_KEY);
-	// }
-	// String markerName = split[1];
-	// String pattern = properties.getProperty(key);
-	// markerMap.put(markerName, pattern);
-	// }
-	//
-	// }
+    }
+
+    private static void setupJULSupport(URL resource) {
+        boolean julSupportEnabled = Boolean.valueOf(log4jConfigProps.getProperty(FoundationLoggerConstants.Foundation_JUL_SUPPORT_ENABLED.toString(), "false"));
+        if (julSupportEnabled) {
+            String appenderRef = log4jConfigProps.getProperty(FoundationLoggerConstants.Foundation_JUL_APPENDER_REF.toString());
+
+            if (StringUtils.isBlank(appenderRef)) {
+
+                Enumeration allAppenders = Logger.getRootLogger().getAllAppenders();
+
+                while (allAppenders.hasMoreElements()) {
+
+                    Appender appender = (Appender) allAppenders.nextElement();
+
+                    if (appender instanceof FileAppender) {
+                        appenderRef = appender.getName();
+                        getLogger(FoundationLogger.class).info("*** Using '" + appenderRef + "' as the Java util logging appender ref ***");
+                        System.err.println("*** Using '" + appenderRef + "' as the Java util logging appender ref ***");
+                        break;
+                    }
+                }
+            }
+
+            if (StringUtils.isBlank(appenderRef)) {
+                throw new IllegalArgumentException("Java util support was enabled but couldn't find a matching appender under the '" + FoundationLoggerConstants.Foundation_JUL_APPENDER_REF.toString() + "' key.");
+            }
+
+
+            Handler handler  = null;
+
+            Appender appender = Logger.getRootLogger().getAppender(appenderRef);
+            if(appender == null){
+
+                Enumeration allAppenders = Logger.getRootLogger().getAllAppenders();
+
+                while (allAppenders.hasMoreElements()){
+
+                    Appender tempAppender = (Appender)allAppenders.nextElement();
+
+                    if(tempAppender instanceof AsyncAppender){
+
+                        AsyncAppender asyncAppender = (AsyncAppender)tempAppender;
+                        Enumeration asyncAppenderAllAppenders = asyncAppender.getAllAppenders();
+
+                        while (asyncAppenderAllAppenders.hasMoreElements()){
+
+                            Appender asyncTempAppender = (Appender)asyncAppenderAllAppenders.nextElement();
+
+                            if(appenderRef.equals(asyncTempAppender.getName())){
+                                appender = asyncTempAppender;
+                                break;
+                            }
+                        }
+                        if(appender != null){
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(appender instanceof FileAppender){
+                try {
+                    handler = new FileHandler(((FileAppender)appender).getFile());
+                } catch (IOException e) {
+                    throw new IllegalArgumentException("IOException encountered when trying to setup jul logging: " + e, e);
+                }
+            }else if(appender instanceof ConsoleAppender){
+                handler = new ConsoleHandler();
+            }else{
+                getLogger(FoundationLogger.class).error("got a reference to an unsupported appender: " + appenderRef);
+            }
+
+
+            if (handler != null) {
+
+//                System.setProperty("java.util.logging.config.file",resource.getPath());
+
+                java.util.logging.LogManager.getLogManager().reset();
+                try {
+                    java.util.logging.LogManager.getLogManager().readConfiguration(resource.openStream());
+                } catch (IOException e) {
+                    throw new IllegalArgumentException("IOException encountered when trying to read log4j properties file: " + e, e);
+                }
+
+                handler.setLevel(java.util.logging.Level.FINEST);
+                handler.setFormatter(new FoundationLogFormatter());
+
+                java.util.logging.Logger rootLogger = java.util.logging.Logger.getLogger("");
+                rootLogger.addHandler(handler);
+                rootLogger.setLevel(java.util.logging.Level.SEVERE);
+
+
+                Properties julLoggerSubset = getPropertiesSubset("jul.logger");
+                if(!julLoggerSubset.isEmpty()){
+                    Set<Object> keySet = julLoggerSubset.keySet();
+                    for (Object key : keySet) {
+                        java.util.logging.Logger logger = java.util.logging.Logger.getLogger((String)key);
+                        logger.setLevel(java.util.logging.Level.parse((String)julLoggerSubset.get(key)));
+                    }
+                }
+            }
+
+
+        }
+    }
+
+    private static Properties getPropertiesSubset(String prefix) {
+        Properties subset = new Properties();
+        Enumeration<Object> keys = log4jConfigProps.keys();
+        boolean validSubset = false;
+
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+
+            if (key instanceof String && ((String) key).startsWith(prefix)) {
+                if (!validSubset) {
+                    validSubset = true;
+                }
+
+                /*
+                 * Check to make sure that subset.subset(prefix) doesn't
+                 * blow up when there is only a single property
+                 * with the key prefix. This is not a useful
+                 * subset but it is a valid subset.
+                 */
+                String newKey = null;
+                if (((String) key).length() == prefix.length()) {
+                    newKey = prefix;
+                } else {
+                    newKey = ((String) key).substring(prefix.length() + 1);
+                }
+
+                /*
+                 *  use addPropertyDirect() - this will plug the data as
+                 *  is into the Map, but will also do the right thing
+                 *  re key accounting
+                 */
+                subset.setProperty(newKey, (String) log4jConfigProps.get(key));
+            }
+        }
+
+        if (validSubset) {
+            return subset;
+        } else {
+            return new Properties();
+        }
+    }
+
 
 	private static void udpateMarkerStructuredLogOverrideMap(Logger logger) {
 
@@ -1123,5 +1264,30 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 		}
 
 	}
+
+    private static class FoundationLogFormatter extends java.util.logging.Formatter {
+
+        MessageFormat messageFormat = new MessageFormat("{3} [{0}] [{2}]: {1}: {5} {4} \n");
+
+        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder().appendPattern("yyyy/MM/dd HH:mm:ss.SSS").toFormatter();
+
+        @Override
+        public String format(LogRecord record) {
+            Object[] arguments = new Object[]{
+                    truncateLoggerName(record.getLoggerName(), 1),
+                    record.getLevel(),
+                    Thread.currentThread().getName(),
+                    (new DateTime(record.getMillis(), DateTimeZone.UTC)).toString(dateFormatter),
+                    record.getMessage(),
+                    FlowContextFactory.getFlowContext() == null ? "" : FlowContextFactory.getFlowContext().toString()};
+            return messageFormat.format(arguments);
+        }
+
+        private String truncateLoggerName(String n, int precision) {
+            String[] split = n.split("\\.");
+            return split[split.length-1];
+        }
+
+    }
 
 }
