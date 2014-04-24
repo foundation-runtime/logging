@@ -17,12 +17,18 @@
 package com.cisco.oss.foundation.logging;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -45,14 +51,14 @@ public class SnifferLoggerTest {
 	
 	@Before
 	public void loadLoggerNames() throws Exception {
-		InputStream settingIS = FoundationLogger.class
-				.getResourceAsStream("/sniffingloggers.xml");
+		InputStream settingIS = SnifferLoggerTest.class
+				.getResourceAsStream("/sniffingLogger.xml");
 		assertNotNull(settingIS);
 		SAXBuilder builder = new SAXBuilder();
 		Document document = builder.build(settingIS);
 		settingIS.close();
 		Element rootElement = document.getRootElement();
-		List<Element> sniffingloggers = rootElement.getChildren("sniffinglogger");
+		List<Element> sniffingloggers = rootElement.getChildren("sniffingLogger");
 		assertTrue(sniffingloggers.size()>0);
 		for (Element sniffinglogger : sniffingloggers) {
 			String loggerName = sniffinglogger.getAttributeValue("id");
@@ -63,6 +69,22 @@ public class SnifferLoggerTest {
 		}
 	}
 	
+	@Before
+	public void valiadSnifferXMLByXSD(){
+		try {
+			SchemaFactory factory = SchemaFactory
+					.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			Schema schema = factory.newSchema(new StreamSource(
+					SnifferLoggerTest.class
+							.getResourceAsStream("/sniffingLogger.xsd")));
+			Validator validator = schema.newValidator();
+			validator.validate(new StreamSource(SnifferLoggerTest.class
+					.getResourceAsStream("/sniffingLogger.xml")));
+		} catch (Exception ex) {
+			throw new AssertionError(ex);
+		}
+	}
+
 	@Test
 	public void alwaysTrace(){
 		logger.info("test sniffer logger");

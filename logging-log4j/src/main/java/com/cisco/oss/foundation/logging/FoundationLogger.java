@@ -382,9 +382,9 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 	private static void updateSniffingLoggersLevel(Logger logger) {
 
 		InputStream settingIS = FoundationLogger.class
-				.getResourceAsStream("/sniffingloggers.xml");
+				.getResourceAsStream("/sniffingLogger.xml");
 		if (settingIS == null) {
-			logger.debug("file sniffingloggers.xml not found in classpath");
+			logger.debug("file sniffingLogger.xml not found in classpath");
 		} else {
 			try {
 				SAXBuilder builder = new SAXBuilder();
@@ -392,7 +392,7 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 				settingIS.close();
 				Element rootElement = document.getRootElement();
 				List<Element> sniffingloggers = rootElement
-						.getChildren("sniffinglogger");
+						.getChildren("sniffingLogger");
 				for (Element sniffinglogger : sniffingloggers) {
 					String loggerName = sniffinglogger.getAttributeValue("id");
 					Logger.getLogger(loggerName).setLevel(Level.TRACE);
@@ -402,7 +402,7 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 						"cannot load the sniffing logger configuration file. error is: "
 								+ e, e);
 				throw new IllegalArgumentException(
-						"Problem parsing sniffingloggers.xml", e);
+						"Problem parsing sniffingLogger.xml", e);
 			}
 		}
 
