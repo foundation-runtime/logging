@@ -15,8 +15,8 @@
   ~  limitations under the License.
   -->
 
-<sniffingloggers xsi:noNamespaceSchemaLocation="sniffingloggers.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<sniffinglogger id="com.nds.foundation.infra.highavailability.InfraRmiProxyFactoryBean_Sniffer"/>
-	<sniffinglogger id="com.nds.foundation.infra.highavailability.rmi.exporter.InfraRmiServiceExporter_Sniffer"/>
-	<sniffinglogger id="net.beaumaris.session_trace"/>
-</sniffingloggers>
+<sniffingLoggers xsi:noNamespaceSchemaLocation="sniffingloggers.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<sniffingLogger id="com.nds.foundation.infra.highavailability.InfraRmiProxyFactoryBean_Sniffer"/>
+	<sniffingLogger id="com.nds.foundation.infra.highavailability.rmi.exporter.InfraRmiServiceExporter_Sniffer"/>
+	<sniffingLogger id="net.beaumaris.session_trace"/>
+</sniffingLoggers>
