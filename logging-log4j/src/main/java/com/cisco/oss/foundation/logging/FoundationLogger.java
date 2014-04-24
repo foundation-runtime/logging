@@ -21,6 +21,8 @@ package com.cisco.oss.foundation.logging;
 
 import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
 import com.cisco.oss.foundation.logging.structured.AbstractFoundationLoggingMarker;
+
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.*;
 import org.apache.log4j.helpers.Loader;
@@ -146,7 +148,7 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 		// parseMarkerPurePattern(log4jConfigProps);
 		udpateMarkerStructuredLogOverrideMap(logger);
 
-//		updateRMISniffingLoggersLevel();
+		updateSniffingLoggersLevel(logger);
 
 		new Thread(new Runnable() {
 
@@ -374,15 +376,37 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 	}
 
 	/**
-     *
+     * The sniffing Loggers are some special Loggers, whose level will be set to TRACE forcedly.
+	 * @param logger
      */
-//	private static void updateRMISniffingLoggersLevel() {
-//		Logger rmiSnifferClientLogger = getLogger("com.nds.foundation.infra.highavailability.InfraRmiProxyFactoryBean_Sniffer");
-//		rmiSnifferClientLogger.setLevel(Level.TRACE);
-//
-//		Logger rmiSnifferServerLogger = getLogger("com.nds.foundation.infra.highavailability.rmi.exporter.InfraRmiServiceExporter_Sniffer");
-//		rmiSnifferServerLogger.setLevel(Level.TRACE);
-//	}
+	private static void updateSniffingLoggersLevel(Logger logger) {
+
+		InputStream settingIS = FoundationLogger.class
+				.getResourceAsStream("/sniffingloggers.xml");
+		if (settingIS == null) {
+			logger.debug("file sniffingloggers.xml not found in classpath");
+		} else {
+			try {
+				SAXBuilder builder = new SAXBuilder();
+				Document document = builder.build(settingIS);
+				settingIS.close();
+				Element rootElement = document.getRootElement();
+				List<Element> sniffingloggers = rootElement
+						.getChildren("sniffinglogger");
+				for (Element sniffinglogger : sniffingloggers) {
+					String loggerName = sniffinglogger.getAttributeValue("id");
+					Logger.getLogger(loggerName).setLevel(Level.TRACE);
+				}
+			} catch (Exception e) {
+				logger.error(
+						"cannot load the sniffing logger configuration file. error is: "
+								+ e, e);
+				throw new IllegalArgumentException(
+						"Problem parsing sniffingloggers.xml", e);
+			}
+		}
+
+	}
 
 	private static void determineIfNTEventLogIsSupported() {
 		boolean supported = true;
