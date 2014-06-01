@@ -29,7 +29,7 @@ import org.apache.log4j.spi.LoggingEvent;
  */
 public final class FoundationLoggingCompVersionPatternConverter extends LoggingEventPatternConverter {
 	
-	private static String componentVersion = getComponentVersion();
+	static String componentVersion = getComponentVersion();
 
 	/**
 	 * Private constructor.
@@ -70,7 +70,7 @@ public final class FoundationLoggingCompVersionPatternConverter extends LoggingE
 		return false;
 	}
 	
-	private static String getComponentVersion() {
+	public static String getComponentVersion() {
 		String compVersion = System.getenv("_ARTIFACT_VERSION");
 		
 		if(StringUtils.isBlank(compVersion)){
