@@ -15,18 +15,20 @@
   ~  limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-		<groupId>com.cisco.oss.foundation</groupId>
-		<artifactId>foundation-common-base</artifactId>
-		<version>0.0.0-5</version>
+        <groupId>com.cisco.oss.foundation</groupId>
+        <artifactId>foundation-common-base</artifactId>
+        <version>0.0.0-5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cisco.oss.foundation</groupId>
     <artifactId>logging-log4j</artifactId>
     <name>logging-log4j</name>
     <version>0.0.0-6-SNAPSHOT</version>
-    <description>This project is the logging log4j implementation library in the cisco vss foundation runtime</description>
+    <description>This project is the logging log4j implementation library in the cisco vss foundation runtime
+    </description>
     <url>https://github.com/foundation-runtime/logging/tree/master/logging-log4j</url>
     <packaging>jar</packaging>
     <licenses>
@@ -42,7 +44,7 @@
         <url>{URL in JIRA or Product name in CQ}</url>
     </issueManagement>
     <mailingLists>
-        <mailingList />
+        <mailingList/>
     </mailingLists>
     <developers>
         <developer>
@@ -58,7 +60,8 @@
     </developers>
     <properties>
         <logging-api-version>0.0.0-6</logging-api-version>
-            </properties>
+        <commons-version>0.0.0-6</commons-version>
+    </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
         <developerConnection>scm:git:git@github.com:foundation-runtime/logging.git</developerConnection>
@@ -71,7 +74,7 @@
     </organization>
     <build>
         <pluginManagement>
-            <plugins />
+            <plugins/>
         </pluginManagement>
         <plugins>
         </plugins>
@@ -102,5 +105,5 @@
             <artifactId>joda-time</artifactId>
             <version>2.3</version>
         </dependency>
-    </dependencies>	
+    </dependencies>
 </project>
