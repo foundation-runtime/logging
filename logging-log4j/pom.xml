@@ -57,7 +57,7 @@
         </developer>
     </developers>
     <properties>
-        <logging-api-version>0.0.0-6-SNAPSHOT</logging-api-version>
+        <logging-api-version>0.0.0-6</logging-api-version>
             </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
