@@ -29,7 +29,7 @@ public interface FoundationLoggingEvent{
      * get the marker implementation
      * @return
      */
-	Marker getMarker();
+	Marker getSlf4jMarker();
 
     /**
      * set the appender name correlated to this appender
