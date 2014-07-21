@@ -80,7 +80,7 @@ final class TimeBasedRoller extends AbstractRoller implements FileRollable {
   /**
    * Not thread-safe.
    * 
-   * @see com.nds.cab.infra.logging.appender.FileRollable#roll(org.apache.log4j.spi.LoggingEvent)
+   * @see FileRollable#roll(org.apache.log4j.spi.LoggingEvent)
    */
   public final boolean roll(final LoggingEvent loggingEvent) {
     boolean rolled = false;

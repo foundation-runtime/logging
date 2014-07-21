@@ -74,7 +74,7 @@ public class FoundationLoggingStructuredMessageConverter extends LoggingEventPat
 		if (event instanceof FoundationLof4jLoggingEvent) { // So we can call get marker
 			FoundationLof4jLoggingEvent foundationLof4jLoggingEvent = (FoundationLof4jLoggingEvent) event;
 
-			Marker marker = foundationLof4jLoggingEvent.getMarker();
+			Marker marker = foundationLof4jLoggingEvent.getSlf4jMarker();
 
 			if (marker instanceof FoundationLoggingMarker) { // So this converter may
 														// uses internal pattern

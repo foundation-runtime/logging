@@ -65,7 +65,7 @@ public final class FoundationLoggingUserFieldPatternConverter extends LoggingEve
 		if(event instanceof FoundationLof4jLoggingEvent){
 			FoundationLof4jLoggingEvent foundationLof4jLoggingEvent = (FoundationLof4jLoggingEvent)event;
 			
-			Marker marker = foundationLof4jLoggingEvent.getMarker();
+			Marker marker = foundationLof4jLoggingEvent.getSlf4jMarker();
 			
 			marker.getName();
 			

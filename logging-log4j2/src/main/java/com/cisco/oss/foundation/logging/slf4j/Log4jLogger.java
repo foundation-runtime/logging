@@ -41,15 +41,60 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
     private static final long serialVersionUID = 7869000638091304316L;
     private static final Marker EVENT_MARKER = MarkerFactory.getMarker("EVENT");
     private final boolean eventLogger;
-    private transient ExtendedLogger logger;
     private final String name;
-//    private transient EventDataConverter converter;
+    private transient ExtendedLogger logger;
+    private Level log4jLevel;
 
     public Log4jLogger(final ExtendedLogger logger, final String name) {
         this.logger = logger;
         this.eventLogger = "EventLogger".equals(name);
         this.name = name;
 //        this.converter = createConverter();
+    }
+//    private transient EventDataConverter converter;
+
+    private static org.apache.logging.log4j.Marker getMarker(final Marker marker) {
+        if (marker != null) {
+            if (marker instanceof org.apache.logging.log4j.Marker) {
+                return (org.apache.logging.log4j.Marker) marker;
+            } else {
+                return new Log4jMarker(marker);
+            }
+
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Always treat de-serialization as a full-blown constructor, by validating the final state of
+     * the de-serialized object.
+     */
+
+
+    public static Level getLevel(final int i) {
+        switch (i) {
+            case TRACE_INT:
+                return Level.TRACE;
+            case DEBUG_INT:
+                return Level.DEBUG;
+            case INFO_INT:
+                return Level.INFO;
+            case WARN_INT:
+                return Level.WARN;
+            case ERROR_INT:
+                return Level.ERROR;
+        }
+        return Level.ERROR;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public Level getLog4jLevel() {
+        return log4jLevel;
     }
 
     @Override
@@ -354,7 +399,7 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
 
     @Override
     public void log(final Marker marker, final String fqcn, final int level, final String message, final Object[] params, Throwable throwable) {
-        final Level log4jLevel = getLevel(level);
+        log4jLevel = getLevel(level);
         final org.apache.logging.log4j.Marker log4jMarker = getMarker(marker);
 
         if (!logger.isEnabled(log4jLevel, log4jMarker, message, params)) {
@@ -362,7 +407,7 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
         }
         final Message msg;
 //        if (eventLogger && marker != null && marker.contains(EVENT_MARKER) && converter != null) {
-        if (eventLogger && marker != null && marker.contains(EVENT_MARKER)){
+        if (eventLogger && marker != null && marker.contains(EVENT_MARKER)) {
 //            msg = converter.convertEvent(message, params, throwable);
             msg = new SimpleMessage(message);
         } else if (params == null) {
@@ -376,36 +421,11 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
         logger.logMessage(fqcn, log4jLevel, log4jMarker, msg, throwable);
     }
 
-    private static org.apache.logging.log4j.Marker getMarker(final Marker marker) {
-        if(marker instanceof org.apache.logging.log4j.Marker){
-            return (org.apache.logging.log4j.Marker)marker;
-        }else{
-            return new Log4jMarker(marker);
-        }
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Always treat de-serialization as a full-blown constructor, by validating the final state of
-     * the de-serialized object.
-     */
     private void readObject(final ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
         // always perform the default de-serialization first
         aInputStream.defaultReadObject();
         logger = LogManager.getContext().getLogger(name);
 //        converter = createConverter();
-    }
-
-    /**
-     * This is the default implementation of writeObject. Customise if necessary.
-     */
-    private void writeObject(final ObjectOutputStream aOutputStream) throws IOException {
-        // perform the default serialization for all non-transient, non-static fields
-        aOutputStream.defaultWriteObject();
     }
 
 //    private static EventDataConverter createConverter() {
@@ -417,19 +437,11 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
 //        }
 //    }
 
-    private static Level getLevel(final int i) {
-        switch (i) {
-            case TRACE_INT:
-                return Level.TRACE;
-            case DEBUG_INT:
-                return Level.DEBUG;
-            case INFO_INT:
-                return Level.INFO;
-            case WARN_INT:
-                return Level.WARN;
-            case ERROR_INT:
-                return Level.ERROR;
-        }
-        return Level.ERROR;
+    /**
+     * This is the default implementation of writeObject. Customise if necessary.
+     */
+    private void writeObject(final ObjectOutputStream aOutputStream) throws IOException {
+        // perform the default serialization for all non-transient, non-static fields
+        aOutputStream.defaultWriteObject();
     }
 }

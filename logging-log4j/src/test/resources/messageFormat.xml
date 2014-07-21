@@ -16,7 +16,7 @@
   -->
 
 <markers xsi:noNamespaceSchemaLocation="http://ch-infra.il.nds.com/cabResources/messageFormat.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<marker id="com.cisco.oss.foundation.logging.structured.test.TransactionMarker">
+	<log4jMarker id="com.cisco.oss.foundation.logging.structured.test.TransactionMarker">
 		<defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType} and %u{base}">
 			<criteria>
 				<criterion format="my conditional format 1 from xml">
@@ -62,9 +62,9 @@
 
 		<appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
-	</marker>
+	</log4jMarker>
 
-	<marker id="TransactionMarker3">
+	<log4jMarker id="TransactionMarker3">
 		<defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
 		<appender id="logfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
@@ -91,9 +91,9 @@
 
 		<appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
-	</marker>
+	</log4jMarker>
 
-<marker id="com.cisco.oss.foundation.logging.structured.test.TransactionMarker2">
+<log4jMarker id="com.cisco.oss.foundation.logging.structured.test.TransactionMarker2">
 		<defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
 		<appender id="logfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
@@ -120,6 +120,6 @@
 
 		<appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
-	</marker>
+	</log4jMarker>
 
 </markers>

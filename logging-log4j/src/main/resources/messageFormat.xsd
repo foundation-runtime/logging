@@ -28,7 +28,7 @@
 	<xsd:element name="markers">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element maxOccurs="unbounded" ref="marker" />
+				<xsd:element maxOccurs="unbounded" ref="log4jMarker" />
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -38,7 +38,7 @@
 			<xsd:attribute name="equals" type="xsd:string"  use="required"/>
 		</xsd:complexType>
 	</xsd:element>
-	<xsd:element name="marker">
+	<xsd:element name="log4jMarker">
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:element ref="defaultAppender" />

@@ -45,8 +45,8 @@ public class TestUsingLog4j {
 	@Test
 	public void myTest() {
 
-		Integer one = ApplicationState.setState(Level.INFO, "persistent data message");
-		ApplicationState.setState(Level.WARN, "persistent data message - WARN");
+		Integer one = ApplicationState.setState(FoundationLevel.INFO, "persistent data message");
+		ApplicationState.setState(FoundationLevel.WARN, "persistent data message - WARN");
 
 		for (int i = 0; i < NUMBER_OF_ITER; i++) {
 			// MDC.put("catTerm", CategoryTerm.Log);
@@ -61,8 +61,8 @@ public class TestUsingLog4j {
 			LOGGER.fatal("Fatal message test!!!");
 
 			if (i == 500) {
-				ApplicationState.updateState(one, Level.INFO, "persistent data message was updated");
-				ApplicationState.updateState(one, Level.INFO, "persistent data message was updated");
+				ApplicationState.updateState(one, FoundationLevel.INFO, "persistent data message was updated");
+				ApplicationState.updateState(one, FoundationLevel.INFO, "persistent data message was updated");
 			} else if (i == 750) {
 				ApplicationState.removeState(one);
 				ApplicationState.removeState(Integer.valueOf(112234));

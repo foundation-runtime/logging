@@ -46,7 +46,7 @@ final class CompositeRoller implements FileRollable {
   /**
    * Delegates file rolling to composed objects.
    * 
-   * @see com.nds.cab.infra.logging.appender.FileRollable#roll(org.apache.log4j.spi.LoggingEvent)
+   * @see FileRollable#roll(org.apache.log4j.spi.LoggingEvent)
    */
   public final boolean roll(final LoggingEvent loggingEvent) {
     for (int i = 0; i < this.fileRollables.length; i++) {

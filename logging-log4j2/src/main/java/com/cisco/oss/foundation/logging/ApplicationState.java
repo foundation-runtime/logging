@@ -16,10 +16,15 @@
 
 package com.cisco.oss.foundation.logging;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.MDC;
+import com.cisco.oss.foundation.logging.slf4j.Log4jLogger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.impl.Log4jLogEvent;
+import org.apache.logging.log4j.message.SimpleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -30,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * The application can register state values with the Foundation logging library. The values are logged when first registered, when values are changed, and at roll-over. This facility can be used to log persistent messages, e.g. log an entry when a failure is encountered, and log the corresponding clearing
  * message.
- * 
+ *
  * @author Jethro Revill
  * @author Yair Ogen
  */
@@ -54,7 +59,7 @@ public final class ApplicationState {
 
     private static AtomicInteger stateUniqueKey = new AtomicInteger(0);
 
-    public static final Logger LOGGER = Logger.getLogger(ApplicationState.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(ApplicationState.class);
 
 
     /**
@@ -73,11 +78,13 @@ public final class ApplicationState {
         final ApplicationStateMessage newValue = new ApplicationStateMessage(level, messageString);
 
 //        if (isApplicationStateEnabled()) {
-            
+
 //        }
         String flowContext = (String) MDC.get("flowCtxt");
 		MDC.remove("flowCtxt");
-        LOGGER.log(FQCN, getLog4jLevel(level), message, null);
+        if (LOGGER instanceof Log4jLogger) {
+            ((Log4jLogger)LOGGER).log(null,FQCN, level.getIntLevel(), messageString, null, null);
+        }
         if (flowContext != null) {
    			MDC.put("flowCtxt", flowContext);
    		}
@@ -104,12 +111,14 @@ public final class ApplicationState {
         if (!newValue.equals(oldValue)) {
         	String flowContext = (String) MDC.get("flowCtxt");
     		MDC.remove("flowCtxt");
-        	 LOGGER.log(FQCN, getLog4jLevel(level), message, null);
+            if (LOGGER instanceof Log4jLogger) {
+                ((Log4jLogger)LOGGER).log(null,FQCN, level.getIntLevel(), messageString, null, null);
+            }
         	 if (flowContext != null) {
        			MDC.put("flowCtxt", flowContext);
        		}
             appState.put(key, newValue);
-           
+
         }
     }
 
@@ -125,11 +134,14 @@ public final class ApplicationState {
         // this key
         final ApplicationStateMessage applicationStateMessage = appState.get(key);
         if (applicationStateMessage != null) {
-         
+
         	appState.remove(key);
         	String flowContext = (String) MDC.get("flowCtxt");
     		MDC.remove("flowCtxt");
-        	LOGGER.log(FQCN, getLog4jLevel(applicationStateMessage.getLevel()), applicationStateMessage.getMessage(), null);
+            if (LOGGER instanceof Log4jLogger) {
+
+                ((Log4jLogger)LOGGER).log(null,FQCN, applicationStateMessage.getLevel().getIntLevel(), applicationStateMessage.getMessage(), null, null);
+            }
         	 if (flowContext != null) {
       			MDC.put("flowCtxt", flowContext);
       		}
@@ -150,9 +162,10 @@ public final class ApplicationState {
                 final Collection<ApplicationStateMessage> entries = appState.values();
                 for (ApplicationStateMessage entry : entries) {
                     Level level = getLog4jLevel(entry.getLevel());
-                    if (level.isGreaterOrEqual(LOGGER.getEffectiveLevel())) {
-                        final org.apache.log4j.spi.LoggingEvent loggingEvent = new org.apache.log4j.spi.LoggingEvent(FQCN, LOGGER,level, entry.getMessage(), null);
-                        appender.doAppend(loggingEvent);
+                    if (level.isMoreSpecificThan(((Log4jLogger) LOGGER).getLog4jLevel())) {
+                        LogEvent logEvent = new Log4jLogEvent(LOGGER.getName(),null, FQCN, level, new SimpleMessage(entry.getMessage()), null);
+//                        final org.apache.log4j.spi.LoggingEvent loggingEvent = new org.apache.log4j.spi.LoggingEvent(FQCN,null, LOGGER, entry.getLevel(), entry.getMessage(), null);
+                        appender.append(logEvent);
                     }
                 }
 
@@ -161,7 +174,7 @@ public final class ApplicationState {
 //        }
     }
 
-    public static Level getLog4jLevel(FoundationLevel foundationLevel) {
+    private static Level getLog4jLevel(FoundationLevel foundationLevel) {
         switch (foundationLevel){
             case TRACE:return Level.TRACE;
             case DEBUG:return Level.DEBUG;
@@ -175,7 +188,7 @@ public final class ApplicationState {
 
 //    /**
 //     * return true if presitent logging is enabled. can be turned on or off in log4j configuration file:<br>
-//     * FoundationLogger.applicationstateEnabled=true<br>
+//     * Log4jLogger.applicationstateEnabled=true<br>
 //     * Default is set to true
 //     *
 //     * @return
@@ -184,8 +197,8 @@ public final class ApplicationState {
 //
 //        boolean isApplicationStateEnabled = true;
 //
-//        if (FoundationLogger.log4jConfigProps != null && FoundationLogger.log4jConfigProps.containsKey(FondationLoggerConstants.APPSTATE_ENABLED.toString())) {
-//            isApplicationStateEnabled = Boolean.valueOf(FoundationLogger.log4jConfigProps.getProperty(FondationLoggerConstants.APPSTATE_ENABLED.toString()));
+//        if (Log4jLogger.log4jConfigProps != null && Log4jLogger.log4jConfigProps.containsKey(FondationLoggerConstants.APPSTATE_ENABLED.toString())) {
+//            isApplicationStateEnabled = Boolean.valueOf(Log4jLogger.log4jConfigProps.getProperty(FondationLoggerConstants.APPSTATE_ENABLED.toString()));
 //        }
 //
 //        return isApplicationStateEnabled;

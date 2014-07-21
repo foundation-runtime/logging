@@ -21,6 +21,7 @@ package com.cisco.oss.foundation.logging.appender;
 
 import com.cisco.oss.foundation.logging.ApplicationState;
 import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
 import org.apache.log4j.MDC;
 
 import java.util.Collection;
@@ -52,8 +53,9 @@ public class FoundationRollEventListener implements FileRollEventListener {
 				
 				final Collection<ApplicationState.ApplicationStateMessage> entries = ApplicationState.getAppStateEntries();
 				for (ApplicationState.ApplicationStateMessage entry : entries) {
-				    if(entry.getLevel().isGreaterOrEqual(ApplicationState.LOGGER.getEffectiveLevel())) {				       
-						final org.apache.log4j.spi.LoggingEvent loggingEvent = new org.apache.log4j.spi.LoggingEvent(ApplicationState.FQCN, ApplicationState.LOGGER, entry.getLevel(), entry.getMessage(), null);
+                    Level level = ApplicationState.getLog4jLevel(entry.getLevel());
+				    if(level.isGreaterOrEqual(ApplicationState.LOGGER.getEffectiveLevel())) {
+						final org.apache.log4j.spi.LoggingEvent loggingEvent = new org.apache.log4j.spi.LoggingEvent(ApplicationState.FQCN, ApplicationState.LOGGER, level, entry.getMessage(), null);
 
 						//Save the current layout before changing it to the original (relevant for marker cases when the layout was changed)
 						Layout current=fileRollEvent.getSource().getLayout();

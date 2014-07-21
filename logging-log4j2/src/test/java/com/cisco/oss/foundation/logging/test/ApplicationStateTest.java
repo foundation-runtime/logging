@@ -17,10 +17,13 @@
 /**
  * 
  */
-package com.cisco.oss.foundation.logging;
+package com.cisco.oss.foundation.logging.test;
 
-import org.apache.log4j.Logger;
+import com.cisco.oss.foundation.logging.ApplicationState;
+import com.cisco.oss.foundation.logging.FoundationLevel;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 
@@ -32,7 +35,13 @@ import static org.junit.Assert.*;
  */
 public class ApplicationStateTest {
 	
-	static final Logger logger = Logger.getLogger(ApplicationStateTest.class);
+	static final Logger logger = LoggerFactory.getLogger(ApplicationStateTest.class);
+
+    @Test
+    public void testLog(){
+        Integer state = ApplicationState.setState(FoundationLevel.INFO, "application state message");
+        ApplicationState.updateState(state,FoundationLevel.INFO,"application state message updated");
+    }
 	
 	@Test
 	public void equalstest(){

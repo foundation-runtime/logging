@@ -59,7 +59,7 @@ import java.util.logging.LogRecord;
  * top of log4j. The logger is initialized by the the FoundationLogHierarcy Object. It
  * is not meant to be used in code by developers. In runtime they will use this
  * Logger if they specify the following line in thier log4j.properties file:
- * log4j.loggerFactory=com.nds.foundation.infra.logging.FoundationLogFactory
+ * log4j.loggerFactory=com.cisco.oss.foundation.logging.FoundationLogFactory
  * 
  * @author Yair Ogen
  */
@@ -973,25 +973,6 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 	public void error(String msg, Throwable t) {
 		log(FQCN, Level.ERROR, msg, t);
 	}
-
-	// @Override
-	// protected void forcedLog(final String fqcn, final Priority level, final
-	// Object message, final Throwable throwable) {
-	// //update the relevant category in the MDC. when no category was specified
-	// use Log as default.
-	// if (message instanceof MessageWrapper) {
-	// MDC.put(FondationLoggerConstants.CAT_TERM.toString(),
-	// ((MessageWrapper)message).getCategoryTerm());
-	// }else{
-	// CategoryTerm catTerm = CategoryTerm.Library;
-	// if (getName().startsWith("com.nds")) {
-	// catTerm = CategoryTerm.Log;
-	// }
-	// MDC.put(FondationLoggerConstants.CAT_TERM.toString(), catTerm);
-	// }
-	// super.forcedLog(fqcn, level, message, throwable);
-	// }
-	//
 
 	@Override
 	public boolean isTraceEnabled(Marker marker) {

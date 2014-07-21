@@ -47,7 +47,7 @@ public class FoundationLof4jLoggingEvent extends LoggingEvent implements Foundat
      * @return
      */
     @Override
-	public Marker getMarker() {
+	public Marker getSlf4jMarker() {
 		return marker;
 	}
 
