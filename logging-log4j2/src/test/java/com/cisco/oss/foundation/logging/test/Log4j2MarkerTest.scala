@@ -31,7 +31,19 @@ class Log4j2MarkerTest {
 
 
    @Test def simpleMarkerTest(){
-     LOGGER.info(new TransactionMarker("mySessionIdFromTest"), "simple test")
+
+     Thread.sleep(1000)
+     val transactionMarker: TransactionMarker = new TransactionMarker("mySessionIdFromTest")
+
+     transactionMarker setSourceId ("test source id")
+     transactionMarker setSourceType ("test source type")
+
+     LOGGER.info(transactionMarker, "simple test")
+
+     val transactionMarker2: TransactionMarker = new TransactionMarker("mySessionIdFromTest")
+     transactionMarker2 setSourceId ("sourceId1")
+     transactionMarker2 setSourceType ("sourceType1")
+     LOGGER.info(transactionMarker2, "simple test")
    }
 
  }

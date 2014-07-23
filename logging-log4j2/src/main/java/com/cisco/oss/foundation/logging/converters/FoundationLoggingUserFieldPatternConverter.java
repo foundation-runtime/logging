@@ -19,7 +19,7 @@
  */
 package com.cisco.oss.foundation.logging.converters;
 
-import com.cisco.oss.foundation.logging.FoundationLog4jLogEvent;
+import com.cisco.oss.foundation.logging.slf4j.Log4jMarker;
 import com.cisco.oss.foundation.logging.structured.FoundationLoggingMarker;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
@@ -65,16 +65,18 @@ public final class FoundationLoggingUserFieldPatternConverter  extends NamePatte
 	 */
 	@Override
     public void format(final LogEvent event, final StringBuilder toAppendTo) {
-		
-		if(event instanceof FoundationLog4jLogEvent){
-            FoundationLog4jLogEvent foundationLof4jLoggingEvent = (FoundationLog4jLogEvent)event;
-			
-			Marker marker = foundationLof4jLoggingEvent.getSlf4jMarker();
-			
+
+        org.apache.logging.log4j.Marker marker = event.getMarker();
+        if(marker instanceof Log4jMarker){
+
+            Log4jMarker log4jMarker = (Log4jMarker)marker;
+
+            Marker foundationMarker = log4jMarker.getMarker();
+
 			marker.getName();
 			
-			if(marker instanceof FoundationLoggingMarker){
-				FoundationLoggingMarker foundationLoggingMarker = (FoundationLoggingMarker)marker;
+			if(foundationMarker instanceof FoundationLoggingMarker){
+				FoundationLoggingMarker foundationLoggingMarker = (FoundationLoggingMarker)foundationMarker;
 				String userFieldValue = foundationLoggingMarker.valueOf(key);
 				if(FoundationLoggingMarker.NO_OPERATION.equals(userFieldValue)){
 					toAppendTo.append("");

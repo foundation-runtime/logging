@@ -28,7 +28,7 @@ public class FoundationLoggerContext extends org.apache.logging.log4j.core.Logge
 
     public FoundationLoggerContext(final String name) {
         super(name);
-        start(new FoundationLoggerConfiguration());
+        start(FoundationLoggerConfiguration.INSTANCE);
 //        start(new FoundationLoggerConfiguration());
     }
 

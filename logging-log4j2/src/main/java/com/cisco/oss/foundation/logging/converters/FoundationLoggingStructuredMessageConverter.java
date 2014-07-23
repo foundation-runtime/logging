@@ -16,14 +16,18 @@
 
 package com.cisco.oss.foundation.logging.converters;
 
+import com.cisco.oss.foundation.logging.FoundationLoggerConfiguration;
+import com.cisco.oss.foundation.logging.FoundationLoggingPatternLayout;
 import com.cisco.oss.foundation.logging.slf4j.Log4jMarker;
 import com.cisco.oss.foundation.logging.structured.FoundationLoggingMarker;
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.pattern.ConverterKeys;
 import org.apache.logging.log4j.core.pattern.MessagePatternConverter;
 import org.apache.logging.log4j.core.pattern.NamePatternConverter;
+import org.apache.logging.log4j.core.util.Charsets;
 import org.slf4j.Marker;
 
 import java.util.HashMap;
@@ -80,19 +84,25 @@ public class FoundationLoggingStructuredMessageConverter  extends NamePatternCon
 
                 FoundationLoggingMarker foundationMarker = (FoundationLoggingMarker) marker;
 
-//                String pattern = foundationMarker.getFormatter().getFormat((FoundationLoggingEvent)event);
+                String pattern = foundationMarker.getFormatter().getFormat(ThreadContext.get("%APPENDER_NAME%"));
 
-//                if (pattern != null) { // only if we have pattern from one of two options
-
-//                    if (layoutsMap.get(pattern) == null) {
-//						layoutsMap.put(pattern, new FoundationLoggingPatternLayout(pattern));
-//					}
-
-					// get the layout from static layouts map and get its format string.
-//					String fromInnerPattern = layoutsMap.get(pattern).format(event);
-//					toAppendTo.append(fromInnerPattern);
-//					appended = true;
-//                }
+                if (pattern != null) { // only if we have pattern from one of two options
+                    if (layoutsMap.get(pattern) == null) {
+                        layoutsMap.put(pattern, new FoundationLoggingPatternLayout(
+                                FoundationLoggerConfiguration.INSTANCE,
+                                null,
+                                pattern,
+                                Charsets.UTF_8,
+                                true,
+                                false,
+                                null,
+                                null));
+                    }
+                    // get the layout from static layouts map and get its format string.
+                    String fromInnerPattern = layoutsMap.get(pattern).toSerializable(event).toString();
+                    toAppendTo.append(fromInnerPattern);
+                    appended = true;
+                }
             }
         }
 

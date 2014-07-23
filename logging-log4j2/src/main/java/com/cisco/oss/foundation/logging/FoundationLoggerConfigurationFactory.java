@@ -41,7 +41,7 @@ public class FoundationLoggerConfigurationFactory extends ConfigurationFactory {
      */
     @Override
     public Configuration getConfiguration(final ConfigurationSource source) {
-        return new FoundationLoggerConfiguration();
+        return FoundationLoggerConfiguration.INSTANCE;
     }
 
     /**

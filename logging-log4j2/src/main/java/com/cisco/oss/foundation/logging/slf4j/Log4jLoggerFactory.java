@@ -16,6 +16,7 @@
 
 package com.cisco.oss.foundation.logging.slf4j;
 
+import com.cisco.oss.foundation.logging.FoundationLoggerContextFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.spi.ExtendedLogger;
 import org.apache.logging.log4j.spi.LoggerContext;
@@ -23,8 +24,6 @@ import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -36,32 +35,34 @@ public class Log4jLoggerFactory implements ILoggerFactory {
     private static final String FQCN = Log4jLoggerFactory.class.getName();
     private static final String PACKAGE = "org.slf4j";
 
-    private final Map<LoggerContext, ConcurrentMap<String, Logger>> contextMap =
-            new WeakHashMap<LoggerContext, ConcurrentMap<String, Logger>>();
+    private final  ConcurrentMap<String, Logger> loggers = new ConcurrentHashMap();
+//    private final Map<LoggerContext, ConcurrentMap<String, Logger>> contextMap =
+//            new WeakHashMap<LoggerContext, ConcurrentMap<String, Logger>>();
 
     @Override
     public Logger getLogger(final String name) {
-        final LoggerContext context = getContext();
-        final ConcurrentMap<String, Logger> loggers = getLoggersMap(context);
+//        final LoggerContext context = getContext();
+//        final ConcurrentMap<String, Logger> loggers = getLoggersMap(context);
 
         if (loggers.containsKey(name)) {
             return loggers.get(name);
         }
         final String key = Logger.ROOT_LOGGER_NAME.equals(name) ? LogManager.ROOT_LOGGER_NAME : name;
-        loggers.putIfAbsent(name, new Log4jLogger(context.getLogger(key), name));
+        loggers.putIfAbsent(name, new Log4jLogger(FoundationLoggerContextFactory.CONTEXT.getLogger(key), name));
         return loggers.get(name);
     }
 
-    private ConcurrentMap<String, Logger> getLoggersMap(final LoggerContext context) {
-        synchronized (contextMap) {
-            ConcurrentMap<String, Logger> map = contextMap.get(context);
-            if (map == null) {
-                map = new ConcurrentHashMap<String, Logger>();
-                contextMap.put(context, map);
-            }
-            return map;
-        }
-    }
+//    private ConcurrentMap<String, Logger> getLoggersMap(final LoggerContext context) {
+//        synchronized (contextMap) {
+//            ConcurrentMap<String, Logger> map = contextMap.get(context);
+//            if (map == null) {
+//                map = new ConcurrentHashMap<String, Logger>();
+//                contextMap.put(context, map);
+//            }
+//            return map;
+//        }
+//    }
+
     private LoggerContext getContext() {
         final Throwable t = new Throwable();
         boolean next = false;

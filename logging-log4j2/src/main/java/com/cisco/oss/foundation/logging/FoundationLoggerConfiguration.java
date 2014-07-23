@@ -16,13 +16,13 @@
 
 package com.cisco.oss.foundation.logging;
 
+import com.cisco.oss.foundation.logging.appenders.FoundationRollingRandomAccessFileAppender;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
-import org.apache.logging.log4j.core.appender.RollingRandomAccessFileAppender;
 import org.apache.logging.log4j.core.appender.rolling.*;
 import org.apache.logging.log4j.core.config.*;
 import org.apache.logging.log4j.core.layout.PatternLayout;
@@ -84,6 +84,7 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
 //        final Level level = levelName != null && Level.valueOf(levelName) != null ?
 //                Level.valueOf(levelName) : Level.ERROR;
 //        root.setLevel(level);
+
     }
 
     private void init(Layout layout) {
@@ -217,7 +218,7 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
                         SizeBasedTriggeringPolicy.createPolicy("100 MB")
                 );
                 RolloverStrategy rolloverStrategy = DefaultRolloverStrategy.createStrategy("100",null,null,null,this);
-                RollingRandomAccessFileAppender appender = RollingRandomAccessFileAppender.createAppender(fileName, filePattern, "true", appenderName, "false", null, trigerringPolicy, rolloverStrategy, layout, null, null, null, null, this);
+                FoundationRollingRandomAccessFileAppender appender = FoundationRollingRandomAccessFileAppender.createAppender(fileName, filePattern, "true", appenderName, "false", null, trigerringPolicy, rolloverStrategy, layout, null, null, null, null, this);
                 appender.start();
                 addAppender(appender);
 //                appender.
