@@ -146,22 +146,11 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 
 		// parseMarkerPatterns(log4jConfigProps);
 		// parseMarkerPurePattern(log4jConfigProps);
-		udpateMarkerStructuredLogOverrideMap(logger);
+//		udpateMarkerStructuredLogOverrideMap(logger);
+
+        AbstractFoundationLoggingMarker.init();
 
 		updateSniffingLoggersLevel(logger);
-
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					AbstractFoundationLoggingMarker.scanClassPathForFormattingAnnotations();
-				} catch (Exception e) {
-					logger.error("Problem parsing marker annotations. Error is: " + e, e);
-				}
-
-			}
-		}).start();
 
         setupJULSupport(resource);
 
@@ -315,65 +304,41 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
     }
 
 
-	private static void udpateMarkerStructuredLogOverrideMap(Logger logger) {
 
-		InputStream messageFormatIS = FoundationLogger.class.getResourceAsStream("/messageFormat.xml");
-		if (messageFormatIS == null) {
-			logger.debug("file messageformat.xml not found in classpath");
-		} else {
-			try {
-				SAXBuilder builder = new SAXBuilder();
-				Document document = builder.build(messageFormatIS);
 
-				messageFormatIS.close();
-
-				Element rootElement = document.getRootElement();
-				List<Element> markers = rootElement.getChildren("marker");
-				for (Element marker : markers) {
-					AbstractFoundationLoggingMarker.markersXmlMap.put(marker.getAttributeValue("id"), marker);
-				}
-
-			} catch (Exception e) {
-				logger.error("cannot load the structured log override file. error is: " + e, e);
-				throw new IllegalArgumentException("Problem parsing messageformat.xml", e);
-			}
-		}
-
-	}
-
-	private static void parseMarkerPatterns(Properties properties) {
-
-		Set<String> markerMappingKeySet = new HashSet<String>();
-
-		Set<String> entrySet = properties.stringPropertyNames();
-		for (String key : entrySet) {
-			if (key.startsWith("logevent")) {
-				markerMappingKeySet.add(key);
-			}
-		}
-
-		for (String key : markerMappingKeySet) {
-
-			String[] split = key.split("\\.");
-			if (split.length != 4) {
-				throw new IllegalArgumentException("the key " + key + " does not contain a four part mapping.");
-			}
-
-			String markerName = split[1];
-			String appenderName = split[2];
-			String pattern = properties.getProperty(key);
-
-			if (markerAppendersMap.get(markerName) == null) {
-				markerAppendersMap.put(markerName, new HashMap<String, Layout>());
-			}
-
-			Map<String, Layout> markerAppenderMap = markerAppendersMap.get(markerName);
-			Layout patternLayout = new FoundationLoggingPatternLayout(pattern);
-			markerAppenderMap.put(appenderName, patternLayout);
-
-		}
-
-	}
+//	private static void parseMarkerPatterns(Properties properties) {
+//
+//		Set<String> markerMappingKeySet = new HashSet<String>();
+//
+//		Set<String> entrySet = properties.stringPropertyNames();
+//		for (String key : entrySet) {
+//			if (key.startsWith("logevent")) {
+//				markerMappingKeySet.add(key);
+//			}
+//		}
+//
+//		for (String key : markerMappingKeySet) {
+//
+//			String[] split = key.split("\\.");
+//			if (split.length != 4) {
+//				throw new IllegalArgumentException("the key " + key + " does not contain a four part mapping.");
+//			}
+//
+//			String markerName = split[1];
+//			String appenderName = split[2];
+//			String pattern = properties.getProperty(key);
+//
+//			if (markerAppendersMap.get(markerName) == null) {
+//				markerAppendersMap.put(markerName, new HashMap<String, Layout>());
+//			}
+//
+//			Map<String, Layout> markerAppenderMap = markerAppendersMap.get(markerName);
+//			Layout patternLayout = new FoundationLoggingPatternLayout(pattern);
+//			markerAppenderMap.put(appenderName, patternLayout);
+//
+//		}
+//
+//	}
 
 	/**
      * The sniffing Loggers are some special Loggers, whose level will be set to TRACE forcedly.

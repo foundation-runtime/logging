@@ -83,7 +83,7 @@ public class FoundationLoggingStructuredMessageConverter extends LoggingEventPat
 
 				FoundationLoggingMarker foundationMarker = (FoundationLoggingMarker) marker;
 
-				String pattern = foundationMarker.getFormatter().getFormat(foundationLof4jLoggingEvent);
+				String pattern = foundationMarker.getFormatter().getFormat(foundationLof4jLoggingEvent.getAppenderName());
 				
 				if (pattern != null) { // only if we have pattern from one of
 										// two options

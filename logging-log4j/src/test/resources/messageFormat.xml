@@ -16,110 +16,110 @@
   -->
 
 <markers xsi:noNamespaceSchemaLocation="http://ch-infra.il.nds.com/cabResources/messageFormat.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<log4jMarker id="com.cisco.oss.foundation.logging.structured.test.TransactionMarker">
-		<defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType} and %u{base}">
-			<criteria>
-				<criterion format="my conditional format 1 from xml">
-					<field name="sourceId" equals="sourceId1" />
-					<field name="sourceType" equals="sourceType1" />
-				</criterion>
-				<criterion format="my conditional format 2 from xml">
-					<field name="sourceId" equals="sourceId2" />
-					<field name="sourceType" equals="sourceType2" />
-				</criterion>
-				<criterion format="my conditional format 3 from xml">
-					<field name="sourceId" equals="sourceId3" />
-					<field name="sourceType" equals="sourceType3" />
-				</criterion>
-				<criterion format="my conditional format 4 from xml">
-					<field name="sourceId" equals="sourceId3" />
-					<field name="sourceType" equals="sourceType4" />
-				</criterion>
-			</criteria>
-		</defaultAppender>
+    <marker id="com.cisco.oss.foundation.logging.structured.test.TransactionMarker">
+        <defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType} and %u{base}">
+            <criteria>
+                <criterion format="my conditional format 1 from xml">
+                    <field name="sourceId" equals="sourceId1" />
+                    <field name="sourceType" equals="sourceType1" />
+                </criterion>
+                <criterion format="my conditional format 2 from xml">
+                    <field name="sourceId" equals="sourceId2" />
+                    <field name="sourceType" equals="sourceType2" />
+                </criterion>
+                <criterion format="my conditional format 3 from xml">
+                    <field name="sourceId" equals="sourceId3" />
+                    <field name="sourceType" equals="sourceType3" />
+                </criterion>
+                <criterion format="my conditional format 4 from xml">
+                    <field name="sourceId" equals="sourceId3" />
+                    <field name="sourceType" equals="sourceType4" />
+                </criterion>
+            </criteria>
+        </defaultAppender>
 
-		<appender id="logfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
-			<criteria>
-				<criterion format="my conditional format 1 from xml">
-					<field name="sourceId" equals="sourceId1" />
-					<field name="sourceType" equals="sourceType1" />
-				</criterion>
-				<criterion format="my conditional format 2 from xml">
-					<field name="sourceId" equals="sourceId2" />
-					<field name="sourceType" equals="sourceType2" />
-				</criterion>
-			</criteria>
-		</appender>
+        <appender id="logfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
+            <criteria>
+                <criterion format="my conditional format 1 from xml">
+                    <field name="sourceId" equals="sourceId1" />
+                    <field name="sourceType" equals="sourceType1" />
+                </criterion>
+                <criterion format="my conditional format 2 from xml">
+                    <field name="sourceId" equals="sourceId2" />
+                    <field name="sourceType" equals="sourceType2" />
+                </criterion>
+            </criteria>
+        </appender>
 
-		<appender id="auditfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType} and %u{base}">
-			<criteria>
-				<criterion format="my conditional format 1 from xml - audit">
-					<field name="sourceId" equals="sourceId1" />
-					<field name="sourceType" equals="sourceType1" />
-				</criterion>
-			</criteria>
-		</appender>
+        <appender id="auditfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType} and %u{base}">
+            <criteria>
+                <criterion format="my conditional format 1 from xml - audit">
+                    <field name="sourceId" equals="sourceId1" />
+                    <field name="sourceType" equals="sourceType1" />
+                </criterion>
+            </criteria>
+        </appender>
 
-		<appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
+        <appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
-	</log4jMarker>
+    </marker>
 
-	<log4jMarker id="TransactionMarker3">
-		<defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
+    <marker id="TransactionMarker3">
+        <defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
-		<appender id="logfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
-			<criteria>
-				<criterion format=" my conditional format 1 from xml ">
-					<field name="sourceId" equals="sourceId1" />
-					<field name="sourceType" equals="sourceType1" />
-				</criterion>
-				<criterion format="my conditional format 2 from xml">
-					<field name="sourceId" equals="sourceId2" />
-					<field name="sourceType" equals="sourceType2" />
-				</criterion>
-			</criteria>
-		</appender>
+        <appender id="logfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
+            <criteria>
+                <criterion format=" my conditional format 1 from xml ">
+                    <field name="sourceId" equals="sourceId1" />
+                    <field name="sourceType" equals="sourceType1" />
+                </criterion>
+                <criterion format="my conditional format 2 from xml">
+                    <field name="sourceId" equals="sourceId2" />
+                    <field name="sourceType" equals="sourceType2" />
+                </criterion>
+            </criteria>
+        </appender>
 
-		<appender id="auditfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
-			<criteria>
-				<criterion format="my conditional format 1 from xml">
-					<field name="sourceId" equals="sourceId1" />
-					<field name="sourceType" equals="sourceType1" />
-				</criterion>
-			</criteria>
-		</appender>
+        <appender id="auditfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
+            <criteria>
+                <criterion format="my conditional format 1 from xml">
+                    <field name="sourceId" equals="sourceId1" />
+                    <field name="sourceType" equals="sourceType1" />
+                </criterion>
+            </criteria>
+        </appender>
 
-		<appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
+        <appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
-	</log4jMarker>
+    </marker>
 
-<log4jMarker id="com.cisco.oss.foundation.logging.structured.test.TransactionMarker2">
-		<defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
+    <marker id="com.cisco.oss.foundation.logging.structured.test.TransactionMarker2">
+        <defaultAppender defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
-		<appender id="logfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
-			<criteria>
-				<criterion format=" my conditional format 1 from xml ">
-					<field name="sourceId" equals="sourceId1" />
-					<field name="sourceType" equals="sourceType1" />
-				</criterion>
-				<criterion format="my conditional format 2 from xml">
-					<field name="sourceId" equals="sourceId2" />
-					<field name="sourceType" equals="sourceType2" />
-				</criterion>
-			</criteria>
-		</appender>
+        <appender id="logfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
+            <criteria>
+                <criterion format=" my conditional format 1 from xml ">
+                    <field name="sourceId" equals="sourceId1" />
+                    <field name="sourceType" equals="sourceType1" />
+                </criterion>
+                <criterion format="my conditional format 2 from xml">
+                    <field name="sourceId" equals="sourceId2" />
+                    <field name="sourceType" equals="sourceType2" />
+                </criterion>
+            </criteria>
+        </appender>
 
-		<appender id="auditfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
-			<criteria>
-				<criterion format="my conditional format 1 from xml">
-					<field name="sourceId" equals="sourceId1" />
-					<field name="sourceType" equals="sourceType1" />
-				</criterion>
-			</criteria>
-		</appender>
+        <appender id="auditfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}">
+            <criteria>
+                <criterion format="my conditional format 1 from xml">
+                    <field name="sourceId" equals="sourceId1" />
+                    <field name="sourceType" equals="sourceType1" />
+                </criterion>
+            </criteria>
+        </appender>
 
-		<appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
+        <appender id="biFile" defaultFormat="My default format for %u{sourceId} and %u{sourceType}" />
 
-	</log4jMarker>
+    </marker>
 
 </markers>
