@@ -16,8 +16,6 @@
 
 package com.cisco.oss.foundation.logging.structured;
 
-import com.cisco.oss.foundation.logging.FoundationLoggingEvent;
-
 /**
  * Default formatter for use when User Marker doesn't have any annotations or configuration overrides
  * @author Yair Ogen
@@ -25,7 +23,7 @@ import com.cisco.oss.foundation.logging.FoundationLoggingEvent;
 public class DefaultMarkerFormatter implements FoundationLoggingMarkerFormatter {
 
 	@Override
-	public String getFormat(FoundationLoggingEvent foundationLoggingEvent) {
+	public String getFormat(String appenderName) {
 		return null;
 	}
 

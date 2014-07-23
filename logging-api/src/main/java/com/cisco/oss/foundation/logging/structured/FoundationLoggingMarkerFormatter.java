@@ -17,8 +17,6 @@
 package com.cisco.oss.foundation.logging.structured;
 
 
-import com.cisco.oss.foundation.logging.FoundationLoggingEvent;
-
 /**
  * A formatter helper class to support formatting based on annotations present on the Marker
  * This class should not have any user defined implementations
@@ -26,6 +24,6 @@ import com.cisco.oss.foundation.logging.FoundationLoggingEvent;
  *
  */
 public interface FoundationLoggingMarkerFormatter {
-	String getFormat(FoundationLoggingEvent foundationLoggingEvent);
+	String getFormat(String appenderName);
 	void setMarker(FoundationLoggingMarker marker);
 }

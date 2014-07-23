@@ -17,11 +17,12 @@
 package com.cisco.oss.foundation.logging.structured;
 
 import com.cisco.oss.foundation.logging.FoundationLoggerConstants;
-import com.cisco.oss.foundation.logging.FoundationLoggingEvent;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import javax.tools.*;
 import javax.tools.JavaFileObject.Kind;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -58,6 +60,49 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 	private FoundationLoggingMarkerFormatter formatter;
 
 	private static Logger LOGGER = LoggerFactory.getLogger(AbstractFoundationLoggingMarker.class);
+
+    public static void init(){
+        udpateMarkerStructuredLogOverrideMap();
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    scanClassPathForFormattingAnnotations();
+                } catch (Exception e) {
+                    LOGGER.error("Problem parsing marker annotations. Error is: " + e, e);
+                }
+
+            }
+        }).start();
+    }
+
+    private static void udpateMarkerStructuredLogOverrideMap() {
+
+        InputStream messageFormatIS = AbstractFoundationLoggingMarker.class.getResourceAsStream("/messageFormat.xml");
+        if (messageFormatIS == null) {
+            LOGGER.debug("file messageformat.xml not found in classpath");
+        } else {
+            try {
+                SAXBuilder builder = new SAXBuilder();
+                Document document = builder.build(messageFormatIS);
+
+                messageFormatIS.close();
+
+                Element rootElement = document.getRootElement();
+                List<Element> markers = rootElement.getChildren("marker");
+                for (Element marker : markers) {
+                    AbstractFoundationLoggingMarker.markersXmlMap.put(marker.getAttributeValue("id"), marker);
+                }
+
+            } catch (Exception e) {
+                LOGGER.error("cannot load the structured log override file. error is: " + e, e);
+                throw new IllegalArgumentException("Problem parsing messageformat.xml", e);
+            }
+        }
+
+    }
 
 	public AbstractFoundationLoggingMarker() {
 		super();
@@ -309,12 +354,12 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 		builder.append("\npackage ").append(markerClass.getPackage().getName()).append(";\n\n");
 		builder.append("import ").append(FoundationLoggingMarkerFormatter.class.getName()).append(";\n");
 		builder.append("import ").append(FoundationLoggingMarker.class.getName()).append(";\n");
-		builder.append("import ").append(FoundationLoggingEvent.class.getName()).append(";\n");
+//		builder.append("import ").append(FoundationLoggingEvent.class.getName()).append(";\n");
 
 		builder.append("public class ").append(markerClass.getSimpleName()).append("Formatter").append(" implements FoundationLoggingMarkerFormatter ").append(" {\n\n");
 		builder.append("private FoundationLoggingMarker loggingMarker;\n\n");
 		builder.append("	\n@Override\n" + "	public void setMarker(FoundationLoggingMarker marker) {\r\n" + "		this.loggingMarker = marker;\r\n" + "	}");
-		builder.append("\n@Override\npublic String getFormat(FoundationLoggingEvent foundationLoggingEvent) {\n").append(markerClass.getSimpleName()).append(" marker = (").append(markerClass.getSimpleName()).append(")loggingMarker;\n");
+		builder.append("\n@Override\npublic String getFormat(String appenderName) {\n").append(markerClass.getSimpleName()).append(" marker = (").append(markerClass.getSimpleName()).append(")loggingMarker;\n");
 	}
 
 	private static void buildClassSuffix(StringBuilder builder) {
@@ -336,35 +381,36 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 		Element defaultAppender = markerElement.getChild("defaultAppender");
 
 		List<Element> appenders = markerElement.getChildren("appender");
+        String markerId = markerElement.getAttributeValue("id");
 
-		if (appenders != null) {
-			for (Element appender : appenders) {
-				String appenderId = appender.getAttributeValue("id");
-				if (appenderId == null) {
-					LOGGER.error("the appender element must have an id poiting to a valid appender name");
-				} else {
-					buildFromAppenderElement(appender, builder, false, appenderId);
-				}
-			}
-		}
+        if (appenders != null) {
+            for (Element appender : appenders) {
+                String appenderId = appender.getAttributeValue("id");
+                if (appenderId == null) {
+                    LOGGER.error("the appender element must have an id poiting to a valid appender name");
+                } else {
+                    buildFromAppenderElement(markerId, appenderId, appender, builder, false, appenderId);
+                }
+            }
+        }
 
-		if (defaultAppender == null) {
+        if (defaultAppender == null) {
 
-			LOGGER.error("The marker element must contain a 'defaultAppender' element");
+            LOGGER.error("The marker element: '{}' must contain a 'defaultAppender' element", markerId);
 			builder.append("return null;");
 
 		} else {
 
-			buildFromAppenderElement(defaultAppender, builder, true, "DEFAULT");
+			buildFromAppenderElement(markerId, "defaultAppender", defaultAppender, builder, true, "DEFAULT");
 		}
 
 		return true;
 	}
 
-	private static void buildFromAppenderElement(Element appenderElement, StringBuilder builder, boolean isDefault, String appenderName) {
+	private static void buildFromAppenderElement(String markerId, String appenderId, Element appenderElement, StringBuilder builder, boolean isDefault, String appenderName) {
 
 		if (!isDefault) {
-			builder.append("if (\"").append(appenderName).append("\".equals(").append("foundationLoggingEvent.getAppenderName())){\n");
+			builder.append("if (\"").append(appenderName).append("\".equals(").append("appenderName)){\n");
 		}
 
 		Element criteriaElement = appenderElement.getChild("criteria");
@@ -404,12 +450,12 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 				}
 			}
 		} else {
-			LOGGER.info("The marker element does not contain a 'criteria' element");
+			LOGGER.info("The marker element '{}' does not contain a 'criteria' element for appender: '{}'", markerId, appenderId);
 		}
 
 		String defaultFormat = appenderElement.getAttributeValue("defaultFormat");
 		if (defaultFormat == null) {
-			LOGGER.error("The marker element must contain a 'defaultFormat' element");
+			LOGGER.error("The marker element: '{}' must contain a 'defaultFormat' element", markerId);
 		}
 		builder.append("return \"" + defaultFormat + "\";");
 
