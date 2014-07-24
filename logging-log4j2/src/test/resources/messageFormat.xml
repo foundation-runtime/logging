@@ -51,7 +51,7 @@
 			</criteria>
 		</appender>
 
-		<appender id="auditfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType} and %u{base}">
+		<appender id="auditfile" defaultFormat="My default format for %u{sourceId} and %u{sourceType} and %u{base} - AUDIT!!!">
 			<criteria>
 				<criterion format="my conditional format 1 from xml - audit">
 					<field name="sourceId" equals="sourceId1" />

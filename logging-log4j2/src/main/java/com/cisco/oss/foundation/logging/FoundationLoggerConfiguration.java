@@ -29,6 +29,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -181,22 +182,31 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
                 Boolean additive = Boolean.valueOf(loggerSubset.getString(key));
                 logger.setAdditive(additive);
             } else {
+                List<String> appenderRefs = new ArrayList<>();
                 name = key;
                 String val = loggerSubset.getString(key);
                 if (StringUtils.isNotBlank(val)) {
                     if (val.contains(",")) {
                         String[] strings = val.split(",");
                         level = strings[0];
-                        //TODO support appenders
+                        if(strings.length > 1){
+                            for (int i = 1; i < strings.length; i++) {
+                                String appenderName = strings[i].trim();
+                                appenderRefs.add(appenderName);
+                            }
+                        }
                     } else {
                         level = val;
                     }
                 }
-                LoggerConfig loggerConfig = new LoggerConfig(name, Level.getLevel(level.toUpperCase()), additivity);
+                Level level1 = Level.getLevel(level.toUpperCase());
+                LoggerConfig loggerConfig = new LoggerConfig(name, level1, additivity);
+                for (String appenderRef : appenderRefs) {
+                    loggerConfig.addAppender(getAppender(appenderRef), level1,null);
+                }
 //                loggerConfig.getAppenderRefs()
                 addLogger(key, loggerConfig);
             }
-            System.out.println("logger key=" + key);
 
         }
     }
@@ -232,7 +242,6 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
                     addAppender(appender);
                 }
 
-            System.out.println("appender key=" + key);
 
 
         }

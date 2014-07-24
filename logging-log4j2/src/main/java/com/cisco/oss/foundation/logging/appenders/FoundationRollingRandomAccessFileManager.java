@@ -39,6 +39,12 @@ public class FoundationRollingRandomAccessFileManager extends RollingRandomAcces
         super(raf, fileName, pattern, os, append,immediateFlush,bufferSize, size, time, policy, strategy, advertiseURI, layout);
     }
 
+    @Override
+    protected void createFileAfterRollover() throws IOException {
+        super.createFileAfterRollover();
+//        ApplicationState.logState();
+    }
+
     public static FoundationRollingRandomAccessFileManager getRollingRandomAccessFileManager(final String fileName,
                                                                                    final String filePattern, final boolean isAppend, final boolean immediateFlush, final int bufferSize,
                                                                                    final TriggeringPolicy policy, final RolloverStrategy strategy, final String advertiseURI,
@@ -95,6 +101,8 @@ public class FoundationRollingRandomAccessFileManager extends RollingRandomAcces
             this.layout = layout;
         }
     }
+
+
 
     private static class FoundationRollingRandomAccessFileManagerFactory implements ManagerFactory<FoundationRollingRandomAccessFileManager, FactoryData> {
 
