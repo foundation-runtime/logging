@@ -49,7 +49,7 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 
 	private static final long serialVersionUID = 6354894754547315308L;
 
-	protected Map<String, Object> userFields = new HashMap<String, Object>();
+	protected Map<String, Object> userFields = new ConcurrentHashMap<String, Object>();
 
 	private static final Map<Class<? extends FoundationLoggingMarker>, Multiset<Field>> markerClassFields = new ConcurrentHashMap<Class<? extends FoundationLoggingMarker>, Multiset<Field>>();
 
