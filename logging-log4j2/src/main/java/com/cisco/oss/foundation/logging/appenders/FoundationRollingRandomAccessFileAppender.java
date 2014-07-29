@@ -70,7 +70,7 @@ public class FoundationRollingRandomAccessFileAppender  extends AbstractOutputSt
             @PluginAttribute("advertiseURI") final String advertiseURI,
             @PluginConfiguration final Configuration config) {
 
-        final RollingRandomAccessFileManager manager = FoundationRollingRandomAccessFileManager.getRollingRandomAccessFileManager(
+        final FoundationRollingRandomAccessFileManager manager = FoundationRollingRandomAccessFileManager.getRollingRandomAccessFileManager(
                 fileName,
                 filePattern,
                 Boolean.valueOf(append),
@@ -98,6 +98,8 @@ public class FoundationRollingRandomAccessFileAppender  extends AbstractOutputSt
                 advertise,
                 advertiseURI,
                 config);
+
+        manager.setFoundationRollingRandomAccessFileAppender(foundationRollingRandomAccessFileAppender);
 
         return foundationRollingRandomAccessFileAppender;
 

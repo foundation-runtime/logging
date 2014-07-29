@@ -16,6 +16,7 @@
 
 package com.cisco.oss.foundation.logging.appenders;
 
+import com.cisco.oss.foundation.logging.ApplicationState;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.appender.ManagerFactory;
 import org.apache.logging.log4j.core.appender.rolling.RollingRandomAccessFileManager;
@@ -30,27 +31,34 @@ import java.io.*;
 public class FoundationRollingRandomAccessFileManager extends RollingRandomAccessFileManager {
 
     private static final FoundationRollingRandomAccessFileManagerFactory FACTORY = new FoundationRollingRandomAccessFileManagerFactory();
+    private FoundationRollingRandomAccessFileAppender foundationRollingRandomAccessFileAppender = null;
 
     public FoundationRollingRandomAccessFileManager(final RandomAccessFile raf, final String fileName,
-                                          final String pattern, final OutputStream os, final boolean append,
-                                          final boolean immediateFlush, final int bufferSize, final long size, final long time,
-                                          final TriggeringPolicy policy, final RolloverStrategy strategy,
-                                          final String advertiseURI, final Layout<? extends Serializable> layout) {
-        super(raf, fileName, pattern, os, append,immediateFlush,bufferSize, size, time, policy, strategy, advertiseURI, layout);
+                                                    final String pattern, final OutputStream os, final boolean append,
+                                                    final boolean immediateFlush, final int bufferSize, final long size, final long time,
+                                                    final TriggeringPolicy policy, final RolloverStrategy strategy,
+                                                    final String advertiseURI, final Layout<? extends Serializable> layout) {
+        super(raf, fileName, pattern, os, append, immediateFlush, bufferSize, size, time, policy, strategy, advertiseURI, layout);
+    }
+
+    public static FoundationRollingRandomAccessFileManager getRollingRandomAccessFileManager(final String fileName,
+                                                                                             final String filePattern, final boolean isAppend, final boolean immediateFlush, final int bufferSize,
+                                                                                             final TriggeringPolicy policy, final RolloverStrategy strategy, final String advertiseURI,
+                                                                                             final Layout<? extends Serializable> layout) {
+        return (FoundationRollingRandomAccessFileManager) getManager(fileName, new FactoryData(filePattern, isAppend,
+                immediateFlush, bufferSize, policy, strategy, advertiseURI, layout), FACTORY);
     }
 
     @Override
     protected void createFileAfterRollover() throws IOException {
         super.createFileAfterRollover();
-//        ApplicationState.logState();
+        if (foundationRollingRandomAccessFileAppender != null) {
+            ApplicationState.logState(foundationRollingRandomAccessFileAppender);
+        }
     }
 
-    public static FoundationRollingRandomAccessFileManager getRollingRandomAccessFileManager(final String fileName,
-                                                                                   final String filePattern, final boolean isAppend, final boolean immediateFlush, final int bufferSize,
-                                                                                   final TriggeringPolicy policy, final RolloverStrategy strategy, final String advertiseURI,
-                                                                                   final Layout<? extends Serializable> layout) {
-        return (FoundationRollingRandomAccessFileManager) getManager(fileName, new FactoryData(filePattern, isAppend,
-                immediateFlush, bufferSize, policy, strategy, advertiseURI, layout), FACTORY);
+    void setFoundationRollingRandomAccessFileAppender(FoundationRollingRandomAccessFileAppender foundationRollingRandomAccessFileAppender) {
+        this.foundationRollingRandomAccessFileAppender = foundationRollingRandomAccessFileAppender;
     }
 
     static class DummyOutputStream extends OutputStream {
@@ -79,8 +87,8 @@ public class FoundationRollingRandomAccessFileManager extends RollingRandomAcces
         /**
          * Create the data for the factory.
          *
-         * @param pattern The pattern.
-         * @param append The append flag.
+         * @param pattern        The pattern.
+         * @param append         The append flag.
          * @param immediateFlush
          * @param bufferSize
          * @param policy
@@ -101,7 +109,6 @@ public class FoundationRollingRandomAccessFileManager extends RollingRandomAcces
             this.layout = layout;
         }
     }
-
 
 
     private static class FoundationRollingRandomAccessFileManagerFactory implements ManagerFactory<FoundationRollingRandomAccessFileManager, FactoryData> {

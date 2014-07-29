@@ -17,8 +17,9 @@
 package com.cisco.oss.foundation.logging.test
 
 import com.cisco.oss.foundation.flowcontext.FlowContextFactory
+import com.cisco.oss.foundation.logging.{FoundationLevel, ApplicationState}
 import com.cisco.oss.foundation.logging.test.structured.TransactionMarker
-import org.junit.Test
+import org.junit.{Ignore, Test}
 import org.slf4j.LoggerFactory
 
 /**
@@ -46,14 +47,20 @@ class Log4j2MarkerTest {
      transactionMarker2 setSourceId ("sourceId1")
      transactionMarker2 setSourceType ("sourceType1")
      LOGGER.info(transactionMarker2, "simple test")
+     LOGGER.info("simple test between markers")
+     LOGGER.info(transactionMarker2, "simple test")
 //     Thread.sleep(2000)
 
    }
 
-  @Test def loadTest(){
-    for(i <- 1 to 100000){
+  @Ignore @Test def loadTest(){
+    LOGGER.info("starting test")
+    ApplicationState.setState(FoundationLevel.INFO,"my persistent message!!!")
+    for(i <- 1 to 1250000){
       LOGGER.info("0123456879012345687901234568790123456879012345687901234568790123456879012345687901234568790123456879");
     }
+    Thread.sleep(120000)
+    LOGGER.info("finished test")
   }
 
  }
