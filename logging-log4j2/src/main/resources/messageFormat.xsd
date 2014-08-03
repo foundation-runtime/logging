@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="criterion">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" ref="field" />
+			</xsd:sequence>
+			<xsd:attribute name="format" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="appender">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="0" ref="criteria" />
+			</xsd:sequence>
+			<xsd:attribute name="defaultFormat" type="xsd:string" use="required" />
+			<xsd:attribute name="id" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="defaultAppender">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="0" ref="criteria" />
+			</xsd:sequence>
+			<xsd:attribute name="defaultFormat" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="markers">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" ref="log4jMarker" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="field">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="xsd:string"  use="required"/>
+			<xsd:attribute name="equals" type="xsd:string"  use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="log4jMarker">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="defaultAppender" />
+				<xsd:element maxOccurs="unbounded" ref="appender" />
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:string"  use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="criteria">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" ref="criterion" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
