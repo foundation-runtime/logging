@@ -61,7 +61,7 @@
     <properties>
         <logging-api-version>1.0.0-1-SNAPSHOT</logging-api-version>
         <commons-version>0.0.0-6</commons-version>
-        <log4j-version>2.0</log4j-version>
+        <log4j-version>2.0.1</log4j-version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
