@@ -16,7 +16,6 @@
 
 package com.cisco.oss.foundation.logging.test
 
-import com.cisco.oss.foundation.flowcontext.FlowContextFactory
 import com.cisco.oss.foundation.logging.{FoundationLevel, ApplicationState}
 import com.cisco.oss.foundation.logging.test.structured.TransactionMarker
 import org.junit.{Ignore, Test}
@@ -55,7 +54,7 @@ class Log4j2MarkerTest {
 
   @Ignore @Test def loadTest(){
     LOGGER.info("starting test")
-    ApplicationState.setState(FoundationLevel.INFO,"my persistent message!!!")
+    ApplicationState.getInstance().setState(FoundationLevel.INFO,"my persistent message!!!")
     for(i <- 1 to 1250000){
       LOGGER.info("0123456879012345687901234568790123456879012345687901234568790123456879012345687901234568790123456879");
     }

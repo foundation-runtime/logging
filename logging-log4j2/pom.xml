@@ -130,6 +130,12 @@
             <artifactId>configuration-lib</artifactId>
             <version>${configuration-lib-version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.cisco.oss.foundation</groupId>
+                    <artifactId>logging-log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>

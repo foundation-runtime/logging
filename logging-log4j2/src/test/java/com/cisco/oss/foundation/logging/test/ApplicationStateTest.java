@@ -25,8 +25,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Constructor;
-
 import static org.junit.Assert.*;
 
 /**
@@ -39,8 +37,8 @@ public class ApplicationStateTest {
 
     @Test
     public void testLog(){
-        Integer state = ApplicationState.setState(FoundationLevel.INFO, "application state message");
-        ApplicationState.updateState(state,FoundationLevel.INFO,"application state message updated");
+        Integer state = ApplicationState.getInstance().setState(FoundationLevel.INFO, "application state message");
+        ApplicationState.getInstance().updateState(state,FoundationLevel.INFO,"application state message updated");
     }
 	
 	@Test
@@ -90,14 +88,6 @@ public class ApplicationStateTest {
 	}
 	
 	
-	@Test
-	public void mockCtor() throws Exception {// NOPMD
-		@SuppressWarnings("unchecked")
-		Constructor<ApplicationState>[] constructors = (Constructor<ApplicationState>[]) ApplicationState.class.getDeclaredConstructors();
-		for (Constructor<ApplicationState> constructor : constructors) {
-			constructor.setAccessible(true);
-			constructor.newInstance();
-		}
-	}
+
 
 }
