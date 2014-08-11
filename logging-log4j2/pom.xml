@@ -62,6 +62,8 @@
         <logging-api-version>1.0.0-1-SNAPSHOT</logging-api-version>
         <commons-version>0.0.0-6</commons-version>
         <log4j-version>2.0.1</log4j-version>
+        <configuration-api-version>1.0.0-1-SNAPSHOT</configuration-api-version>
+        <configuration-lib-version>1.0.0-1-SNAPSHOT</configuration-lib-version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
@@ -123,11 +125,17 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang-version}</version>
         </dependency>
-       <!-- <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j-version}</version>
-        </dependency>-->
+        <dependency>
+            <groupId>com.cisco.oss.foundation</groupId>
+            <artifactId>configuration-api</artifactId>
+            <version>${configuration-api-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cisco.oss.foundation</groupId>
+            <artifactId>configuration-lib</artifactId>
+            <version>${configuration-lib-version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
