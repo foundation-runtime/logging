@@ -25,6 +25,7 @@ import org.apache.logging.log4j.message.SimpleMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -39,7 +40,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Jethro Revill
  * @author Yair Ogen
  */
-public final class ApplicationState {
+public enum ApplicationState implements ApplicationStateInterface{
+
+    INSTANCE;
+
+    public static ApplicationState getInstance(){
+        return INSTANCE;
+    }
 
     /**
      * Eliminate the default constructor.
@@ -71,7 +78,8 @@ public final class ApplicationState {
      * @param message Log message to output
      * @return The key created for future use.
      */
-    public static Integer setState(final FoundationLevel level, final Object message) {
+    @Override
+    public Integer setState(final FoundationLevel level, final Object message) {
 
         final Integer key = stateUniqueKey.incrementAndGet();
         final String messageString = message.toString();
@@ -101,7 +109,8 @@ public final class ApplicationState {
      * @param level   Level of the log message
      * @param message Log message to output	 *
      */
-    public static void updateState(final Integer key, final FoundationLevel level, final Object message) {
+    @Override
+    public void updateState(final Integer key, final FoundationLevel level, final Object message) {
 
         final String messageString = message.toString();
         final ApplicationStateMessage newValue = new ApplicationStateMessage(level, messageString);
@@ -128,7 +137,8 @@ public final class ApplicationState {
      *
      * @param key Key of the state item to remove
      */
-    public static void removeState(final Integer key) {
+    @Autowired
+    public void removeState(final Integer key) {
 
         // Only log if an item was really removed, i.e. if a value existed for
         // this key
