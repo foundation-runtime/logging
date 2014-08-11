@@ -22,8 +22,6 @@ package com.cisco.oss.foundation.logging;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-
 import static org.junit.Assert.*;
 
 /**
@@ -81,14 +79,6 @@ public class ApplicationStateTest {
 	}
 	
 	
-	@Test
-	public void mockCtor() throws Exception {// NOPMD
-		@SuppressWarnings("unchecked")
-		Constructor<ApplicationState>[] constructors = (Constructor<ApplicationState>[]) ApplicationState.class.getDeclaredConstructors();
-		for (Constructor<ApplicationState> constructor : constructors) {
-			constructor.setAccessible(true);
-			constructor.newInstance();
-		}
-	}
+
 
 }
