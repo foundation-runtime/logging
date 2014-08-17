@@ -17,8 +17,6 @@
 package com.cisco.oss.foundation.logging;
 
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.async.AsyncLogger;
@@ -26,21 +24,11 @@ import org.apache.logging.log4j.core.async.RingBufferLogEvent;
 import org.apache.logging.log4j.core.jmx.RingBufferAdmin;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFactory;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;
-
-import java.io.InputStream;
-import java.util.List;
 
 /**
  * Created by Yair Ogen on 17/07/2014.
  */
 public class FoundationLogger extends AsyncLogger {
-
-    static {
-        updateSniffingLoggersLevel();
-    }
 
     private AsyncLogger asyncLogger;
 
@@ -69,40 +57,6 @@ public class FoundationLogger extends AsyncLogger {
      */
     public static RingBufferAdmin createRingBufferAdmin(final String contextName) {
         return AsyncLogger.createRingBufferAdmin(contextName);
-    }
-
-    /**
-     * The sniffing Loggers are some special Loggers, whose level will be set to TRACE forcedly.
-     */
-    private static void updateSniffingLoggersLevel() {
-
-        InputStream settingIS = FoundationLogger.class
-                .getResourceAsStream("/sniffingLogger.xml");
-        if (settingIS == null) {
-//            logger.debug("file sniffingLogger.xml not found in classpath");
-        } else {
-            try {
-                SAXBuilder builder = new SAXBuilder();
-                Document document = builder.build(settingIS);
-                settingIS.close();
-                Element rootElement = document.getRootElement();
-                List<Element> sniffingloggers = rootElement.getChildren("sniffingLogger");
-                for (Element sniffinglogger : sniffingloggers) {
-                    String loggerName = sniffinglogger.getAttributeValue("id");
-                    Logger logger = LogManager.getLogger(loggerName);
-                    if(logger instanceof org.apache.logging.log4j.core.Logger){
-                        org.apache.logging.log4j.core.Logger log4jLoggger = (org.apache.logging.log4j.core.Logger)logger;
-                        log4jLoggger.setLevel(Level.TRACE);
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("cannot load the sniffing logger configuration file. error is: " + e);
-//                logger.error("cannot load the sniffing logger configuration file. error is: " + e, e);
-                throw new IllegalArgumentException(
-                        "Problem parsing sniffingLogger.xml", e);
-            }
-        }
-
     }
 
     @Override
