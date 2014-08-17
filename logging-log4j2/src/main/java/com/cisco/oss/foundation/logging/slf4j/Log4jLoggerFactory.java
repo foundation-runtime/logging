@@ -39,6 +39,10 @@ public class Log4jLoggerFactory implements ILoggerFactory {
 //    private final Map<LoggerContext, ConcurrentMap<String, Logger>> contextMap =
 //            new WeakHashMap<LoggerContext, ConcurrentMap<String, Logger>>();
 
+    public void clearLoggers(){
+        loggers.clear();
+    }
+
     @Override
     public Logger getLogger(final String name) {
 //        final LoggerContext context = getContext();
@@ -48,6 +52,15 @@ public class Log4jLoggerFactory implements ILoggerFactory {
             return loggers.get(name);
         }
         final String key = Logger.ROOT_LOGGER_NAME.equals(name) ? LogManager.ROOT_LOGGER_NAME : name;
+        if(!Thread.currentThread().getName().equals("FirstTimeConfigInit")){
+            FoundationLoggerContextFactory.CONTEXT.toString();
+            try {
+//                FoundationLoggerContext.POST_CONFIG_REFRESH_LATCH.await();
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.err.println("POST_CONFIG_REFRESH_LATCH was interruputed: " + e);
+            }
+        }
         loggers.putIfAbsent(name, new Log4jLogger(FoundationLoggerContextFactory.CONTEXT.getLogger(key), name));
         return loggers.get(name);
     }

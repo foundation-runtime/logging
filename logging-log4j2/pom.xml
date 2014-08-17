@@ -59,11 +59,11 @@
         </developer>
     </developers>
     <properties>
-        <logging-api-version>1.0.0-1-SNAPSHOT</logging-api-version>
+        <logging-api-version>1.0.0-1</logging-api-version>
         <commons-version>0.0.0-6</commons-version>
         <log4j-version>2.0.1</log4j-version>
-        <configuration-api-version>1.0.0-1-SNAPSHOT</configuration-api-version>
-        <configuration-lib-version>1.0.0-1-SNAPSHOT</configuration-lib-version>
+        <configuration-api-version>1.0.0-1</configuration-api-version>
+        <configuration-lib-version>1.0.0-1</configuration-lib-version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>

@@ -17,6 +17,7 @@
 package com.cisco.oss.foundation.logging;
 
 import com.cisco.oss.foundation.logging.structured.AbstractFoundationLoggingMarker;
+import org.apache.logging.log4j.core.FoundationLoggerContext;
 import org.apache.logging.log4j.spi.LoggerContext;
 import org.apache.logging.log4j.spi.LoggerContextFactory;
 

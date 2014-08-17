@@ -14,21 +14,38 @@
  *  limitations under the License.
  */
 
-package com.cisco.oss.foundation.logging;
+package org.apache.logging.log4j.core;
 
-import org.apache.logging.log4j.core.Logger;
+import com.cisco.oss.foundation.logging.FoundationLogger;
+import com.cisco.oss.foundation.logging.FoundationLoggerConfiguration;
 import org.apache.logging.log4j.message.MessageFactory;
 
 import java.net.URI;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by Yair Ogen on 17/07/2014.
  */
 public class FoundationLoggerContext extends org.apache.logging.log4j.core.LoggerContext {
 
+    public static final CountDownLatch POST_CONFIG_LATCH = new CountDownLatch(1);
+
+//    private final ConcurrentMap<String, Logger> loggers = new ConcurrentHashMap<String, Logger>();
+
     public FoundationLoggerContext(final String name) {
         super(name);
         start(FoundationLoggerConfiguration.INSTANCE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    POST_CONFIG_LATCH.await();
+                } catch (InterruptedException e) {
+                    System.err.println("post config thread was interrupted: " + e);
+                }
+                updateLoggers(FoundationLoggerConfiguration.INSTANCE);
+            }
+        }, "postConfigThread").start();
 //        start(new FoundationLoggerConfiguration());
     }
 
@@ -56,6 +73,31 @@ public class FoundationLoggerContext extends org.apache.logging.log4j.core.Logge
     public void stop() {
         FoundationLogger.stop();
         super.stop();
+    }
+
+//    /**
+//     * Obtain a Logger from the Context.
+//     * @param name The name of the Logger to return.
+//     * @param messageFactory The message factory is used only when creating a
+//     *            logger, subsequent use does not change the logger but will log
+//     *            a warning if mismatched.
+//     * @return The Logger.
+//     */
+//    @Override
+//    public Logger getLogger(final String name, final MessageFactory messageFactory) {
+//        Logger logger = loggers.get(name);
+//        if (logger != null) {
+//            AbstractLogger.checkMessageFactory(logger, messageFactory);
+//            return logger;
+//        }
+//
+//        logger = newInstance(this, name, messageFactory);
+//        final Logger prev = loggers.putIfAbsent(name, logger);
+//        return prev == null ? logger : prev;
+//    }
+
+    public void clearLoggers(){
+        getLoggers().clear();
     }
 
 }

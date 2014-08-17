@@ -30,6 +30,9 @@ class Log4j2BasicTest {
 
   @Test def simpleTest(){
 
+
+//    Thread.sleep(250);
+
     FlowContextFactory.createFlowContext();
     LOGGER.info("simple test")
 
@@ -40,6 +43,9 @@ class Log4j2BasicTest {
     LOGGER.info("simple test3")
 
   }
+
+
+
 
 
 
