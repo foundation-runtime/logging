@@ -533,13 +533,13 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 		ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
 		// scan classpath and filter out classes that don't begin with "com.nds"
-		Reflections ndsReflections = new Reflections("com.nds");
+		Reflections reflections = new Reflections("com.nds","com.cisco");
 
-		Set<Class<?>> annotated = ndsReflections.getTypesAnnotatedWith(DefaultFormat.class);
+		Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(DefaultFormat.class);
 
-        Reflections ciscoReflections = new Reflections("com.cisco");
-
-        annotated.addAll(ciscoReflections.getTypesAnnotatedWith(DefaultFormat.class));
+//        Reflections ciscoReflections = new Reflections("com.cisco");
+//
+//        annotated.addAll(ciscoReflections.getTypesAnnotatedWith(DefaultFormat.class));
 
 		for (Class<?> markerClass : annotated) {
 
