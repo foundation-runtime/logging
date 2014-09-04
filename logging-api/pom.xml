@@ -58,7 +58,7 @@
         </developer>
     </developers>
     <properties>
-        <javaVersion>1.7</javaVersion>
+        <javaVersion>1.6</javaVersion>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
