@@ -119,7 +119,7 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
 
     private void initLoggersFromCommon(Map<String, Map<String, String>> loggerMap, Layout layout) {
 
-        List<LoggerConfig> loggerConfigs = new ArrayList<>();
+        List<LoggerConfig> loggerConfigs = new ArrayList<LoggerConfig>();
 
         Set<Map.Entry<String, Map<String, String>>> entries = loggerMap.entrySet();
         for (Map.Entry<String, Map<String, String>> entry : entries) {
@@ -134,7 +134,7 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
 
             if (prefixesExists) {
 
-                List<Appender> appenders = new ArrayList<>();
+                List<Appender> appenders = new ArrayList<Appender>();
 
                 if (destinationExists) {
                     Map<String, String> destinationsMap = ConfigUtil.parseSimpleArrayAsMap("logging.logger." + loggerGroupName + ".destinations");
@@ -246,7 +246,7 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
 
         String filePattern = fileName + ".%d{yyyy-MM-dd}.%i.gz";
 
-        List<TriggeringPolicy> defualtTriggeringPolicies = new ArrayList<>(3);
+        List<TriggeringPolicy> defualtTriggeringPolicies = new ArrayList<TriggeringPolicy>(3);
         defualtTriggeringPolicies.add(OnStartupTriggeringPolicy.createPolicy());
         defualtTriggeringPolicies.add(TimeBasedTriggeringPolicy.createPolicy("1", "false"));
         defualtTriggeringPolicies.add(SizeBasedTriggeringPolicy.createPolicy("100 MB"));
@@ -254,7 +254,7 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
         Map<String, String> rollingPoliciesMap = ConfigUtil.parseSimpleArrayAsMap("logging.destination." + destinationName + ".rollingPolicy");
         if (!rollingPoliciesMap.isEmpty()) {
             Set<Map.Entry<String, String>> entries = rollingPoliciesMap.entrySet();
-            List<TriggeringPolicy> triggeringPolicies = new ArrayList<>(3);
+            List<TriggeringPolicy> triggeringPolicies = new ArrayList<TriggeringPolicy>(3);
             for (Map.Entry<String, String> entry : entries) {
                 if (entry.getKey().contains("type")) {
                     String policyType = entry.getValue();
@@ -402,7 +402,7 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
 
     private void initLoggers(org.apache.commons.configuration.Configuration loggerSubset) {
         Iterator<String> keys = loggerSubset.getKeys();
-        List<LoggerConfig> loggerConfigs = new ArrayList<>();
+        List<LoggerConfig> loggerConfigs = new ArrayList<LoggerConfig>();
         while (keys.hasNext()) {
             String key = keys.next();
             String name = "";
@@ -413,7 +413,7 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
                 Boolean additive = Boolean.valueOf(loggerSubset.getString(key));
                 logger.setAdditive(additive);
             } else {
-                List<String> appenderRefs = new ArrayList<>();
+                List<String> appenderRefs = new ArrayList<String>();
                 name = key;
                 String val = loggerSubset.getString(key);
                 if (StringUtils.isNotBlank(val)) {
