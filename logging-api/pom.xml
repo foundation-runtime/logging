@@ -15,8 +15,7 @@
   ~  limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>com.cisco.oss.foundation</groupId>
         <artifactId>foundation-common-base</artifactId>
@@ -26,7 +25,7 @@
     <groupId>com.cisco.oss.foundation</groupId>
     <artifactId>logging-api</artifactId>
     <name>logging-api</name>
-    <version>1.0.2-1-SNAPSHOT</version>
+    <version>1.0.2-1</version>
     <description>This project is the logging api library in the cisco vss foundation runtime</description>
     <url>https://github.com/foundation-runtime/logging/tree/master/logging-api</url>
     <packaging>jar</packaging>
@@ -43,7 +42,7 @@
         <url>{URL in JIRA or Product name in CQ}</url>
     </issueManagement>
     <mailingLists>
-        <mailingList/>
+        <mailingList />
     </mailingLists>
     <developers>
         <developer>
@@ -64,7 +63,7 @@
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
         <developerConnection>scm:git:git@github.com:foundation-runtime/logging.git</developerConnection>
         <url>https://github.com/foundation-runtime/logging.git</url>
-        <tag>HEAD</tag>
+        <tag>logging-api-1.0.2-1</tag>
     </scm>
     <organization>
         <name>Cisco</name>
@@ -72,7 +71,7 @@
     </organization>
     <build>
         <pluginManagement>
-            <plugins/>
+            <plugins />
         </pluginManagement>
         <plugins>
         </plugins>
