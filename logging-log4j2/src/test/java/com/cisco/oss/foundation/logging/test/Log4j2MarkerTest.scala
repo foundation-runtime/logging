@@ -26,15 +26,13 @@ import org.slf4j.LoggerFactory
   */
 class Log4j2MarkerTest {
 
-   val LOGGER = LoggerFactory.getLogger(classOf[Log4j2MarkerTest])
+  val LOGGER = LoggerFactory.getLogger(classOf[Log4j2MarkerTest])
    val AUDITOR = LoggerFactory.getLogger("audit."+classOf[Log4j2MarkerTest].getName)
+  val transactionMarker: TransactionMarker = new TransactionMarker("mySessionIdFromTest")
 
+  @Test def simpleMarkerTest(){
 
-
-   @Test def simpleMarkerTest(){
-
-//     Thread.sleep(1000)
-     val transactionMarker: TransactionMarker = new TransactionMarker("mySessionIdFromTest")
+     //     Thread.sleep(1000)
 
      transactionMarker setSourceId ("test source id")
      transactionMarker setSourceType ("test source type")

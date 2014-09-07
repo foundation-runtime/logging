@@ -18,6 +18,7 @@ package org.apache.logging.log4j.core;
 
 import com.cisco.oss.foundation.logging.FoundationLogger;
 import com.cisco.oss.foundation.logging.FoundationLoggerConfiguration;
+import com.cisco.oss.foundation.logging.structured.AbstractFoundationLoggingMarker;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.MessageFactory;
@@ -51,6 +52,7 @@ public class FoundationLoggerContext extends org.apache.logging.log4j.core.Logge
                     System.err.println("post config thread was interrupted: " + e);
                 }
                 updateLoggers(FoundationLoggerConfiguration.INSTANCE);
+                AbstractFoundationLoggingMarker.init();
                 updateSniffingLoggersLevel();
             }
         }, "postConfigThread").start();

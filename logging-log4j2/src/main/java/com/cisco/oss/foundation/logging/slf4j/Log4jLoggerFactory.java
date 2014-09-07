@@ -18,6 +18,7 @@ package com.cisco.oss.foundation.logging.slf4j;
 
 import com.cisco.oss.foundation.logging.FoundationLoggerContextFactory;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.FoundationLoggerContext;
 import org.apache.logging.log4j.spi.ExtendedLogger;
 import org.apache.logging.log4j.spi.LoggerContext;
 import org.slf4j.ILoggerFactory;
@@ -51,14 +52,20 @@ public class Log4jLoggerFactory implements ILoggerFactory {
         if (loggers.containsKey(name)) {
             return loggers.get(name);
         }
+
         final String key = Logger.ROOT_LOGGER_NAME.equals(name) ? LogManager.ROOT_LOGGER_NAME : name;
+
         if(!Thread.currentThread().getName().equals("FirstTimeConfigInit")){
             FoundationLoggerContextFactory.CONTEXT.toString();
             try {
 //                FoundationLoggerContext.POST_CONFIG_REFRESH_LATCH.await();
-                Thread.sleep(1000);
+//                if (FoundationLoggerContext.POST_CONFIG_LATCH.getCount() > 0) {
+//                    Thread.sleep(1000);
+//                }
+
+                FoundationLoggerContext.POST_CONFIG_LATCH.await();
             } catch (InterruptedException e) {
-                System.err.println("POST_CONFIG_REFRESH_LATCH was interruputed: " + e);
+                System.err.println("POST_CONFIG_REFRESH_LATCH was interrupted: " + e);
             }
         }
         loggers.putIfAbsent(name, new Log4jLogger(FoundationLoggerContextFactory.CONTEXT.getLogger(key), name));

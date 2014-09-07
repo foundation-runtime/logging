@@ -59,11 +59,12 @@
         </developer>
     </developers>
     <properties>
-        <logging-api-version>1.0.0-1</logging-api-version>
-        <commons-version>1.0.0-1</commons-version>
+        <logging-api-version>1.0.2-1</logging-api-version>
+        <commons-version>1.0.2-1</commons-version>
         <log4j-version>2.0.2</log4j-version>
-        <configuration-api-version>1.0.0-1</configuration-api-version>
-        <configuration-lib-version>1.0.0-1</configuration-lib-version>
+        <configuration-api-version>1.0.2-1-SNAPSHOT</configuration-api-version>
+        <configuration-lib-version>1.0.2-1-SNAPSHOT</configuration-lib-version>
+        <javaVersion>1.6</javaVersion>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
@@ -105,6 +106,11 @@
         </plugins>
     </build>
     <dependencies>
+        <!--<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.7</version>
+        </dependency>-->
         <dependency>
             <groupId>com.cisco.oss.foundation</groupId>
             <artifactId>commons</artifactId>

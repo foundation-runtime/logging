@@ -16,7 +16,6 @@
 
 package com.cisco.oss.foundation.logging;
 
-import com.cisco.oss.foundation.logging.structured.AbstractFoundationLoggingMarker;
 import org.apache.logging.log4j.core.FoundationLoggerContext;
 import org.apache.logging.log4j.spi.LoggerContext;
 import org.apache.logging.log4j.spi.LoggerContextFactory;
@@ -29,9 +28,9 @@ import java.net.URI;
 public class FoundationLoggerContextFactory implements LoggerContextFactory {
     public static final FoundationLoggerContext CONTEXT = new FoundationLoggerContext("FoundationLoggerContext@"
             + FoundationLoggerContext.class.hashCode());
-    static{
-        AbstractFoundationLoggingMarker.init();
-    }
+//    static{
+//        AbstractFoundationLoggingMarker.init();
+//    }
     @Override
     public LoggerContext getContext(final String fqcn, final ClassLoader loader, final Object externalContext,
                                     final boolean currentContext) {
