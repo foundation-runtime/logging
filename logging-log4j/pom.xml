@@ -58,8 +58,8 @@
         </developer>
     </developers>
     <properties>
-        <logging-api-version>1.0.2-1-SNAPSHOT</logging-api-version>
-        <commons-version>1.0.2-1-SNAPSHOT</commons-version>
+        <logging-api-version>1.0.2-1</logging-api-version>
+        <commons-version>1.0.2-1</commons-version>
         <javaVersion>1.6</javaVersion>
     </properties>
     <scm>
