@@ -25,7 +25,6 @@ import org.apache.logging.log4j.message.SimpleMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -137,7 +136,6 @@ public enum ApplicationState implements ApplicationStateInterface{
      *
      * @param key Key of the state item to remove
      */
-    @Autowired
     public void removeState(final Integer key) {
 
         // Only log if an item was really removed, i.e. if a value existed for
