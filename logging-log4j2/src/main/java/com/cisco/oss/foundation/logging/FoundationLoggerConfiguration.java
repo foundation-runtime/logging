@@ -18,6 +18,8 @@ package com.cisco.oss.foundation.logging;
 
 import com.cisco.oss.foundation.configuration.ConfigUtil;
 import com.cisco.oss.foundation.configuration.ConfigurationFactory;
+import com.cisco.oss.foundation.configuration.FoundationConfigurationListener;
+import com.cisco.oss.foundation.configuration.FoundationConfigurationListenerRegistry;
 import com.cisco.oss.foundation.logging.appenders.FoundationRollingRandomAccessFileAppender;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,8 @@ import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.appender.rolling.*;
 import org.apache.logging.log4j.core.config.*;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.net.URL;
@@ -40,6 +44,7 @@ import java.util.*;
 public class FoundationLoggerConfiguration extends AbstractConfiguration implements Reconfigurable {
 
     public static final FoundationLoggerConfiguration INSTANCE = new FoundationLoggerConfiguration();
+//    private static final Logger LOGGER = LoggerFactory.getLogger(FoundationLoggerConfiguration.class);
     /**
      * The name of the default configuration.
      */
@@ -47,7 +52,13 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
     private static final String DEFAULT_CONFIGURATION_FILE = "/log4j.properties"; // NOPMD
     private org.apache.commons.configuration.Configuration configuration = null;
     private boolean useCustomConfiguration = Boolean.getBoolean("foundationLogging.useCustomConfiguration");
-//    private AtomicBoolean isFirstTime = new AtomicBoolean(true);
+
+    public Layout<? extends Serializable> getLayout() {
+        return layout;
+    }
+
+    private Layout<? extends Serializable> layout;
+
 
     /**
      * Constructor to create the default configuration.
@@ -55,6 +66,11 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
     public FoundationLoggerConfiguration() {
         super(ConfigurationSource.NULL_SOURCE);
 
+        final Layout<? extends Serializable> layout = PatternLayout.newBuilder()
+                .withPattern(FoundationLoggerConstants.DEFAULT_CONV_PATTERN.toString())
+                .withConfiguration(this)
+                .build();
+        this.layout = layout;
 
         Runnable initConfig = new Runnable() {
             public void run() {
@@ -69,10 +85,6 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
     }
 
     private void initConfig() {
-        final Layout<? extends Serializable> layout = PatternLayout.newBuilder()
-                .withPattern(FoundationLoggerConstants.DEFAULT_CONV_PATTERN.toString())
-                .withConfiguration(this)
-                .build();
 
         if (!useCustomConfiguration) {
             try {
@@ -487,4 +499,5 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
     public Configuration reconfigure() {
         return this;
     }
+
 }

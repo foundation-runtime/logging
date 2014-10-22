@@ -16,6 +16,9 @@
 
 package org.apache.logging.log4j.core;
 
+import com.cisco.oss.foundation.configuration.ConfigurationFactory;
+import com.cisco.oss.foundation.configuration.FoundationConfigurationListener;
+import com.cisco.oss.foundation.configuration.FoundationConfigurationListenerRegistry;
 import com.cisco.oss.foundation.logging.FoundationLogger;
 import com.cisco.oss.foundation.logging.FoundationLoggerConfiguration;
 import com.cisco.oss.foundation.logging.structured.AbstractFoundationLoggingMarker;
@@ -25,6 +28,7 @@ import org.apache.logging.log4j.message.MessageFactory;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -54,6 +58,7 @@ public class FoundationLoggerContext extends org.apache.logging.log4j.core.Logge
                 updateLoggers(FoundationLoggerConfiguration.INSTANCE);
                 AbstractFoundationLoggingMarker.init();
                 updateSniffingLoggersLevel();
+                FoundationConfigurationListenerRegistry.addFoundationConfigurationListener(new LoggingConfigurationListener());
             }
         }, "postConfigThread").start();
 //        start(new FoundationLoggerConfiguration());
@@ -144,4 +149,19 @@ public class FoundationLoggerContext extends org.apache.logging.log4j.core.Logge
 
     }
 
+    private class LoggingConfigurationListener implements FoundationConfigurationListener {
+
+
+        public LoggingConfigurationListener() {
+        }
+
+        @Override
+        public void configurationChanged() {
+            org.slf4j.Logger log = LoggerFactory.getLogger(FoundationLoggerConfiguration.class);
+            log.info("identified configuration changes");
+            FoundationLoggerConfiguration.INSTANCE.initiateLoggingFromConfiguration(FoundationLoggerConfiguration.INSTANCE.getLayout(), ConfigurationFactory.getConfiguration());
+            updateLoggers();
+            log.info("finished reloading the logging configuration");
+        }
+    }
 }
