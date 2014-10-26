@@ -18,12 +18,16 @@ package com.cisco.oss.foundation.logging.test;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Created by Yair Ogen on 04/09/2014.
  */
 public class SpringLogTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringLogTest.class);
 
     @Test
     public void testSpringLog(){
