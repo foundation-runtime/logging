@@ -161,6 +161,7 @@ public class FoundationLoggerContext extends org.apache.logging.log4j.core.Logge
             log.info("identified configuration changes");
             FoundationLoggerConfiguration.INSTANCE.initiateLoggingFromConfiguration(FoundationLoggerConfiguration.INSTANCE.getLayout(), ConfigurationFactory.getConfiguration());
             updateLoggers();
+            updateSniffingLoggersLevel();
             log.info("finished reloading the logging configuration");
         }
     }
