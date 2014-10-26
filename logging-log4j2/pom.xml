@@ -61,7 +61,7 @@
     <properties>
         <logging-api-version>1.0.2-1</logging-api-version>
         <commons-version>1.0.2-1</commons-version>
-        <log4j-version>2.0.2</log4j-version>
+        <log4j-version>2.1</log4j-version>
         <configuration-api-version>1.0.2-1</configuration-api-version>
         <configuration-lib-version>1.0.2-1</configuration-lib-version>
         <javaVersion>1.6</javaVersion>
