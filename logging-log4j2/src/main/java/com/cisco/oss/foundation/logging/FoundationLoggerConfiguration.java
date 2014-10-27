@@ -18,8 +18,6 @@ package com.cisco.oss.foundation.logging;
 
 import com.cisco.oss.foundation.configuration.ConfigUtil;
 import com.cisco.oss.foundation.configuration.ConfigurationFactory;
-import com.cisco.oss.foundation.configuration.FoundationConfigurationListener;
-import com.cisco.oss.foundation.configuration.FoundationConfigurationListenerRegistry;
 import com.cisco.oss.foundation.logging.appenders.FoundationRollingRandomAccessFileAppender;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
@@ -31,8 +29,6 @@ import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.appender.rolling.*;
 import org.apache.logging.log4j.core.config.*;
 import org.apache.logging.log4j.core.layout.PatternLayout;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.net.URL;
@@ -65,6 +61,16 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
      */
     public FoundationLoggerConfiguration() {
         super(ConfigurationSource.NULL_SOURCE);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //wait a second before shutting down to allow async logging to finish
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {}
+            }
+        }));
 
         final Layout<? extends Serializable> layout = PatternLayout.newBuilder()
                 .withPattern(FoundationLoggerConstants.DEFAULT_CONV_PATTERN.toString())

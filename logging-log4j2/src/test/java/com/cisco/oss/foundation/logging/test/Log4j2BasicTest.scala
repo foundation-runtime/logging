@@ -42,6 +42,8 @@ class Log4j2BasicTest {
     FlowContextFactory.createFlowContext();
     LOGGER.info("simple test3")
 
+//    Thread.sleep(2000)
+
   }
 
 

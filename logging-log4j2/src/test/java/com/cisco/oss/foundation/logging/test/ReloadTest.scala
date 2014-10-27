@@ -45,8 +45,9 @@ class ReloadTest {
     props.store(stream,"")
     stream flush()
     stream close()
+    LOGGER.info("after file change")
 
-    Thread sleep(6000)
+    Thread sleep(10000)
 
     LOGGER.info("should be the info line followed by trace")
     LOGGER.trace("should be the first trace line")

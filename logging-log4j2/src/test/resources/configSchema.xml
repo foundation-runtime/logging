@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2014 Cisco Systems, Inc.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<NamespaceDefinitions
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/foundation-runtime/configuration/master/ccp_schema/CCP_XML.xsd"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <NamespaceDefinition>
+        <NamespaceIdentifier version="TBD" name="TBD"/>
+        <Parameter name="logging" type="STRUCTURE" base="logger.base" description="logger structure definition"
+                   advanced="true" requiresRestart="false">
+            <DefaultValue>
+                <StructureValue>
+                    <StructureMemberValue name="logger">
+                        <StructureValue index="uhe-infra">
+                            <StructureMemberValue name="prefix" index="1" value="com.cisco"/>
+                            <StructureMemberValue name="prefix" index="2" value="com.nds"/>
+                            <StructureMemberValue name="prefix" index="3" value="audit.com"/>
+                            <StructureMemberValue name="prefix" index="4" value="org.springframework"/>
+                            <StructureMemberValue name="level" value="info"/>
+                        </StructureValue>
+                        <StructureValue index="root">
+                            <StructureMemberValue name="prefix" index="1" value="root"/>
+                            <StructureMemberValue name="level" value="error"/>
+                            <StructureMemberValue name="destinations" index="1" value="logfile"/>
+                            <StructureMemberValue name="destinations" index="2" value="console"/>
+                        </StructureValue>
+                        <StructureValue index="logging-marker">
+                            <StructureMemberValue name="prefix" index="1"
+                                                  value="com.cisco.oss.foundation.logging.structured"/>
+                            <StructureMemberValue name="level" value="debug"/>
+                        </StructureValue>
+                    </StructureMemberValue>
+                    <StructureMemberValue name="destination">
+                        <StructureValue index="logfile">
+                            <StructureMemberValue name="type" value="ROLLING_RANDOM_ACCESS_FILE"/>
+                            <StructureMemberValue name="fileName" value="./log/logging-log4j2.log"/>
+                            <StructureMemberValue name="archive" value="true"/>
+                            <StructureMemberValue name="rollingPolicy">
+                                <StructureValue index="1">
+                                    <StructureMemberValue name="type" value="ON_STARTUP"/>
+                                </StructureValue>
+                                <StructureValue index="2">
+                                    <StructureMemberValue name="type" value="SIZE"/>
+                                    <StructureMemberValue name="unit" value="100 MB"/>
+                                </StructureValue>
+                                <StructureValue index="3">
+                                    <StructureMemberValue name="type" value="TIME"/>
+                                    <StructureMemberValue name="unit" value="1"/>
+                                </StructureValue>
+                            </StructureMemberValue>
+                        </StructureValue>
+                        <StructureValue index="console">
+                            <StructureMemberValue name="type" value="CONSOLE"/>
+                            <StructureMemberValue name="logPattern"
+                                                  value="%d{yyyy/MM/dd HH:mm:ss.SSS}{UTC} %-5p: %X{flowCtxt} %sl{pretty}%n"/>
+                        </StructureValue>
+                    </StructureMemberValue>
+                </StructureValue>
+            </DefaultValue>
+        </Parameter>
+
+    </NamespaceDefinition>
+</NamespaceDefinitions>
