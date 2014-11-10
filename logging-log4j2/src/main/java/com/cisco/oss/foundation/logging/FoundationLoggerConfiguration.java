@@ -270,9 +270,9 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
         defualtTriggeringPolicies.add(SizeBasedTriggeringPolicy.createPolicy("100 MB"));
 
         Map<String, String> rollingPoliciesMap = ConfigUtil.parseSimpleArrayAsMap("logging.destination." + destinationName + ".rollingPolicy");
+        List<TriggeringPolicy> triggeringPolicies = new ArrayList<TriggeringPolicy>(3);
         if (!rollingPoliciesMap.isEmpty()) {
             Set<Map.Entry<String, String>> entries = rollingPoliciesMap.entrySet();
-            List<TriggeringPolicy> triggeringPolicies = new ArrayList<TriggeringPolicy>(3);
             for (Map.Entry<String, String> entry : entries) {
                 if (entry.getKey().contains("type")) {
                     String policyType = entry.getValue();
@@ -305,7 +305,8 @@ public class FoundationLoggerConfiguration extends AbstractConfiguration impleme
             }
         }
 
-        TriggeringPolicy trigerringPolicy = CompositeTriggeringPolicy.createPolicy(defualtTriggeringPolicies.toArray(new TriggeringPolicy[0]));
+        TriggeringPolicy[] policies = !triggeringPolicies.isEmpty() ? triggeringPolicies.toArray(new TriggeringPolicy[0]) : defualtTriggeringPolicies.toArray(new TriggeringPolicy[0]);
+        TriggeringPolicy trigerringPolicy = CompositeTriggeringPolicy.createPolicy(policies);
 
         RolloverStrategy rolloverStrategy = DefaultRolloverStrategy.createStrategy("100", null, null, null, this);
 
