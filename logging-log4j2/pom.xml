@@ -63,7 +63,7 @@
         <commons-version>1.0.2-1</commons-version>
         <log4j-version>2.2</log4j-version>
         <configuration-api-version>1.0.2-4</configuration-api-version>
-        <configuration-lib-version>1.0.2-5</configuration-lib-version>
+        <configuration-lib-version>1.0.3-1</configuration-lib-version>
         <!--<javaVersion>1.6</javaVersion>-->
     </properties>
     <scm>
