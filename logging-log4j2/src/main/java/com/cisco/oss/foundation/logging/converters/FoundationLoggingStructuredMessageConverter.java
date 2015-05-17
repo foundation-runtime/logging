@@ -20,6 +20,7 @@ import com.cisco.oss.foundation.logging.FoundationLoggerConfiguration;
 import com.cisco.oss.foundation.logging.FoundationLoggingPatternLayout;
 import com.cisco.oss.foundation.logging.slf4j.Log4jMarker;
 import com.cisco.oss.foundation.logging.structured.FoundationLoggingMarker;
+import com.google.common.base.Charsets;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
@@ -27,7 +28,6 @@ import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.pattern.ConverterKeys;
 import org.apache.logging.log4j.core.pattern.MessagePatternConverter;
 import org.apache.logging.log4j.core.pattern.NamePatternConverter;
-import org.apache.logging.log4j.core.util.Charsets;
 import org.slf4j.Marker;
 
 import java.util.HashMap;
