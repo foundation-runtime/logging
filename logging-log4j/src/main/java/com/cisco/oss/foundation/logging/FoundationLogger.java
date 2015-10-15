@@ -41,6 +41,7 @@ import org.joda.time.format.DateTimeFormatterBuilder;
 import org.slf4j.Marker;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
+import org.slf4j.spi.LocationAwareLogger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -63,7 +64,7 @@ import java.util.logging.LogRecord;
  * 
  * @author Yair Ogen
  */
-class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
+class FoundationLogger extends Logger implements LocationAwareLogger { // NOPMD
 	/**
 	 * the property key for reloading the log4j properties file.
 	 */
@@ -1156,6 +1157,31 @@ class FoundationLogger extends Logger implements org.slf4j.Logger { // NOPMD
 	public void error(Marker marker, String msg, Throwable t) {
 		log(marker, FQCN, Level.ERROR, msg, t);
 
+	}
+
+	@Override
+	public void log(Marker marker, String fqcn, int level, String msg, Object[] argArray, Throwable t) {
+		Level log4jLevel;
+		switch (level) {
+			case LocationAwareLogger.TRACE_INT:
+				log4jLevel = Level.TRACE;
+				break;
+			case LocationAwareLogger.DEBUG_INT:
+				log4jLevel = Level.DEBUG;
+				break;
+			case LocationAwareLogger.INFO_INT:
+				log4jLevel = Level.INFO;
+				break;
+			case LocationAwareLogger.WARN_INT:
+				log4jLevel = Level.WARN;
+				break;
+			case LocationAwareLogger.ERROR_INT:
+				log4jLevel = Level.ERROR;
+				break;
+			default:
+				throw new IllegalStateException("Level number " + level + " is not recognized.");
+		}
+		log(FQCN, log4jLevel, msg, t);
 	}
 
 	public void log(Marker marker, String callerFQCN, Priority level, Object message, Throwable t) {
