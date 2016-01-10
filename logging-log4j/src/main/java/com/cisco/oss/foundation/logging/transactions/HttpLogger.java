@@ -4,26 +4,28 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 
+import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.IOException;
-import java.util.*;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Class for HTTP transactions logging
- *
  * @author abrandwi
+ *
  */
 public class HttpLogger extends TransactionLogger {
 
-    private enum HttpPropertyKey {Summary,Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody}
-
-
-
-    private enum HttpVerbosePropertyKey {RequestHeaders, RequestBody, ResponseHeaders, ResponseBody}
-
-
+    private enum HttpPropertyKey {Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody};
+    private enum HttpVerbosePropertyKey {RequestHeaders, RequestBody, ResponseHeaders, ResponseBody};
 
 // Those headers will be used when we'll add sourceIdentity to properties
 //	private static final String SOURCE_TYPE_HEADER = "Source-Type"; // Cisco header (used by UPM): Should contain the type of machine sent the request (e.g. UPM, TSTVM) - currently won't be sent to PPS
@@ -31,18 +33,20 @@ public class HttpLogger extends TransactionLogger {
 
     // ********* Public methods *********
 
-
-
     public static void start(final Logger logger, final Logger auditor, final HttpServletRequest request) {
         start(logger, auditor, request, null);
     }
 
+    public static HttpLogger startAsync(final Logger logger, final Logger auditor, final HttpServletRequest request) {
+        return startAsync(logger, auditor, request, null);
+    }
+
     public static void start(final Logger logger, final Logger auditor, final HttpServletRequest request, final String requestBody) {
-        if (!TransactionLogger.createLoggingAction(logger, auditor, new HttpLogger())) {
+        if(!createLoggingAction(logger, auditor, new HttpLogger())) {
             return;
         }
 
-        HttpLogger httpLogger = (HttpLogger) TransactionLogger.getInstance();
+        HttpLogger httpLogger = (HttpLogger) getInstance();
         if (httpLogger == null) {
             return;
         }
@@ -50,8 +54,18 @@ public class HttpLogger extends TransactionLogger {
         httpLogger.startInstance(request, requestBody);
     }
 
-    public static void success(final HttpServletResponse response) {
-        HttpLogger httpLogger = (HttpLogger) TransactionLogger.getInstance();
+    public static HttpLogger startAsync(final Logger logger, final Logger auditor, final HttpServletRequest request, final String requestBody) {
+        HttpLogger httpLogger = new HttpLogger();
+        if(!createLoggingActionAsync(logger, auditor, httpLogger)) {
+            return null;
+        }
+
+        httpLogger.startInstance(request, requestBody);
+        return httpLogger;
+    }
+
+    public static void success(final Response response) {
+        HttpLogger httpLogger = (HttpLogger) getInstance();
         if (httpLogger == null) {
             return;
         }
@@ -59,12 +73,23 @@ public class HttpLogger extends TransactionLogger {
         httpLogger.successInstance(response);
     }
 
-    public static void failure(final HttpServletResponse response) {
-        HttpLogger httpLogger = (HttpLogger) TransactionLogger.getInstance();
+
+    public static void successAsync(final HttpResponse response, HttpLogger httpLogger) {
+        FlowContextFactory.deserializeNativeFlowContext(httpLogger.getFlowContextAsync(httpLogger));
+        httpLogger.successInstance(response);
+    }
+
+    public static void failure(final Response response) {
+        HttpLogger httpLogger = (HttpLogger) getInstance();
         if (httpLogger == null) {
             return;
         }
 
+        httpLogger.failureInstance(response);
+    }
+
+    public static void failureAsync(final HttpResponse response, HttpLogger httpLogger) {
+        FlowContextFactory.deserializeNativeFlowContext(httpLogger.getFlowContextAsync(httpLogger));
         httpLogger.failureInstance(response);
     }
 
@@ -73,29 +98,51 @@ public class HttpLogger extends TransactionLogger {
     protected void startInstance(final HttpServletRequest request, final String requestBody) {
         try {
             addPropertiesStart(request, requestBody);
-            writePropertiesToLog(this.auditor, Level.INFO);
+            writePropertiesToLog(this.logger, Level.INFO);
         } catch (Exception e) {
             logger.error("Failed logging HTTP transaction start: " + e.getMessage(), e);
         }
     }
 
-    protected void successInstance(final HttpServletResponse response) {
+    protected void successInstance(final Response response) {
         try {
             end();
             addPropertiesSuccess(response);
             addPropertiesProcessingTime();
-            writePropertiesToLog(this.logger, Level.INFO);
+            writePropertiesToLog(this.auditor, Level.INFO);
         } catch (Exception e) {
             logger.error("Failed logging HTTP transaction success: " + e.getMessage(), e);
         }
     }
 
-    protected void failureInstance(final HttpServletResponse response) {
+    protected void successInstance(final HttpResponse response) {
+        try {
+            end();
+            addPropertiesSuccess(response);
+            addPropertiesProcessingTime();
+            writePropertiesToLog(this.auditor, Level.INFO);
+        } catch (Exception e) {
+            logger.error("Failed logging HTTP transaction success: " + e.getMessage(), e);
+        }
+    }
+
+    protected void failureInstance(final Response response) {
         try {
             end();
             addPropertiesFailure(response);
             addPropertiesProcessingTime();
-            writePropertiesToLog(this.logger, Level.ERROR);
+            writePropertiesToLog(this.auditor, Level.ERROR);
+        } catch (Exception e) {
+            logger.error("Failed logging HTTP transaction failure: " + e.getMessage(), e);
+        }
+    }
+
+    protected void failureInstance(final HttpResponse response) {
+        try {
+            end();
+            addPropertiesFailure(response);
+            addPropertiesProcessingTime();
+            writePropertiesToLog(this.auditor, Level.ERROR);
         } catch (Exception e) {
             logger.error("Failed logging HTTP transaction failure: " + e.getMessage(), e);
         }
@@ -103,7 +150,7 @@ public class HttpLogger extends TransactionLogger {
 
     protected void addPropertiesStart(final HttpServletRequest request, String requestBody) {
         super.addPropertiesStart("HTTP");
-//        this.properties.put(HttpPropertyKey.Summary.name(),"Summary");
+
         this.properties.put(HttpPropertyKey.SourceName.name(), request.getRemoteHost());
         this.properties.put(HttpPropertyKey.SourcePort.name(), String.valueOf(request.getRemotePort()));
         this.properties.put(HttpPropertyKey.Method.name(), request.getMethod());
@@ -117,8 +164,8 @@ public class HttpLogger extends TransactionLogger {
     }
 
     protected void addVerbosePropertiesStart(final HttpServletRequest request, String requestBody) {
-        if (ConfigurationUtil.INSTANCE.isVerbose()) {
-            String requestHeaders = TransactionLogger.getMapAsString(getHeadersAsMap(request), TransactionLogger.secondSeparator);
+        if ( ConfigurationUtil.INSTANCE.isVerbose() ) {
+            String requestHeaders = getMapAsString(getHeadersAsMap(request), secondSeparator);
 
             if (requestHeaders != null) {
                 this.properties.put(HttpVerbosePropertyKey.RequestHeaders.name(), requestHeaders);
@@ -129,54 +176,75 @@ public class HttpLogger extends TransactionLogger {
         }
     }
 
-    protected void addPropertiesSuccess(final HttpServletResponse response) {
+    protected void addPropertiesSuccess(final HttpResponse response) {
         super.addPropertiesSuccess();
 
         this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatus()));
-        try {
-
-
-            if (response.getOutputStream().toString() != null) {
-                if (!(response.getOutputStream() instanceof StreamingOutput)) {
-                    this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(response.getOutputStream().toString().length()));
-                } else {
-                    this.properties.put(HttpPropertyKey.ResponseContentLength.name(), "chunked");
-                }
-            }
-
-            addVerbosePropertiesSuccess(response);
-        } catch (IOException e) {
-            logger.error("Failed to parse HTTP response" + e.getMessage(), e);
+        if ( response.getBody() != null ) {
+            this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(response.getBody().length()));
         }
+
+        addVerbosePropertiesSuccess(response);
     }
 
+    protected void addPropertiesSuccess(final Response response) {
+        super.addPropertiesSuccess();
 
-    protected void addVerbosePropertiesSuccess(HttpServletResponse response) {
+        this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatus()));
+        if ( response.getEntity() != null ) {
+            if ( !(response.getEntity() instanceof StreamingOutput) ) {
+                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(response.getEntity().toString().length()));
+            } else {
+                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), "chunked");
+            }
+        }
+
+        addVerbosePropertiesSuccess(response);
+    }
+
+    protected void addVerbosePropertiesSuccess(Response response) {
         if (ConfigurationUtil.INSTANCE.isVerbose()) {
-            String responseHeaders = TransactionLogger.getMapAsString(getHeadersAsMap(response), TransactionLogger.secondSeparator);
-            try {
-                if (responseHeaders != null) {
-                    this.properties.put(HttpVerbosePropertyKey.ResponseHeaders.name(), responseHeaders);
-                }
-                if ((response.getOutputStream() != null) && !(response.getOutputStream() instanceof StreamingOutput)) {
-                    this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getOutputStream().toString());
-                }
-            } catch (IOException e) {
-                logger.error("Failed to parse HTTP response" + e.getMessage(), e);
+            String responseHeaders = getMapAsString(getHeadersAsMap(response), secondSeparator);
+
+            if (responseHeaders != null) {
+                this.properties.put(HttpVerbosePropertyKey.ResponseHeaders.name(), responseHeaders);
+            }
+            if ( (response.getEntity() != null) && !(response.getEntity() instanceof StreamingOutput) ) {
+                this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getEntity().toString());
             }
         }
     }
 
-    protected void addPropertiesFailure(final HttpServletResponse response) {
+    protected void addVerbosePropertiesSuccess(HttpResponse response) {
+        if (ConfigurationUtil.INSTANCE.isVerbose()) {
+            String responseHeaders = getMapAsString(response.getHeaders(), secondSeparator);
+
+            if (responseHeaders != null) {
+                this.properties.put(HttpVerbosePropertyKey.ResponseHeaders.name(), responseHeaders);
+            }
+            if ( response.getBody() != null) {
+                this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getBody());
+            }
+        }
+    }
+
+    protected void addPropertiesFailure(final Response response) {
         super.addPropertiesFailure();
 
         this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatus()));
-        try {
-            if (response.getOutputStream() != null) {
-                this.properties.put(HttpPropertyKey.ResponseBody.name(), response.getOutputStream().toString());
-            }
-        } catch (IOException e) {
-            logger.error("Failed to parse HTTP response" + e.getMessage(), e);
+
+        if (response.getEntity() != null) {
+            this.properties.put(HttpPropertyKey.ResponseBody.name(), response.getEntity().toString());
+        }
+    }
+
+    protected void addPropertiesFailure(final HttpResponse response) {
+        super.addPropertiesFailure();
+
+        this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatus()));
+
+        if (response.getBody() != null) {
+            this.properties.put(HttpPropertyKey.ResponseBody.name(), response.getBody().toString());
         }
     }
 
@@ -208,20 +276,22 @@ public class HttpLogger extends TransactionLogger {
         return map;
     }
 
-    protected static Map<String, String> getHeadersAsMap(HttpServletResponse response) {
-
-
-        List<String> headers = new ArrayList<>(response.getHeaderNames());
+    protected static Map<String, String> getHeadersAsMap(Response response) {
+        MultivaluedMap<String, Object> headers = response.getMetadata();
         if (headers == null) {
             return null;
         }
 
         Map<String, String> map = new HashMap<String, String>();
-        for (String header : headers) {
-            StringBuilder values = new StringBuilder();
-            values.append(response.getHeader(header)).append(",");
 
-            String key = header;
+        for (Entry<String, List<Object>> header : headers.entrySet()) {
+            StringBuilder values = new StringBuilder();
+            for (Object singleValue : header.getValue()) {
+                values.append(singleValue).append(",");
+            }
+            values.deleteCharAt(values.length()-1); // Delete last comma
+
+            String key = header.getKey();
             String value = values.toString();
             map.put(key, value);
         }
