@@ -121,7 +121,7 @@ public class SchedulerLogger extends TransactionLogger {
         }
     }
 
-    private void successInstance() {
+    protected void successInstance() {
         try {
             end();
             addPropertiesSuccess();
