@@ -20,6 +20,10 @@ public class ReportLogger extends SchedulerLogger {
         reportLogger.startInstance(reportName);
     }
 
+    public void addReportBody(String reportBody) {
+        ReportLogger instance = (ReportLogger)getInstance();
+        instance.properties.put("ReportBody", reportBody);
+    }
 
     @Override
     protected void addPropertiesStart(String reportName) {
