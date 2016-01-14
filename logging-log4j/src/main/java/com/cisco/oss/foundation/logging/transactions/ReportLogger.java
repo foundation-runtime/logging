@@ -25,4 +25,16 @@ public class ReportLogger extends SchedulerLogger {
     protected void addPropertiesStart(String reportName) {
         super.addPropertiesStart("Report", "ReportName", reportName);
     }
+
+    public static void success(String reportBody) {
+        ReportLogger logger = (ReportLogger) getInstance();
+        if (logger == null) {
+            return;
+        }
+
+        addProperty("ReportBody", reportBody);
+
+        logger.successInstance();
+
+    }
 }
