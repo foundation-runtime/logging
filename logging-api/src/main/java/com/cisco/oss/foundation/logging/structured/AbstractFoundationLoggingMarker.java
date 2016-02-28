@@ -62,6 +62,9 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 	private static Logger LOGGER = LoggerFactory.getLogger(AbstractFoundationLoggingMarker.class);
 
     public static void init(){
+		if(LOGGER == null){
+			LOGGER = LoggerFactory.getLogger(AbstractFoundationLoggingMarker.class);
+		}
         udpateMarkerStructuredLogOverrideMap();
 
         new Thread(new Runnable() {
@@ -118,9 +121,15 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 	private static FoundationLoggingMarkerFormatter getFormatter(Class<? extends FoundationLoggingMarker> markerClass) {
 		try {
 
-			generateAndUpdateFormatterInMap(markerClass);
+//			generateAndUpdateFormatterInMap(markerClass);
 
-			Class<FoundationLoggingMarkerFormatter> formatterClass = markersMap.get(markerClass);
+
+			Class<? extends FoundationLoggingMarkerFormatter> formatterClass = null;
+			try {
+				formatterClass = (Class<? extends FoundationLoggingMarkerFormatter>)Class.forName(markerClass.getName() + "Formatter");
+			} catch (ClassNotFoundException e) {
+				LOGGER.error("annotation processign ahs failed. " + e.toString());
+			}
 			FoundationLoggingMarkerFormatter newFormatter = null;
 			if (formatterClass == null) {
 				newFormatter = new DefaultMarkerFormatter();
