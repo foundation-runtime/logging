@@ -167,6 +167,18 @@ public abstract class TransactionLogger {
     return logger.flowContext;
   }
 
+  /**
+   * Add property to 'properties' map on transaction
+   * @param key - of property
+   * @param value - of property
+   */
+  public static void addProperty(String key, String value) {
+    TransactionLogger instance = getInstance();
+    if (instance != null) {
+      instance.properties.put(key, value);
+    }
+  }
+
   // ********************************* Protected methods *********************************
 
   /**
