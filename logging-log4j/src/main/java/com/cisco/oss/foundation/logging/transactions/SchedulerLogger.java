@@ -10,7 +10,7 @@ import org.slf4j.Logger;
  */
 public class SchedulerLogger extends TransactionLogger {
 
-    private enum SchedulerPropertyKey {SchedulerName, HandledType, HandledNumber, Failures}
+    private enum SchedulerPropertyKey {SchedulerName, HandledType, HandledNumber, Failures, SchedulerResult}
 
     ;
 
@@ -38,6 +38,18 @@ public class SchedulerLogger extends TransactionLogger {
         }
 
         schedulerLogger.successInstance();
+    }
+    
+    public static void success(String schedulerResult) {
+    	SchedulerLogger schedulerLogger = (SchedulerLogger) getInstance();
+        if (schedulerLogger == null) {
+            return;
+        }
+
+        addProperty(SchedulerPropertyKey.SchedulerResult.name(), schedulerResult);
+
+        schedulerLogger.successInstance();
+
     }
 
     public static void failure(final Exception exception) {
@@ -115,7 +127,7 @@ public class SchedulerLogger extends TransactionLogger {
     protected void startInstance(String schedulerName) {
         try {
             addPropertiesStart(schedulerName);
-            writePropertiesToLog(this.logger, Level.INFO);
+            writePropertiesToLog(this.logger, Level.DEBUG);
         } catch (Exception e) {
             logger.error("Failed logging Scheduler transaction start: " + e.getMessage(), e);
         }
