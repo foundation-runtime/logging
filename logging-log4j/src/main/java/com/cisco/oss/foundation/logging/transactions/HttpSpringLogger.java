@@ -71,7 +71,7 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void startInstance(final HttpServletRequest request, final String requestBody) {
         try {
             addPropertiesStart(request, requestBody);
-            writePropertiesToLog(this.auditor, Level.INFO);
+            writePropertiesToLog(this.auditor, Level.DEBUG);
         } catch (Exception e) {
             logger.error("Failed logging HTTP transaction start: " + e.getMessage(), e);
         }

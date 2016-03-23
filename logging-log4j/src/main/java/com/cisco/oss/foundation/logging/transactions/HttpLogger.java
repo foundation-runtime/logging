@@ -98,7 +98,7 @@ public class HttpLogger extends TransactionLogger {
     protected void startInstance(final HttpServletRequest request, final String requestBody) {
         try {
             addPropertiesStart(request, requestBody);
-            writePropertiesToLog(this.logger, Level.INFO);
+            writePropertiesToLog(this.logger, Level.DEBUG);
         } catch (Exception e) {
             logger.error("Failed logging HTTP transaction start: " + e.getMessage(), e);
         }

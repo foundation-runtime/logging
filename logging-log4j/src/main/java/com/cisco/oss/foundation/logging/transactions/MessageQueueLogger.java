@@ -83,7 +83,7 @@ public class MessageQueueLogger extends TransactionLogger {
   private void startInstance(String notification) {
     try {
       addPropertiesStart(notification);
-      writePropertiesToLog(logger, Level.INFO);
+      writePropertiesToLog(logger, Level.DEBUG);
     } catch (Exception e) {
       this.logger.error("Failed logging Message Queue transaction start: " + e.getMessage(), e);
     }
