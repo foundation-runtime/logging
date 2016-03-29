@@ -1,11 +1,7 @@
 package com.cisco.oss.foundation.logging.transactions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
-import org.springframework.util.CollectionUtils;
 
 /**
  * Class for internal scheduler transactions logging
@@ -14,9 +10,9 @@ import org.springframework.util.CollectionUtils;
  */
 public class SchedulerLogger extends TransactionLogger {
 
-    private enum SchedulerPropertyKey {SchedulerName, HandledType, HandledNumber, Failures, SchedulerResult};
-    
-    private Map<String, Integer> resultMap = new HashMap<String, Integer>();
+    private enum SchedulerPropertyKey {SchedulerName, HandledType, HandledNumber, Failures, SchedulerResult}
+
+    ;
 
     private String handledItemsType;        // Type of DB items that where handled in scheduler, e.g. catalogItem, pvr...
     private int handledItemsNumber = 0;        // Number of DB items that where handled in scheduler
@@ -42,6 +38,18 @@ public class SchedulerLogger extends TransactionLogger {
         }
 
         schedulerLogger.successInstance();
+    }
+    
+    public static void success(String schedulerResult) {
+    	SchedulerLogger schedulerLogger = (SchedulerLogger) getInstance();
+        if (schedulerLogger == null) {
+            return;
+        }
+
+        addProperty(SchedulerPropertyKey.SchedulerResult.name(), schedulerResult);
+
+        schedulerLogger.successInstance();
+
     }
 
     public static void failure(final Exception exception) {
@@ -115,19 +123,6 @@ public class SchedulerLogger extends TransactionLogger {
     public static void addPropertyAsync(String propertyName, String propertyValue, SchedulerLogger schedulerLogger) {
         schedulerLogger.properties.put(propertyName, propertyValue);
     }
-    
-    public static void addToResult(String resultType) {
-		addToResult(resultType, 1);
-	}
-	
-    public static void addToResult(String resultType, int number) {    	
-    	SchedulerLogger schedulerLogger = (SchedulerLogger) getInstance();
-        if (schedulerLogger == null) {
-            return;
-        }
-        
-        schedulerLogger.addToResultInstance(resultType, number);
-	}
 
     protected void startInstance(String schedulerName) {
         try {
@@ -179,15 +174,6 @@ public class SchedulerLogger extends TransactionLogger {
     private void addFailureInstance(int num) {
         this.failures += num;
     }
-    
-    private void addToResultInstance(String resultType, int number) {
-    	Integer currentNumber = this.resultMap.get(resultType);
-		if (currentNumber == null) {
-			currentNumber = 0;
-		} 
-		
-		this.resultMap.put(resultType, currentNumber+number); 
-    }
 
     protected void addPropertiesStart(String schedulerName) {
         addPropertiesStart("Scheduler", SchedulerPropertyKey.SchedulerName.name(), schedulerName);
@@ -200,10 +186,6 @@ public class SchedulerLogger extends TransactionLogger {
 
     protected void addPropertiesSuccess() {
         super.addPropertiesSuccess();
-        
-        if (!CollectionUtils.isEmpty(this.resultMap)) {
-        	this.properties.put(SchedulerPropertyKey.SchedulerResult.name(), JsonUtil.getObjectAsJson(this.resultMap));
-        }
 
         if (handledItemsType != null) {
             this.properties.put(SchedulerPropertyKey.HandledType.name(), this.handledItemsType);
@@ -212,7 +194,7 @@ public class SchedulerLogger extends TransactionLogger {
         this.properties.put(SchedulerPropertyKey.Failures.name(), String.valueOf(this.failures));
     }
 
-	private void addPropertiesFailure(Exception exception, String errorMessage) {
+    private void addPropertiesFailure(Exception exception, String errorMessage) {
         super.addPropertiesFailure();
 
         if (errorMessage == null) {
