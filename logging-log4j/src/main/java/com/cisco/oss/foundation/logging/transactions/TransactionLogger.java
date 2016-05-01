@@ -351,6 +351,9 @@ public abstract class TransactionLogger {
     if (mapComponentTimes.containsKey(component.getComponentType())) {
       currentTimeOfComponent = mapComponentTimes.get(component.getComponentType());
     }
-    mapComponentTimes.put(component.getComponentType(), currentTimeOfComponent + component.getTime());
+    //when transactions are run in parallel, we should log the longest transaction only to avoid that 
+    //for ex 'Total time' would be 100ms and transactions in parallel to hornetQ will be 2000ms 
+    Long maxTime =  Math.max(component.getTime(), currentTimeOfComponent);
+    mapComponentTimes.put(component.getComponentType(), maxTime);
   }
 }
