@@ -237,12 +237,14 @@ public abstract class TransactionLogger {
    */
   protected void addPropertiesProcessingTime() {
 
-    HashMap<String, Long> mapComponentTimes = new HashMap<>();
+    HashMap<String, Long> mapComponentTimes			= new HashMap<>();
+    HashMap<String, Long> mapComponentInvocations	= new HashMap<>();
 
     // For multi-threaded transaction: will calculate the sum of the time spent by all components in all threads
     if (this.componentsMultiThread != null) {
       for (Component component : this.componentsMultiThread.getComponents()) {
         addTimePerComponent(mapComponentTimes, component);
+        addInvocationPerComponent(mapComponentInvocations, component);
       }
     }
 
@@ -254,6 +256,10 @@ public abstract class TransactionLogger {
       this.properties.put(entry.getKey(), entry.getValue() + "ms");
     }
 
+    for (Entry<String, Long> entry : mapComponentInvocations.entrySet()) {
+        this.properties.put(entry.getKey(), entry.getValue() + "times");
+    }
+    
     this.properties.put(TOTAL_COMPONENT, this.total.getTime() + "ms");
   }
 
@@ -348,12 +354,25 @@ public abstract class TransactionLogger {
    */
   private static void addTimePerComponent(HashMap<String, Long> mapComponentTimes,	Component component) {
     Long currentTimeOfComponent = 0L;
-    if (mapComponentTimes.containsKey(component.getComponentType())) {
-      currentTimeOfComponent = mapComponentTimes.get(component.getComponentType());
+    String key = component.getComponentType();
+    if (mapComponentTimes.containsKey(key)) {
+      currentTimeOfComponent = mapComponentTimes.get(key);
     }
     //when transactions are run in parallel, we should log the longest transaction only to avoid that 
     //for ex 'Total time' would be 100ms and transactions in parallel to hornetQ will be 2000ms 
     Long maxTime =  Math.max(component.getTime(), currentTimeOfComponent);
-    mapComponentTimes.put(component.getComponentType(), maxTime);
+    mapComponentTimes.put(key, maxTime);
   }
+
+  private static void addInvocationPerComponent(HashMap<String, Long> mapComponentInvocations, Component component) {
+    Long invocationComponent = 0L;
+    String key = component.getComponentType() + " invocations";
+    if (mapComponentInvocations.containsKey(key)) {
+      invocationComponent = mapComponentInvocations.get(key);
+    }
+
+    invocationComponent ++;
+    mapComponentInvocations.put(key, invocationComponent);
+  }
+
 }
