@@ -257,7 +257,7 @@ public abstract class TransactionLogger {
     }
 
     for (Entry<String, Long> entry : mapComponentInvocations.entrySet()) {
-        this.properties.put(entry.getKey(), entry.getValue() + "times");
+        this.properties.put(entry.getKey(), entry.getValue().toString());
     }
     
     this.properties.put(TOTAL_COMPONENT, this.total.getTime() + "ms");
@@ -366,7 +366,7 @@ public abstract class TransactionLogger {
 
   private static void addInvocationPerComponent(HashMap<String, Long> mapComponentInvocations, Component component) {
     Long invocationComponent = 0L;
-    String key = component.getComponentType() + " invocations";
+    String key = component.getComponentType() + "_Invocations";
     if (mapComponentInvocations.containsKey(key)) {
       invocationComponent = mapComponentInvocations.get(key);
     }
