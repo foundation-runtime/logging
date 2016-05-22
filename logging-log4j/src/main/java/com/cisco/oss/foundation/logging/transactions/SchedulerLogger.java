@@ -8,15 +8,10 @@ import org.slf4j.Logger;
  *
  * @author abrandwi
  */
-public class SchedulerLogger extends TransactionLogger {
+public class SchedulerLogger extends JobLogger{
 
     private enum SchedulerPropertyKey {SchedulerName, HandledType, HandledNumber, Failures, SchedulerResult}
-
     ;
-
-    private String handledItemsType;        // Type of DB items that where handled in scheduler, e.g. catalogItem, pvr...
-    private int handledItemsNumber = 0;        // Number of DB items that where handled in scheduler
-    private int failures = 0;                // Number of failed actions in scheduler
 
     public static void start(final Logger logger, final Logger auditor, final String schedulerName) {
         if (!createLoggingAction(logger, auditor, new SchedulerLogger())) {
@@ -76,24 +71,6 @@ public class SchedulerLogger extends TransactionLogger {
 
     public static void addItemsHandledAsync(String handledItemsType, int handledItemsNumber, SchedulerLogger schedulerLogger) {
         schedulerLogger.addItemsHandledInstance(handledItemsType, handledItemsNumber);
-    }
-
-    public static void addItemsHandled(String handledItemsType, int handledItemsNumber) {
-        SchedulerLogger schedulerLogger = (SchedulerLogger) getInstance();
-        if (schedulerLogger == null) {
-            return;
-        }
-
-        schedulerLogger.addItemsHandledInstance(handledItemsType, handledItemsNumber);
-    }
-
-    public static void addFailure() {
-        SchedulerLogger schedulerLogger = (SchedulerLogger) getInstance();
-        if (schedulerLogger == null) {
-            return;
-        }
-
-        schedulerLogger.addFailureInstance(1);
     }
 
     public static void addFailureAsync(SchedulerLogger schedulerLogger) {
@@ -166,15 +143,6 @@ public class SchedulerLogger extends TransactionLogger {
         }
     }
 
-    private void addItemsHandledInstance(String handledItemsType, int handledItemsNumber) {
-        this.handledItemsType = handledItemsType;
-        this.handledItemsNumber += handledItemsNumber;
-    }
-
-    private void addFailureInstance(int num) {
-        this.failures += num;
-    }
-
     protected void addPropertiesStart(String schedulerName) {
         addPropertiesStart("Scheduler", SchedulerPropertyKey.SchedulerName.name(), schedulerName);
     }
@@ -191,7 +159,7 @@ public class SchedulerLogger extends TransactionLogger {
             this.properties.put(SchedulerPropertyKey.HandledType.name(), this.handledItemsType);
             this.properties.put(SchedulerPropertyKey.HandledNumber.name(), String.valueOf(this.handledItemsNumber));
         }
-        this.properties.put(SchedulerPropertyKey.Failures.name(), String.valueOf(this.failures));
+        //this.properties.put(SchedulerPropertyKey.Failures.name(), String.valueOf(this.failures));
     }
 
     private void addPropertiesFailure(Exception exception, String errorMessage) {
