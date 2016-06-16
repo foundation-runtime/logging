@@ -1,5 +1,6 @@
 package com.cisco.oss.foundation.logging.transactions;
 
+import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
@@ -208,14 +209,20 @@ public class HttpSpringLogger extends TransactionLogger {
 
         Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
         Map<String, String> map = new HashMap<>();
-        for (String header : headers.get(0)) {
-            StringBuilder values = new StringBuilder();
-            values.append(response.getHeaders()).append(",");
 
-            String key = header;
-            String value = values.toString();
-            map.put(key, value);
+        for ( Map.Entry<String, List<String>> header :headers.entrySet() ) {
+            String headerValue = Joiner.on(",").join(header.getValue());
+            map.put(header.getKey(), headerValue);
         }
+
+//        for (String header : headers.get(0)) {
+//            StringBuilder values = new StringBuilder();
+//            values.append(response.getHeaders()).append(",");
+//
+//            String key = header;
+//            String value = values.toString();
+//            map.put(key, value);
+//        }
 
         return map;
     }
