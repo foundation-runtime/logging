@@ -133,12 +133,10 @@ public class HttpSpringLogger extends TransactionLogger {
 
         this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatusCode()));
 
-        if (response.toString() != null) {
-            if (!(response.toString() == null)) {
-                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(response.toString().length()));
-            } else {
-                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), "chunked");
-            }
+        if ( response.getBody() != null ) {
+            this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(response.getBody().toString().length()));
+        } else {
+            this.properties.put(HttpPropertyKey.ResponseContentLength.name(), "chunked");
         }
 
         addVerbosePropertiesSuccess(response);
@@ -155,8 +153,8 @@ public class HttpSpringLogger extends TransactionLogger {
             if (responseHeaders != null) {
                 this.properties.put(HttpVerbosePropertyKey.ResponseHeaders.name(), responseHeaders);
             }
-            if ((response.toString() != null)) {
-                this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.toString());
+            if ((response.getBody() != null)) {
+                this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getBody().toString());
             }
 //            } catch (IOException e) {
 //                logger.error("Failed to parse HTTP response" + e.getMessage(), e);
