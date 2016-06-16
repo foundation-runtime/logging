@@ -72,7 +72,7 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void startInstance(final HttpServletRequest request, final String requestBody) {
         try {
             addPropertiesStart(request, requestBody);
-            writePropertiesToLog(this.auditor, Level.DEBUG);
+            writePropertiesToLog(this.logger, Level.DEBUG);
         } catch (Exception e) {
             logger.error("Failed logging HTTP transaction start: " + e.getMessage(), e);
         }
@@ -132,11 +132,13 @@ public class HttpSpringLogger extends TransactionLogger {
         super.addPropertiesSuccess();
 
         this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatusCode()));
-
-        if ( response.getBody() != null ) {
-            this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(response.getBody().toString().length()));
-        } else {
-            this.properties.put(HttpPropertyKey.ResponseContentLength.name(), "chunked");
+        Object body = response.getBody();
+        if ( body != null ) {
+            if (body instanceof String) {
+                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(body.toString().length()));
+            } else {
+                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), "chunked");
+            }
         }
 
         addVerbosePropertiesSuccess(response);
@@ -153,8 +155,10 @@ public class HttpSpringLogger extends TransactionLogger {
             if (responseHeaders != null) {
                 this.properties.put(HttpVerbosePropertyKey.ResponseHeaders.name(), responseHeaders);
             }
-            if ((response.getBody() != null)) {
-                this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getBody().toString());
+
+            Object body = response.getBody();
+            if ( (body != null) && (body instanceof String) ) {
+                this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), (String)response.getBody());
             }
 //            } catch (IOException e) {
 //                logger.error("Failed to parse HTTP response" + e.getMessage(), e);
@@ -167,8 +171,8 @@ public class HttpSpringLogger extends TransactionLogger {
 
         this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatusCode()));
 //        try {
-        if (response.toString() != null) {
-            this.properties.put(HttpPropertyKey.ResponseBody.name(), response.toString());
+        if ( (response.getBody() != null) && (response.getBody() instanceof String) ) {
+            this.properties.put(HttpPropertyKey.ResponseBody.name(), (String)response.getBody());
         }
 //        } catch (IOException e) {
 //            logger.error("Failed to parse HTTP response" + e.getMessage(), e);
