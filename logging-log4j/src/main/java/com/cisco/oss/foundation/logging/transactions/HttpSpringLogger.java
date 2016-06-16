@@ -205,6 +205,7 @@ public class HttpSpringLogger extends TransactionLogger {
         return map;
     }
 
+    // Flat the map of list of string to map of strings, with theoriginal values, seperated by comma
     protected static Map<String, String> getHeadersAsMap(ResponseEntity response) {
 
         Map<String, List<String>> headers = new HashMap<>(response.getHeaders());
@@ -214,15 +215,6 @@ public class HttpSpringLogger extends TransactionLogger {
             String headerValue = Joiner.on(",").join(header.getValue());
             map.put(header.getKey(), headerValue);
         }
-
-//        for (String header : headers.get(0)) {
-//            StringBuilder values = new StringBuilder();
-//            values.append(response.getHeaders()).append(",");
-//
-//            String key = header;
-//            String value = values.toString();
-//            map.put(key, value);
-//        }
 
         return map;
     }
