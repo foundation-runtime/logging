@@ -3,18 +3,29 @@ package com.cisco.oss.foundation.logging.transactions;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.*;
 
 /**
  * Class for MessageQueue transactions logging
  * @author abrandwi
  *
  */
+@org.springframework.stereotype.Component
 public class MessageQueueLogger extends TransactionLogger {
 
   private enum MessageQueuePropertyKey {NotificationType};
   private enum MessageQueueVerbosePropertyKey {NotificationBody};
 
   private String notificationType;
+
+  @Autowired
+  private Environment environment;
+
+  public MessageQueueLogger(){
+    ConfigurationUtil.setConfigSource(environment);
+  }
 
   public static void start(final Logger logger, final Logger auditor, String notification) {
     if(!createLoggingAction(logger, auditor, new MessageQueueLogger())) {
