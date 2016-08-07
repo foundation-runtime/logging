@@ -1,10 +1,15 @@
 package com.cisco.oss.foundation.logging.transactions;
 
+import com.cisco.oss.foundation.configuration.ConfigurationFactory;
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -17,12 +22,20 @@ import java.util.Map;
  *
  * @author abrandwi
  */
+@org.springframework.stereotype.Component
 public class HttpSpringLogger extends TransactionLogger {
 
     private enum HttpPropertyKey {Summary, Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody}
-
-
     private enum HttpVerbosePropertyKey {RequestHeaders, RequestBody, ResponseHeaders, ResponseBody}
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpSpringLogger.class);
+
+    @Autowired
+    private Environment environment;
+
+    public HttpSpringLogger(){
+        ConfigurationUtil.setConfigSource(environment);
+    }
 
 
 // Those headers will be used when we'll add sourceIdentity to properties

@@ -1,10 +1,16 @@
 package com.cisco.oss.foundation.logging.transactions;
 
+import com.cisco.oss.foundation.configuration.ConfigurationFactory;
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 
 import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MultivaluedMap;
@@ -22,10 +28,23 @@ import java.util.Map.Entry;
  * @author abrandwi
  *
  */
+@org.springframework.stereotype.Component
 public class HttpLogger extends TransactionLogger {
 
-    private enum HttpPropertyKey {Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody};
-    private enum HttpVerbosePropertyKey {RequestHeaders, RequestBody, ResponseHeaders, ResponseBody};
+
+
+    private enum HttpPropertyKey {Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody;};
+    private enum HttpVerbosePropertyKey {RequestHeaders, RequestBody, ResponseHeaders, ResponseBody;};
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpLogger.class);
+
+    @Autowired
+    private Environment environment;
+
+    public HttpLogger(){
+        ConfigurationUtil.setConfigSource(environment);
+    }
+
 
 // Those headers will be used when we'll add sourceIdentity to properties
 //	private static final String SOURCE_TYPE_HEADER = "Source-Type"; // Cisco header (used by UPM): Should contain the type of machine sent the request (e.g. UPM, TSTVM) - currently won't be sent to PPS

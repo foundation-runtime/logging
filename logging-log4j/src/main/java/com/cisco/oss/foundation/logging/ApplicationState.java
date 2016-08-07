@@ -84,7 +84,7 @@ public enum ApplicationState implements ApplicationStateInterface{
         String flowContext = (String) MDC.get("flowCtxt");
 		MDC.remove("flowCtxt");
         LOGGER.log(FQCN, getLog4jLevel(level), message, null);
-        if (flowContext != null) {
+            if (flowContext != null) {
    			MDC.put("flowCtxt", flowContext);
    		}
         appState.put(key, newValue);
