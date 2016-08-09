@@ -20,15 +20,15 @@ public enum ConfigurationUtil implements FoundationConfigurationListener {
     private Environment environment;
 
     ConfigurationUtil() {
-        refresh();
+
     }
 
     @Override
     public void configurationChanged() {
-        refresh();
+        reloadConfig();
     }
 
-    private void refresh() {
+    private void reloadConfig() {
         if (environment == null) {
             verbose = ConfigurationFactory.getConfiguration().getBoolean("logging.verbose", false);
         }else{
@@ -56,5 +56,7 @@ public enum ConfigurationUtil implements FoundationConfigurationListener {
         if (environment != null && !configuredReady){
             INSTANCE.setEnvironment(environment);
         }
+
+        INSTANCE.reloadConfig();
     }
 }
