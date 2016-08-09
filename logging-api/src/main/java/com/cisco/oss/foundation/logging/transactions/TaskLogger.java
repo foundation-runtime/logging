@@ -1,6 +1,6 @@
 package com.cisco.oss.foundation.logging.transactions;
 
-import org.apache.log4j.Level;
+import org.slf4j.event.Level;
 import org.slf4j.Logger;
 
 /**

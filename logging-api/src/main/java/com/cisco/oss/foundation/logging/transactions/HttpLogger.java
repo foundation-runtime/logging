@@ -1,22 +1,18 @@
 package com.cisco.oss.foundation.logging.transactions;
 
-import com.cisco.oss.foundation.configuration.ConfigurationFactory;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Level;
-import org.slf4j.Logger;
-
 import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.*;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +24,6 @@ import java.util.Map.Entry;
  * @author abrandwi
  *
  */
-@org.springframework.stereotype.Component
 public class HttpLogger extends TransactionLogger {
 
 
@@ -42,6 +37,11 @@ public class HttpLogger extends TransactionLogger {
     private Environment environment;
 
     public HttpLogger(){
+
+    }
+
+    @PostConstruct
+    public void init(){
         ConfigurationUtil.setConfigSource(environment);
     }
 

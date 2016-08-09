@@ -1,16 +1,15 @@
 package com.cisco.oss.foundation.logging.transactions;
 
-import com.cisco.oss.foundation.configuration.ConfigurationFactory;
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Level;
+import org.slf4j.event.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.*;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import java.util.Map;
  *
  * @author abrandwi
  */
-@org.springframework.stereotype.Component
 public class HttpSpringLogger extends TransactionLogger {
 
     private enum HttpPropertyKey {Summary, Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody}
@@ -34,6 +32,11 @@ public class HttpSpringLogger extends TransactionLogger {
     private Environment environment;
 
     public HttpSpringLogger(){
+
+    }
+
+    @PostConstruct
+    public void init(){
         ConfigurationUtil.setConfigSource(environment);
     }
 

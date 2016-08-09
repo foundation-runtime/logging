@@ -1,16 +1,15 @@
 package com.cisco.oss.foundation.logging.transactions;
 
+import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
+import com.cisco.oss.foundation.ip.utils.IpUtils;
+import org.slf4j.event.Level;
+import org.slf4j.Logger;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.log4j.Level;
-import org.slf4j.Logger;
-
-import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
-import com.cisco.oss.foundation.ip.utils.IpUtils;
 
 /**
  * Abstract class for transactions logging
@@ -188,7 +187,6 @@ public abstract class TransactionLogger {
    * @param logger
    * @param auditor
    * @param instance
-   * @param flowContextId
    * @return whether new instance was set to thread-local
    */
   protected static boolean createLoggingAction(final Logger logger, final Logger auditor, final TransactionLogger instance) {
