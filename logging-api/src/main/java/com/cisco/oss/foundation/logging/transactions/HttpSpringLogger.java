@@ -67,6 +67,10 @@ public class HttpSpringLogger extends TransactionLogger {
 
     public static void success( ResponseEntity response) {
         HttpSpringLogger httpSpringLogger = (HttpSpringLogger) TransactionLogger.getInstance();
+        success(response, httpSpringLogger);
+    }
+
+    public static void success(ResponseEntity response, HttpSpringLogger httpSpringLogger) {
         if (httpSpringLogger == null) {
             return;
         }
@@ -76,6 +80,10 @@ public class HttpSpringLogger extends TransactionLogger {
 
     public static void failure(final ResponseEntity response) {
         HttpSpringLogger httpSpringLogger = (HttpSpringLogger) TransactionLogger.getInstance();
+        failure(response, httpSpringLogger);
+    }
+
+    public static void failure(ResponseEntity response, HttpSpringLogger httpSpringLogger) {
         if (httpSpringLogger == null) {
             return;
         }

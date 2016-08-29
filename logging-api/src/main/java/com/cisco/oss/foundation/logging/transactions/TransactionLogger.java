@@ -110,6 +110,10 @@ public abstract class TransactionLogger {
   public static void logComponent(final String type, final String details) {
 
     TransactionLogger instance = getInstance();
+    logComponent(type, details, instance);
+  }
+
+  public static void logComponent(String type, String details, TransactionLogger instance) {
     if (instance == null || !instance.logger.isDebugEnabled()) {
       return;
     }
