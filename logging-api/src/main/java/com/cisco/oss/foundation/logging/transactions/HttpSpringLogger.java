@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class HttpSpringLogger extends TransactionLogger {
 
-    private enum HttpPropertyKey {Summary, Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody}
+    //private enum HttpPropertyKey {Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody}
     private enum HttpVerbosePropertyKey {RequestHeaders, RequestBody, ResponseHeaders, ResponseBody}
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpSpringLogger.class);
@@ -49,6 +49,7 @@ public class HttpSpringLogger extends TransactionLogger {
 
 
     public static void start(final Logger logger, final Logger auditor, final HttpServletRequest request) {
+
         start(logger, auditor, request, null);
     }
 
@@ -127,10 +128,10 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void addPropertiesStart(final HttpServletRequest request, String requestBody) {
         super.addPropertiesStart("HTTP");
 //        this.properties.put(HttpPropertyKey.Summary.name(),"Summary");
-        this.properties.put(HttpPropertyKey.SourceName.name(), request.getRemoteHost());
-        this.properties.put(HttpPropertyKey.SourcePort.name(), String.valueOf(request.getRemotePort()));
-        this.properties.put(HttpPropertyKey.Method.name(), request.getMethod());
-        this.properties.put(HttpPropertyKey.URL.name(), getFullURL(request));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.IP_SRC.name()), request.getRemoteHost());
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.PORT_SRC.name()), String.valueOf(request.getRemotePort()));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_METHOD.name()), request.getMethod());
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.URL.name()), getFullURL(request));
 
         addVerbosePropertiesStart(request, requestBody);
     }
@@ -155,13 +156,13 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void addPropertiesSuccess(final ResponseEntity response) {
         super.addPropertiesSuccess();
 
-        this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatusCode()));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatusCode()));
         Object body = response.getBody();
         if ( body != null ) {
             if (body instanceof String) {
-                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(body.toString().length()));
+                this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), String.valueOf(body.toString().length()));
             } else {
-                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), "chunked");
+                this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), "chunked");
             }
         }
 
@@ -193,10 +194,10 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void addPropertiesFailure(final ResponseEntity response) {
         super.addPropertiesFailure();
 
-        this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatusCode()));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatusCode()));
 //        try {
         if ( (response.getBody() != null) && (response.getBody() instanceof String) ) {
-            this.properties.put(HttpPropertyKey.ResponseBody.name(), (String)response.getBody());
+            this.properties.put(loggingKeys.getKeyValue(LoggingKeys.MSG.name()), (String)response.getBody());
         }
 //        } catch (IOException e) {
 //            logger.error("Failed to parse HTTP response" + e.getMessage(), e);

@@ -28,7 +28,7 @@ public class HttpLogger extends TransactionLogger {
 
 
 
-    private enum HttpPropertyKey {Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody;};
+    //private enum HttpPropertyKey {Method, SourceName, SourcePort, URL, ResponseStatusCode, ResponseContentLength, ResponseBody;};
     private enum HttpVerbosePropertyKey {RequestHeaders, RequestBody, ResponseHeaders, ResponseBody;};
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpLogger.class);
@@ -170,10 +170,10 @@ public class HttpLogger extends TransactionLogger {
     protected void addPropertiesStart(final HttpServletRequest request, String requestBody) {
         super.addPropertiesStart("HTTP");
 
-        this.properties.put(HttpPropertyKey.SourceName.name(), request.getRemoteHost());
-        this.properties.put(HttpPropertyKey.SourcePort.name(), String.valueOf(request.getRemotePort()));
-        this.properties.put(HttpPropertyKey.Method.name(), request.getMethod());
-        this.properties.put(HttpPropertyKey.URL.name(), getFullURL(request));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.IP_SRC.name()), request.getRemoteHost());
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.PORT_SRC.name()), String.valueOf(request.getRemotePort()));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_METHOD.name()), request.getMethod());
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.URL.name()), getFullURL(request));
 
         addVerbosePropertiesStart(request, requestBody);
     }
@@ -198,9 +198,9 @@ public class HttpLogger extends TransactionLogger {
     protected void addPropertiesSuccess(final HttpResponse response) {
         super.addPropertiesSuccess();
 
-        this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatus()));
+        this.properties.put(  loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatus()));
         if ( response.getBody() != null ) {
-            this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(response.getBody().length()));
+            this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), String.valueOf(response.getBody().length()));
         }
 
         addVerbosePropertiesSuccess(response);
@@ -209,12 +209,12 @@ public class HttpLogger extends TransactionLogger {
     protected void addPropertiesSuccess(final Response response) {
         super.addPropertiesSuccess();
 
-        this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatus()));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatus()));
         if ( response.getEntity() != null ) {
             if ( !(response.getEntity() instanceof StreamingOutput) ) {
-                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), String.valueOf(response.getEntity().toString().length()));
+                this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), String.valueOf(response.getEntity().toString().length()));
             } else {
-                this.properties.put(HttpPropertyKey.ResponseContentLength.name(), "chunked");
+                this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), "chunked");
             }
         }
 
@@ -250,20 +250,20 @@ public class HttpLogger extends TransactionLogger {
     protected void addPropertiesFailure(final Response response) {
         super.addPropertiesFailure();
 
-        this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatus()));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatus()));
 
         if (response.getEntity() != null) {
-            this.properties.put(HttpPropertyKey.ResponseBody.name(), response.getEntity().toString());
+            this.properties.put(loggingKeys.getKeyValue(LoggingKeys.MSG.name()), response.getEntity().toString());
         }
     }
 
     protected void addPropertiesFailure(final HttpResponse response) {
         super.addPropertiesFailure();
 
-        this.properties.put(HttpPropertyKey.ResponseStatusCode.name(), String.valueOf(response.getStatus()));
+        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatus()));
 
         if (response.getBody() != null) {
-            this.properties.put(HttpPropertyKey.ResponseBody.name(), response.getBody().toString());
+            this.properties.put(loggingKeys.getKeyValue(LoggingKeys.MSG.name()), response.getBody().toString());
         }
     }
 

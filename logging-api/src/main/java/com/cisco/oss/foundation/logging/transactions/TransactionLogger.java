@@ -5,10 +5,8 @@ import com.cisco.oss.foundation.ip.utils.IpUtils;
 import org.slf4j.event.Level;
 import org.slf4j.Logger;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -33,8 +31,13 @@ public abstract class TransactionLogger {
   protected Map<String, String> properties; 			// Contains key-value properties to log
   protected Exception exception;
 
-  protected static final String firstSeparator = " | ";
+  //protected static final String firstSeparator = " | ";
   protected static final String secondSeparator = " $ ";
+
+  private  String separator = " | ";
+  protected static LoggingKeysHandler loggingKeys;
+  private static InputStream keysPropStream = TransactionLogger.class.getResourceAsStream("/loggingKeys.properties");
+
 
   // ********************************* Private properties *********************************
 
@@ -44,6 +47,8 @@ public abstract class TransactionLogger {
   private ComponentsMultiThread componentsMultiThread; // Contains processing time of components during multi-threaded transaction
   private Component total;
   private boolean finished;
+
+
 
   // ********************************* Public methods *********************************
 
@@ -61,6 +66,7 @@ public abstract class TransactionLogger {
    */
   public static void setInstance(TransactionLogger instance) {
     LOGGING_ACTION.set(instance);
+
   }
 
 
@@ -182,6 +188,33 @@ public abstract class TransactionLogger {
     }
   }
 
+
+  public static void setSeparator(String separator) {
+
+    TransactionLogger instance = getInstance();
+    if (instance != null) {
+      instance.separator = separator;
+    }
+
+  }
+
+
+  public static void setKeysPropStream(InputStream keysPropStream) {
+    TransactionLogger.keysPropStream = keysPropStream;
+  }
+
+
+  public static InputStream getKeysPropStream() {
+    return keysPropStream;
+  }
+
+
+
+  public String getSeparator() {
+    return separator;
+  }
+
+
   // ********************************* Protected methods *********************************
 
   /**
@@ -196,8 +229,9 @@ public abstract class TransactionLogger {
   protected static boolean createLoggingAction(final Logger logger, final Logger auditor, final TransactionLogger instance) {
     TransactionLogger oldInstance = getInstance();
     if (oldInstance == null || oldInstance.finished) {
-      initInstance(instance, logger, auditor);
-      setInstance(instance);
+        loggingKeys =new LoggingKeysHandler(getKeysPropStream());
+        initInstance(instance, logger, auditor);
+        setInstance(instance);
       return true;
     }
     return false; // Really not sure it can happen - since we arrive here in a new thread of transaction I think it's ThreadLocal should be empty. But leaving this code just in case...
@@ -213,23 +247,23 @@ public abstract class TransactionLogger {
    * @param type - of transaction
    */
   protected void addPropertiesStart(String type) {
-    this.properties.put(PropertyKey.Host.name(), IpUtils.getHostName());
-    this.properties.put(PropertyKey.Type.name(), type);
-    this.properties.put(PropertyKey.Status.name(), Status.Start.name());
+    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Host.name()), IpUtils.getHostName());
+    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Type.name()), type);
+    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Status.name()), Status.Start.name());
   }
 
   /**
    * Add properties to 'properties' map on transaction success
    */
   protected void addPropertiesSuccess() {
-    this.properties.put(PropertyKey.Status.name(), Status.Success.name());
+    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Status.name()), Status.Success.name());
   }
 
   /**
    * Add properties to 'properties' map on transaction failure
    */
   protected void addPropertiesFailure() {
-    this.properties.put(PropertyKey.Status.name(), Status.Failure.name());
+    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Status.name()), Status.Failure.name());
   }
 
   /**
@@ -272,7 +306,7 @@ public abstract class TransactionLogger {
    * @param level - of logging
    */
   protected void writePropertiesToLog(Logger logger, Level level) {
-    writeToLog(logger, level, getMapAsString(this.properties, firstSeparator), null);
+    writeToLog(logger, level, getMapAsString(this.properties, separator), null);
 
     if (this.exception != null) {
       writeToLog(this.logger, Level.ERROR, "Error:", this.exception);
