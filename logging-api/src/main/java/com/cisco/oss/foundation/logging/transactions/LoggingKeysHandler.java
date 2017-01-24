@@ -15,7 +15,7 @@ public class LoggingKeysHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingKeysHandler.class);
 
-    private HashMap<String, String> keysMap;
+    private Map<String, String> keysMap;
 
     //generate a map with the logging available keys
     public LoggingKeysHandler(InputStream propertiesInputStream) {
@@ -31,7 +31,8 @@ public class LoggingKeysHandler {
         catch (Exception e) {
             LOGGER.error("Some issue finding or loading logging keys properties file. " + e.getMessage());
         }
-        keysMap = new HashMap<String, String>((Map) properties);
+        keysMap = (Map)properties;
+
     }
 
     //get the key name to use in log from the logging keys map

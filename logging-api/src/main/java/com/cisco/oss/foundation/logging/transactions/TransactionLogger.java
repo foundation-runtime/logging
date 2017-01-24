@@ -2,6 +2,7 @@ package com.cisco.oss.foundation.logging.transactions;
 
 import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
 import com.cisco.oss.foundation.ip.utils.IpUtils;
+import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 import org.slf4j.Logger;
 
@@ -22,6 +23,8 @@ public abstract class TransactionLogger {
   // ********************************* Protected properties *********************************
   protected enum PropertyKey {Host, Type, Status, ErrorMessage};
   protected enum Status {Start, Success, Failure};
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(TransactionLogger.class);
 
   protected Logger logger;
   protected Logger auditor;
@@ -200,7 +203,12 @@ public abstract class TransactionLogger {
 
 
   public static void setKeysPropStream(InputStream keysPropStream) {
-    TransactionLogger.keysPropStream = keysPropStream;
+    if(keysPropStream == null){
+      LOGGER.error("logging-keys properties stream can't be null, logger will use default keys");
+    }
+    else {
+      TransactionLogger.keysPropStream = keysPropStream;
+    }
   }
 
 
