@@ -86,7 +86,7 @@ public class HttpSpringLogger extends TransactionLogger {
         success(response, httpSpringLogger);
     }
 
-    public static void successAsync(ResponseEntity response, HttpSpringLogger httpSpringLogger) {FlowContextFactory.deserializeNativeFlowContext(httpSpringLogger.getFlowContextAsync(httpSpringLogger));
+    public static void successAsync(ResponseEntity response, HttpSpringLogger httpSpringLogger) {FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(httpSpringLogger));
         httpSpringLogger.successInstance(response);
     }
 
@@ -112,7 +112,7 @@ public class HttpSpringLogger extends TransactionLogger {
     }
 
     public static void failureAsync(ResponseEntity response, HttpSpringLogger httpSpringLogger) {
-        FlowContextFactory.deserializeNativeFlowContext(httpSpringLogger.getFlowContextAsync(httpSpringLogger));
+        FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(httpSpringLogger));
         httpSpringLogger.failureInstance(response);
     }
 
@@ -220,10 +220,10 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void addPropertiesFailure(final ResponseEntity response) {
         super.addPropertiesFailure();
 
-        putProperty(LoggingKeys.HTTP_CODE.name(),String.valueOf(response.getStatusCode()));//this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatusCode()));
+        putProperty(LoggingKeys.HTTP_CODE.name(),String.valueOf(response.getStatusCode()));
 //        try {
         if ( (response.getBody() != null) && (response.getBody() instanceof String) ) {
-            putProperty(LoggingKeys.MSG.name(),(String)response.getBody());//this.properties.put(loggingKeys.getKeyValue(LoggingKeys.MSG.name()), (String)response.getBody());
+            putProperty(LoggingKeys.MSG.name(),(String)response.getBody());
         }
 //        } catch (IOException e) {
 //            logger.error("Failed to parse HTTP response" + e.getMessage(), e);
