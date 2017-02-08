@@ -1,5 +1,6 @@
 package com.cisco.oss.foundation.logging.transactions;
 
+import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.event.Level;
@@ -53,6 +54,20 @@ public class HttpSpringLogger extends TransactionLogger {
         start(logger, auditor, request, null);
     }
 
+    public static HttpSpringLogger startAsync(final Logger logger, final Logger auditor, final HttpServletRequest request) {
+        return startAsync(logger, auditor, request, null);
+    }
+
+    public static HttpSpringLogger startAsync(final Logger logger, final Logger auditor, final HttpServletRequest request, final String requestBody) {
+        HttpSpringLogger httpSpringLogger = new HttpSpringLogger();
+        if(!createLoggingActionAsync(logger, auditor, httpSpringLogger)) {
+            return null;
+        }
+
+        httpSpringLogger.startInstance(request, requestBody);
+        return httpSpringLogger;
+    }
+
     public static void start(final Logger logger, final Logger auditor, final HttpServletRequest request, final String requestBody) {
         if (!TransactionLogger.createLoggingAction(logger, auditor, new HttpSpringLogger())) {
             return;
@@ -69,6 +84,10 @@ public class HttpSpringLogger extends TransactionLogger {
     public static void success( ResponseEntity response) {
         HttpSpringLogger httpSpringLogger = (HttpSpringLogger) TransactionLogger.getInstance();
         success(response, httpSpringLogger);
+    }
+
+    public static void successAsync(ResponseEntity response, HttpSpringLogger httpSpringLogger) {FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(httpSpringLogger));
+        httpSpringLogger.successInstance(response);
     }
 
     public static void success(ResponseEntity response, HttpSpringLogger httpSpringLogger) {
@@ -89,6 +108,11 @@ public class HttpSpringLogger extends TransactionLogger {
             return;
         }
 
+        httpSpringLogger.failureInstance(response);
+    }
+
+    public static void failureAsync(ResponseEntity response, HttpSpringLogger httpSpringLogger) {
+        FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(httpSpringLogger));
         httpSpringLogger.failureInstance(response);
     }
 
@@ -128,13 +152,15 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void addPropertiesStart(final HttpServletRequest request, String requestBody) {
         super.addPropertiesStart("HTTP");
 //        this.properties.put(HttpPropertyKey.Summary.name(),"Summary");
-        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.IP_SRC.name()), request.getRemoteHost());
-        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.PORT_SRC.name()), String.valueOf(request.getRemotePort()));
-        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_METHOD.name()), request.getMethod());
-        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.URL.name()), getFullURL(request));
+        putProperty(LoggingKeys.IP_SRC.name(), request.getRemoteHost() );
+        putProperty(LoggingKeys.PORT_SRC.name(), String.valueOf(request.getRemotePort()) );
+        putProperty(LoggingKeys.HTTP_METHOD.name(), request.getMethod() );
+        putProperty(LoggingKeys.URL.name(),  getFullURL(request) );
+
 
         addVerbosePropertiesStart(request, requestBody);
     }
+
 
     public static boolean isVerbose() {
         return ConfigurationUtil.INSTANCE.isVerbose();
@@ -156,13 +182,13 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void addPropertiesSuccess(final ResponseEntity response) {
         super.addPropertiesSuccess();
 
-        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatusCode()));
+        putProperty(LoggingKeys.HTTP_CODE.name(), String.valueOf(response.getStatusCode()) );//this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatusCode()));
         Object body = response.getBody();
         if ( body != null ) {
             if (body instanceof String) {
-                this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), String.valueOf(body.toString().length()));
+                putProperty(LoggingKeys.ResponseContentLength.name(), String.valueOf(body.toString().length()));//this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), String.valueOf(body.toString().length()));
             } else {
-                this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), "chunked");
+                putProperty(LoggingKeys.ResponseContentLength.name(),"chunked" );//this.properties.put(loggingKeys.getKeyValue(LoggingKeys.ResponseContentLength.name()), "chunked");
             }
         }
 
@@ -194,10 +220,10 @@ public class HttpSpringLogger extends TransactionLogger {
     protected void addPropertiesFailure(final ResponseEntity response) {
         super.addPropertiesFailure();
 
-        this.properties.put(loggingKeys.getKeyValue(LoggingKeys.HTTP_CODE.name()), String.valueOf(response.getStatusCode()));
+        putProperty(LoggingKeys.HTTP_CODE.name(),String.valueOf(response.getStatusCode()));
 //        try {
         if ( (response.getBody() != null) && (response.getBody() instanceof String) ) {
-            this.properties.put(loggingKeys.getKeyValue(LoggingKeys.MSG.name()), (String)response.getBody());
+            putProperty(LoggingKeys.MSG.name(),(String)response.getBody());
         }
 //        } catch (IOException e) {
 //            logger.error("Failed to parse HTTP response" + e.getMessage(), e);

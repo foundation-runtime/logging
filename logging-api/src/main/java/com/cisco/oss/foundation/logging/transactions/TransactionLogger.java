@@ -2,10 +2,12 @@ package com.cisco.oss.foundation.logging.transactions;
 
 import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
 import com.cisco.oss.foundation.ip.utils.IpUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.Map.Entry;
@@ -34,10 +36,9 @@ public abstract class TransactionLogger {
   protected Map<String, String> properties; 			// Contains key-value properties to log
   protected Exception exception;
 
-  //protected static final String firstSeparator = " | ";
   protected static final String secondSeparator = " $ ";
 
-  private  String separator = " | ";
+  private static String separator = " | ";
   protected static LoggingKeysHandler loggingKeys;
   private static InputStream keysPropStream = TransactionLogger.class.getResourceAsStream("/loggingKeys.properties");
 
@@ -192,12 +193,9 @@ public abstract class TransactionLogger {
   }
 
 
-  public static void setSeparator(String separator) {
+  public static void setSeparator(String separatorChar) {
 
-    TransactionLogger instance = getInstance();
-    if (instance != null) {
-      instance.separator = separator;
-    }
+      separator = separatorChar;
 
   }
 
@@ -209,11 +207,6 @@ public abstract class TransactionLogger {
     else {
       TransactionLogger.keysPropStream = keysPropStream;
     }
-  }
-
-
-  public static InputStream getKeysPropStream() {
-    return keysPropStream;
   }
 
 
@@ -237,7 +230,9 @@ public abstract class TransactionLogger {
   protected static boolean createLoggingAction(final Logger logger, final Logger auditor, final TransactionLogger instance) {
     TransactionLogger oldInstance = getInstance();
     if (oldInstance == null || oldInstance.finished) {
-        loggingKeys =new LoggingKeysHandler(getKeysPropStream());
+      if(loggingKeys == null) {
+        loggingKeys = new LoggingKeysHandler(keysPropStream);
+      }
         initInstance(instance, logger, auditor);
         setInstance(instance);
       return true;
@@ -246,6 +241,9 @@ public abstract class TransactionLogger {
   }
 
   protected static boolean createLoggingActionAsync(final Logger logger, final Logger auditor, final TransactionLogger instance) {
+    if(loggingKeys == null) {
+    loggingKeys = new LoggingKeysHandler(keysPropStream);
+    }
     initInstance(instance, logger, auditor);
     return true;
   }
@@ -255,23 +253,23 @@ public abstract class TransactionLogger {
    * @param type - of transaction
    */
   protected void addPropertiesStart(String type) {
-    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Host.name()), IpUtils.getHostName());
-    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Type.name()), type);
-    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Status.name()), Status.Start.name());
+    putProperty(PropertyKey.Host.name(), IpUtils.getHostName());
+    putProperty(PropertyKey.Type.name(), type);
+    putProperty(PropertyKey.Status.name(), Status.Start.name());
   }
 
   /**
    * Add properties to 'properties' map on transaction success
    */
   protected void addPropertiesSuccess() {
-    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Status.name()), Status.Success.name());
+    putProperty(PropertyKey.Status.name(), Status.Success.name());
   }
 
   /**
    * Add properties to 'properties' map on transaction failure
    */
   protected void addPropertiesFailure() {
-    this.properties.put(loggingKeys.getKeyValue(PropertyKey.Status.name()), Status.Failure.name());
+    putProperty(PropertyKey.Status.name(), Status.Failure.name());
   }
 
   /**
@@ -297,14 +295,13 @@ public abstract class TransactionLogger {
     }
 
     for (Entry<String, Long> entry : mapComponentTimes.entrySet()) {
-      this.properties.put(entry.getKey(), entry.getValue() + "ms");
+      putProperty(entry.getKey(), entry.getValue() + "ms");
     }
 
     for (Entry<String, Long> entry : mapComponentInvocations.entrySet()) {
-        this.properties.put(entry.getKey(), entry.getValue().toString());
+      putProperty(entry.getKey(), entry.getValue().toString());
     }
-    
-    this.properties.put(TOTAL_COMPONENT, this.total.getTime() + "ms");
+    putProperty(TOTAL_COMPONENT, this.total.getTime() + "ms");
   }
 
   /**
@@ -419,4 +416,12 @@ public abstract class TransactionLogger {
     mapComponentInvocations.put(key, invocationComponent);
   }
 
+
+  protected void putProperty(String key , String value) {
+
+    String keyName = loggingKeys.getKeyValue(key);
+    if (keyName != ""){
+      this.properties.put(keyName, value);
+    }
+  }
 }

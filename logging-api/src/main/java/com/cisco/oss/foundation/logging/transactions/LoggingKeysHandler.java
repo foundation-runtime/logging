@@ -27,6 +27,7 @@ public class LoggingKeysHandler {
         Properties properties = new Properties();
         try {
             properties.load(propertiesInputStream);
+            propertiesInputStream.close();
         }
         catch (Exception e) {
             LOGGER.error("Some issue finding or loading logging keys properties file. " + e.getMessage());
@@ -42,7 +43,14 @@ public class LoggingKeysHandler {
             return keyName;
         }
         return ""; //key wasn't defined in keys properties file
-
     }
+
+    public int getMapSize(){
+     return keysMap.size();
+    }
+
+
+
+
 
 }
