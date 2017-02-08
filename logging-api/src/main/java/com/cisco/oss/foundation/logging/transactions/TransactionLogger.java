@@ -422,6 +422,8 @@ public abstract class TransactionLogger {
     String keyName = loggingKeys.getKeyValue(key);
     if (keyName != ""){
       this.properties.put(keyName, value);
+    } else {
+      this.properties.put(key, value);
     }
   }
 }
