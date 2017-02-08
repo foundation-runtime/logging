@@ -20,7 +20,7 @@ public enum ConfigurationUtil implements FoundationConfigurationListener {
     private Environment environment;
 
     ConfigurationUtil() {
-
+        reloadConfig();
     }
 
     @Override
