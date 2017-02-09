@@ -59,7 +59,7 @@
     </developers>
     <properties>
         <foundation-common-base-version>1.0.1-5</foundation-common-base-version>
-        <logging-api-version>1.2.0-2</logging-api-version>
+        <logging-api-version>1.2.0-4</logging-api-version>
         <commons-version>1.0.2-1</commons-version>
         <javaVersion>1.8</javaVersion>
     </properties>
