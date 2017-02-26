@@ -193,6 +193,20 @@ public abstract class TransactionLogger {
   }
 
 
+  /**
+   * Add property to 'properties' map on transaction
+   * @param key - of property
+   * @param value - of property
+   * @param transactionLogger
+   */
+  public static void addAsyncProperty(String key, String value, TransactionLogger transactionLogger) {
+
+    FlowContextFactory.deserializeNativeFlowContext(transactionLogger.getFlowContextAsync(transactionLogger));
+    transactionLogger.properties.put(key, value);
+
+  }
+
+
   public static void setSeparator(String separatorChar) {
 
       separator = separatorChar;
