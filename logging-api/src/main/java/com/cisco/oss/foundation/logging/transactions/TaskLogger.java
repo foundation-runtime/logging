@@ -1,5 +1,6 @@
 package com.cisco.oss.foundation.logging.transactions;
 
+import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
 import org.slf4j.event.Level;
 import org.slf4j.Logger;
 
@@ -26,6 +27,18 @@ public class TaskLogger extends JobLogger{
         taskLogger.startInstance(taskName);
     }
 
+    public static TaskLogger startAsync(final Logger logger, final Logger auditor, final String taskName) {
+
+        TaskLogger taskLogger = new TaskLogger();
+        if (!createLoggingAction(logger, auditor, taskLogger)) {
+            return null;
+        }
+
+        taskLogger.startInstance(taskName);
+        return taskLogger;
+    }
+
+
     public static void success() {
         TaskLogger taskLogger = (TaskLogger) getInstance();
         if (taskLogger == null) {
@@ -33,6 +46,15 @@ public class TaskLogger extends JobLogger{
         }
 
         taskLogger.successInstance(true);
+    }
+
+    public static void successAsync(TaskLogger taskLogger) {
+
+        FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(taskLogger));
+        taskLogger.successInstance(true);
+
+
+
     }
     
     public static void success(boolean handledNotification) {

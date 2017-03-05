@@ -86,7 +86,8 @@ public class HttpSpringLogger extends TransactionLogger {
         success(response, httpSpringLogger);
     }
 
-    public static void successAsync(ResponseEntity response, HttpSpringLogger httpSpringLogger) {FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(httpSpringLogger));
+    public static void successAsync(ResponseEntity response, HttpSpringLogger httpSpringLogger) {
+        FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(httpSpringLogger));
         httpSpringLogger.successInstance(response);
     }
 
