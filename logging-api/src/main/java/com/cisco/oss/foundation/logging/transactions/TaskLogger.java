@@ -30,10 +30,7 @@ public class TaskLogger extends JobLogger{
     public static TaskLogger startAsync(final Logger logger, final Logger auditor, final String taskName) {
 
         TaskLogger taskLogger = new TaskLogger();
-        if (!createLoggingAction(logger, auditor, taskLogger)) {
-            return null;
-        }
-
+        createLoggingActionAsync(logger, auditor, taskLogger);
         taskLogger.startInstance(taskName);
         return taskLogger;
     }
