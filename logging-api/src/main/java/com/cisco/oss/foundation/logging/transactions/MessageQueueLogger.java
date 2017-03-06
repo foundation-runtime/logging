@@ -45,13 +45,11 @@ public class MessageQueueLogger extends TransactionLogger {
     messageQueueLogger.startInstance(notification);
   }
 
-  public static void startAsync(final Logger logger, final Logger auditor, String notification) {
+  public static MessageQueueLogger startAsync(final Logger logger, final Logger auditor, String notification) {
     MessageQueueLogger messageQueueLogger = new MessageQueueLogger();
-    if(!createLoggingActionAsync(logger, auditor, messageQueueLogger)) {
-      return;
-    }
-
+    createLoggingActionAsync(logger, auditor, messageQueueLogger);
     messageQueueLogger.startInstance(notification);
+    return  messageQueueLogger;
   }
 
   /**
