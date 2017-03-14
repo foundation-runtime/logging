@@ -57,7 +57,7 @@ public enum FoundationLoggerConstants {
 	/**
 	 * the default pattern if user did not override it in the log configuration file.
 	 */
-	DEFAULT_CONV_PATTERN("%d{yyyy/MM/dd HH:mm:ss.SSS}{UTC} [%c{1}] [%t]:  %audit %p: %X{flowCtxt} %sl %errorcode %throwable{full} %n"),
+	DEFAULT_CONV_PATTERN("%d{yyyy/MM/dd HH:mm:ss.SSS}{UTC} [%c{1}] [%t]:  %audit %p: [%X{flowCtxt}] %sl %errorcode %throwable{full} %n"),
 	
 	/**
 	 * 
