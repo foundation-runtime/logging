@@ -7,6 +7,14 @@ import org.slf4j.Logger;
  */
 public class ReportLogger extends SchedulerLogger {
 
+    static private String reportNameFieldName = "ReportName";
+    static private String reportBodyFieldName = "ReportBody";
+
+    static public void  setIvpFieldNames(String reportNameFieldName, String reportBodyFieldName) {
+        ReportLogger.reportNameFieldName = reportNameFieldName;
+        ReportLogger.reportBodyFieldName = reportBodyFieldName;
+    }
+
     public static void start(final Logger logger, final Logger auditor, final String reportName) {
         if(!createLoggingAction(logger, auditor, new ReportLogger())) {
             return;
@@ -23,7 +31,7 @@ public class ReportLogger extends SchedulerLogger {
 
     @Override
     protected void addPropertiesStart(String reportName) {
-        super.addPropertiesStart("Report", "ReportName", reportName);
+        super.addPropertiesStart("Report", reportNameFieldName, reportName);
     }
 
     public static void success(String reportBody) {
@@ -32,7 +40,7 @@ public class ReportLogger extends SchedulerLogger {
             return;
         }
 
-        addProperty("ReportBody", reportBody);
+        addProperty(reportBodyFieldName, reportBody);
 
         logger.successInstance();
 
