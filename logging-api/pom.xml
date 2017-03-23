@@ -30,7 +30,7 @@
     <groupId>com.cisco.oss.foundation</groupId>
     <artifactId>logging-api</artifactId>
     <name>logging-api</name>
-    <version>1.2.0-9-SNAPSHOT</version>
+    <version>1.2.0-9</version>
     <description>This project is the logging api library in the cisco vss foundation runtime</description>
     <url>https://github.com/foundation-runtime/logging/tree/master/logging-api</url>
     <packaging>jar</packaging>
@@ -65,7 +65,7 @@
         <connection>scm:git:git@github.com:foundation-runtime/logging.git</connection>
         <developerConnection>scm:git:git@github.com:foundation-runtime/logging.git</developerConnection>
         <url>https://github.com/foundation-runtime/logging.git</url>
-        <tag>HEAD</tag>
+        <tag>logging-api-1.2.0-9</tag>
     </scm>
     <organization>
         <name>Cisco</name>
