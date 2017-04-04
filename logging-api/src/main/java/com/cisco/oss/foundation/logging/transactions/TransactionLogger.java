@@ -112,6 +112,20 @@ public abstract class TransactionLogger {
     transactionLogger.components.get(type).pauseTimer();
   }
 
+  public static void addComponentDuration(final String type, final long duration) {
+      TransactionLogger instance = getInstance();
+      if (instance == null) {
+          return;
+      }
+
+      instance.components.computeIfAbsent(type, Component::new);
+      instance.components.get(type).addMillis(duration);
+  }
+
+  public static void addComponentDurationAsync(final String type, final long duration, TransactionLogger transactionLogger) {
+      FlowContextFactory.deserializeNativeFlowContext(transactionLogger.getFlowContextAsync(transactionLogger));
+      transactionLogger.components.get(type).addMillis(duration);
+  }
 
   /**
    * Log details of component processing (including processing time) to debug for current instance
@@ -132,7 +146,7 @@ public abstract class TransactionLogger {
     StringBuilder builder = new StringBuilder("Completed " + type + " request. ")
             .append(details)
             .append(" Total:")
-            .append(instance.components.get(type).getLastTime());
+            .append(instance.components.get(type).getTime());
 
     if ( printTimeUnits ) {
         builder.append("ms");

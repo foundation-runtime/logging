@@ -11,13 +11,9 @@ public class Component {
 
 	private final String componentType;
 
-    public Component( String ComponentType ) {
-        this.componentType = ComponentType;
-        this.timer		= new Timer();
-    }
-
-    public long getLastTime() {
-            return timer.getLastTime();
+    public Component( String componentType ) {
+        this.componentType = componentType;
+        this.timer		= new Timer(componentType);
     }
 
     public long getTime() {
@@ -25,15 +21,19 @@ public class Component {
     }
 
     public void startTimer() {
-    	timer.start(getComponentType());
+    	timer.start();
     }
 
     public void pauseTimer() {
-    	timer.pause(getComponentType());
+    	timer.pause();
     }
 
     public void resetTimer() {
-        timer.reset(getComponentType());
+        timer.reset();
+    }
+
+    public void addMillis(long duration) {
+        timer.addMillis(duration);
     }
 
 	public String getComponentType() {
