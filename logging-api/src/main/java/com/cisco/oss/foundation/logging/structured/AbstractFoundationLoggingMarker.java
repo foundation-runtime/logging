@@ -42,6 +42,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractFoundationLoggingMarker implements FoundationLoggingMarker {
 
@@ -126,9 +127,12 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 
 			Class<? extends FoundationLoggingMarkerFormatter> formatterClass = null;
 			try {
-				formatterClass = (Class<? extends FoundationLoggingMarkerFormatter>)Class.forName(markerClass.getName() + "Formatter");
+				formatterClass = markersMap.get(markerClass);
+				if (formatterClass == null) {
+					formatterClass = (Class<? extends FoundationLoggingMarkerFormatter>) Class.forName(markerClass.getName() + "Formatter");
+				}
 			} catch (ClassNotFoundException e) {
-				LOGGER.error("annotation processign ahs failed. " + e.toString());
+				LOGGER.error("annotation processing has failed. " + e.toString());
 			}
 			FoundationLoggingMarkerFormatter newFormatter = null;
 			if (formatterClass == null) {
@@ -588,6 +592,11 @@ public abstract class AbstractFoundationLoggingMarker implements FoundationLoggi
 			}
 		}
 
+		try {
+			TimeUnit.SECONDS.sleep(30);
+		} catch (InterruptedException e) {
+			LOGGER.trace(e.toString(), e);
+		}
 		executorService.shutdown();
 		// try {
 		// executorService.awaitTermination(15, TimeUnit.SECONDS);
