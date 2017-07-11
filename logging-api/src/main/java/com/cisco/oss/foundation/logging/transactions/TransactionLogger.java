@@ -185,6 +185,14 @@ public abstract class TransactionLogger {
   }
 
   /**
+   * Get string value of flow context for this
+   * @return string value of flow context
+   */
+  public String getFlowContextAsync(){
+    return this.flowContext;
+  }
+
+  /**
    * Add property to 'properties' map on transaction
    * @param key - of property
    * @param value - of property

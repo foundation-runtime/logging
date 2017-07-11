@@ -1,7 +1,8 @@
 package com.cisco.oss.foundation.logging.transactions;
 
-import org.slf4j.event.Level;
+import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
 import org.slf4j.Logger;
+import org.slf4j.event.Level;
 
 /**
  * Class for internal scheduler transactions logging
@@ -26,6 +27,14 @@ public class SchedulerLogger extends JobLogger{
         schedulerLogger.startInstance(schedulerName);
     }
 
+    public static SchedulerLogger startAsync(final Logger logger, final Logger auditor, final String schedulerName) {
+
+        SchedulerLogger schedulerLogger = new SchedulerLogger();
+        createLoggingActionAsync(logger, auditor, schedulerLogger);
+        schedulerLogger.startInstance(schedulerName);
+        return schedulerLogger;
+    }
+
     public static void success() {
         SchedulerLogger schedulerLogger = (SchedulerLogger) getInstance();
         if (schedulerLogger == null) {
@@ -44,6 +53,20 @@ public class SchedulerLogger extends JobLogger{
         addProperty(SchedulerPropertyKey.SchedulerResult.name(), schedulerResult);
 
         schedulerLogger.successInstance();
+
+    }
+
+    public static void successAsync(SchedulerLogger schedulerLogger) {
+
+        FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(schedulerLogger));
+        schedulerLogger.successInstance();
+
+    }
+
+    public void successAsync() {
+
+        FlowContextFactory.deserializeNativeFlowContext(this.flowContext);
+        this.successInstance();
 
     }
 
@@ -67,6 +90,10 @@ public class SchedulerLogger extends JobLogger{
 
     public static void failureAsync(final String errorMessage, SchedulerLogger schedulerLogger) {
         schedulerLogger.failureInstance(errorMessage);
+    }
+
+    public void failureAsync(final String errorMessage) {
+        this.failureInstance(errorMessage);
     }
 
     public static void addItemsHandledAsync(String handledItemsType, int handledItemsNumber, SchedulerLogger schedulerLogger) {
