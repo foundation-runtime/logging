@@ -190,7 +190,7 @@ public abstract class TransactionLogger {
    */
   public String getFlowContextAsync(){
     if (null == this.flowContext){
-      return null
+      return null;
     }
     return this.flowContext;
   }
