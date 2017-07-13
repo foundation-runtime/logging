@@ -4,4 +4,5 @@ log/
 .classpath
 .project
 .settings/
+.idea/
 
