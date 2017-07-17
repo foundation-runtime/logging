@@ -1,8 +1,8 @@
 package com.cisco.oss.foundation.logging.transactions;
 
 import com.cisco.oss.foundation.flowcontext.FlowContextFactory;
-import org.slf4j.event.Level;
 import org.slf4j.Logger;
+import org.slf4j.event.Level;
 
 /**
  * Class for internal Task transactions logging
@@ -35,7 +35,6 @@ public class TaskLogger extends JobLogger{
         return taskLogger;
     }
 
-
     public static void success() {
         TaskLogger taskLogger = (TaskLogger) getInstance();
         if (taskLogger == null) {
@@ -49,8 +48,6 @@ public class TaskLogger extends JobLogger{
 
         FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(taskLogger));
         taskLogger.successInstance(true);
-
-
 
     }
     
