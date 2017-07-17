@@ -58,7 +58,7 @@ public class SchedulerLogger extends JobLogger{
 
     public static void successAsync(SchedulerLogger schedulerLogger) {
 
-        FlowContextFactory.deserializeNativeFlowContext(TransactionLogger.getFlowContextAsync(schedulerLogger));
+        FlowContextFactory.deserializeNativeFlowContext(schedulerLogger.getFlowContextAsync());
         schedulerLogger.successInstance();
 
     }

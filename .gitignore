@@ -5,4 +5,5 @@ log/
 .project
 .settings/
 .idea/
+*/.idea
 
