@@ -16,6 +16,11 @@ public enum ConfigurationUtil implements FoundationConfigurationListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationUtil.class);
 
     private boolean verbose = false;
+    
+    private boolean allowRequestBody = false;
+    
+    private boolean allowResponseBody = false;
+
 
     private Environment environment;
 
@@ -31,8 +36,12 @@ public enum ConfigurationUtil implements FoundationConfigurationListener {
     private void reloadConfig() {
         if (environment == null) {
             verbose = ConfigurationFactory.getConfiguration().getBoolean("logging.verbose", false);
+            allowRequestBody = ConfigurationFactory.getConfiguration().getBoolean("logging.verbose.allowRequestBody", true);
+            allowResponseBody = ConfigurationFactory.getConfiguration().getBoolean("logging.verbose.allowResponseBody", true);
         }else{
             verbose = Boolean.valueOf(environment.getProperty("logging.verbose", "false"));
+            allowRequestBody = Boolean.valueOf(environment.getProperty("logging.verbose.allowRequestBody", "true"));
+            allowResponseBody = Boolean.valueOf(environment.getProperty("logging.verbose.allowResponseBody", "true"));
         }
     }
 
@@ -40,6 +49,14 @@ public enum ConfigurationUtil implements FoundationConfigurationListener {
         return verbose;
     }
 
+    public boolean allowRequestBody() {
+    	return allowRequestBody;
+    }
+    
+    public boolean allowResponseBody(){
+    	return allowResponseBody;
+    }
+    
     public void setEnvironment(Environment environment){
         this.environment = environment;
     }

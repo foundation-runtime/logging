@@ -189,7 +189,7 @@ public class HttpLogger extends TransactionLogger {
             if (requestHeaders != null) {
                 this.properties.put(HttpVerbosePropertyKey.RequestHeaders.name(), requestHeaders);
             }
-            if (requestBody != null) {
+            if (requestBody != null && ConfigurationUtil.INSTANCE.allowRequestBody()) {
                 this.properties.put(HttpVerbosePropertyKey.RequestBody.name(), StringUtils.deleteWhitespace(requestBody));
             }
         }
@@ -228,9 +228,10 @@ public class HttpLogger extends TransactionLogger {
             if (responseHeaders != null) {
                 this.properties.put(HttpVerbosePropertyKey.ResponseHeaders.name(), responseHeaders);
             }
-            if ( (response.getEntity() != null) && !(response.getEntity() instanceof StreamingOutput) ) {
-                this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getEntity().toString());
-            }
+			if ((response.getEntity() != null) && !(response.getEntity() instanceof StreamingOutput)
+					&& ConfigurationUtil.INSTANCE.allowResponseBody()) {
+				this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getEntity().toString());
+			}
         }
     }
 
@@ -241,9 +242,9 @@ public class HttpLogger extends TransactionLogger {
             if (responseHeaders != null) {
                 this.properties.put(HttpVerbosePropertyKey.ResponseHeaders.name(), responseHeaders);
             }
-            if ( response.getBody() != null) {
-                this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getBody());
-            }
+			if (response.getBody() != null && ConfigurationUtil.INSTANCE.allowResponseBody()) {
+				this.properties.put(HttpVerbosePropertyKey.ResponseBody.name(), response.getBody());
+			}
         }
     }
 
