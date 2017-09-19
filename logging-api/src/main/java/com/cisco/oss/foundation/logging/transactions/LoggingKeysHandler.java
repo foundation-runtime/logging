@@ -24,6 +24,7 @@ public class LoggingKeysHandler {
 
 
     private void loadKeysFromStream(InputStream propertiesInputStream){
+        LOGGER.info("Starting to load keys from map");
         Properties properties = new Properties();
         try {
             properties.load(propertiesInputStream);
@@ -33,6 +34,8 @@ public class LoggingKeysHandler {
             LOGGER.error("Some issue finding or loading logging keys properties file. " + e.getMessage());
         }
         keysMap = (Map)properties;
+        LOGGER.info("completed to load keys from map");
+        LOGGER.info("The logging keysMap is " + keysMap.toString());
 
     }
 
