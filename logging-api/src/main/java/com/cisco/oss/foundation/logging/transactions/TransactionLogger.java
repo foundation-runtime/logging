@@ -39,6 +39,7 @@ public abstract class TransactionLogger {
   protected static final String secondSeparator = " $ ";
 
   private static String separator = " | ";
+  private static boolean  printTimeUnits = true;
   protected static LoggingKeysHandler loggingKeys;
   private static InputStream keysPropStream = TransactionLogger.class.getResourceAsStream("/loggingKeys.properties");
 
@@ -131,8 +132,11 @@ public abstract class TransactionLogger {
     StringBuilder builder = new StringBuilder("Completed " + type + " request. ")
             .append(details)
             .append(" Total:")
-            .append(instance.components.get(type).getLastTime())
-            .append("ms");
+            .append(instance.components.get(type).getLastTime());
+
+    if ( printTimeUnits ) {
+        builder.append("ms");
+    }
 
     instance.logger.debug(builder.toString());
   }
@@ -181,6 +185,17 @@ public abstract class TransactionLogger {
   }
 
   /**
+   * Get string value of flow context for this
+   * @return string value of flow context or null if flow context field is null
+   */
+  public String getFlowContextAsync(){
+    if (null == this.flowContext){
+      return null;
+    }
+    return this.flowContext;
+  }
+
+  /**
    * Add property to 'properties' map on transaction
    * @param key - of property
    * @param value - of property
@@ -213,8 +228,11 @@ public abstract class TransactionLogger {
 
   }
 
+    public static void setPrintTimeUnits(boolean printTimeUnits) {
+        TransactionLogger.printTimeUnits = printTimeUnits;
+    }
 
-  public static void setKeysPropStream(InputStream keysPropStream) {
+    public static void setKeysPropStream(InputStream keysPropStream) {
     if(keysPropStream == null){
       LOGGER.error("logging-keys properties stream can't be null, logger will use default keys");
     }
@@ -245,15 +263,10 @@ public abstract class TransactionLogger {
     TransactionLogger oldInstance = getInstance();
     if (oldInstance == null || oldInstance.finished) {
       if(loggingKeys == null) {
-        synchronized (instance){
-          if(loggingKeys == null) {
-            logger.info("Initializing 'LoggingKeysHandler' class");
-            loggingKeys = new LoggingKeysHandler(keysPropStream);
-          }
-        }
+        loggingKeys = new LoggingKeysHandler(keysPropStream);
       }
-      initInstance(instance, logger, auditor);
-      setInstance(instance);
+        initInstance(instance, logger, auditor);
+        setInstance(instance);
       return true;
     }
     return false; // Really not sure it can happen - since we arrive here in a new thread of transaction I think it's ThreadLocal should be empty. But leaving this code just in case...
@@ -261,14 +274,7 @@ public abstract class TransactionLogger {
 
   protected static boolean createLoggingActionAsync(final Logger logger, final Logger auditor, final TransactionLogger instance) {
     if(loggingKeys == null) {
-      if(loggingKeys == null) {
-        synchronized (instance){
-          if(loggingKeys == null) {
-            logger.info("Initializing 'LoggingKeysHandler' class");
-            loggingKeys = new LoggingKeysHandler(keysPropStream);
-          }
-        }
-      }
+    loggingKeys = new LoggingKeysHandler(keysPropStream);
     }
     initInstance(instance, logger, auditor);
     return true;
@@ -321,14 +327,20 @@ public abstract class TransactionLogger {
     }
 
     for (Entry<String, Long> entry : mapComponentTimes.entrySet()) {
-      putProperty(entry.getKey(), entry.getValue() + "ms");
+      putProperty(entry.getKey(), addDuration(entry.getValue()));
     }
 
     for (Entry<String, Long> entry : mapComponentInvocations.entrySet()) {
       putProperty(entry.getKey(), entry.getValue().toString());
     }
-    putProperty(TOTAL_COMPONENT, this.total.getTime() + "ms");
+    putProperty(TOTAL_COMPONENT, addDuration(this.total.getTime()));
   }
+
+    private String addDuration(Long duration) {
+        return printTimeUnits ?
+                duration + "ms" :
+                duration.toString();
+    }
 
   /**
    * Write 'properties' map to given log in given level - with pipe separator between each entry
@@ -446,7 +458,7 @@ public abstract class TransactionLogger {
   protected void putProperty(String key , String value) {
 
     String keyName = loggingKeys.getKeyValue(key);
-    if (keyName != ""){
+    if (!Objects.equals(keyName, "")){
       this.properties.put(keyName, value);
     } else {
       this.properties.put(key, value);
