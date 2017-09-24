@@ -44,6 +44,8 @@ public abstract class TransactionLogger {
   private static InputStream keysPropStream = TransactionLogger.class.getResourceAsStream("/loggingKeys.properties");
 
 
+
+
   // ********************************* Private properties *********************************
 
   private static final ThreadLocal<TransactionLogger> LOGGING_ACTION = new ThreadLocal<TransactionLogger>(); // Contains information for current thread's transaction
@@ -263,7 +265,7 @@ public abstract class TransactionLogger {
     TransactionLogger oldInstance = getInstance();
     if (oldInstance == null || oldInstance.finished) {
       if(loggingKeys == null) {
-        synchronized (instance) {
+        synchronized (TransactionLogger.class) {
           if (loggingKeys == null) {
             logger.info("Initializing 'LoggingKeysHandler' class");
             loggingKeys = new LoggingKeysHandler(keysPropStream);
@@ -279,7 +281,7 @@ public abstract class TransactionLogger {
 
   protected static boolean createLoggingActionAsync(final Logger logger, final Logger auditor, final TransactionLogger instance) {
     if(loggingKeys == null) {
-      synchronized (instance) {
+        synchronized (TransactionLogger.class) {
         if (loggingKeys == null) {
           logger.info("Initializing 'LoggingKeysHandler' class");
           loggingKeys = new LoggingKeysHandler(keysPropStream);
