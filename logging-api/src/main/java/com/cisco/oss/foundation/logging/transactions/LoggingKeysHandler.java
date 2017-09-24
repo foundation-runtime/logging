@@ -29,11 +29,11 @@ public class LoggingKeysHandler {
         try {
             properties.load(propertiesInputStream);
             propertiesInputStream.close();
+            keysMap = (Map)properties;
         }
         catch (Exception e) {
             LOGGER.error("Some issue finding or loading logging keys properties file. " + e.getMessage());
         }
-        keysMap = (Map)properties;
         LOGGER.info("completed to load keys from map");
         LOGGER.info("The logging keysMap is " + keysMap.toString());
 
