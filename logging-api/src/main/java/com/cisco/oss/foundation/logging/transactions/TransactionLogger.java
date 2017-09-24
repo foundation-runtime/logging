@@ -263,10 +263,15 @@ public abstract class TransactionLogger {
     TransactionLogger oldInstance = getInstance();
     if (oldInstance == null || oldInstance.finished) {
       if(loggingKeys == null) {
-        loggingKeys = new LoggingKeysHandler(keysPropStream);
+        synchronized (instance) {
+          if (loggingKeys == null) {
+            logger.info("Initializing 'LoggingKeysHandler' class");
+            loggingKeys = new LoggingKeysHandler(keysPropStream);
+          }
+        }
       }
-        initInstance(instance, logger, auditor);
-        setInstance(instance);
+      initInstance(instance, logger, auditor);
+      setInstance(instance);
       return true;
     }
     return false; // Really not sure it can happen - since we arrive here in a new thread of transaction I think it's ThreadLocal should be empty. But leaving this code just in case...
@@ -274,7 +279,12 @@ public abstract class TransactionLogger {
 
   protected static boolean createLoggingActionAsync(final Logger logger, final Logger auditor, final TransactionLogger instance) {
     if(loggingKeys == null) {
-    loggingKeys = new LoggingKeysHandler(keysPropStream);
+      synchronized (instance) {
+        if (loggingKeys == null) {
+          logger.info("Initializing 'LoggingKeysHandler' class");
+          loggingKeys = new LoggingKeysHandler(keysPropStream);
+        }
+      }
     }
     initInstance(instance, logger, auditor);
     return true;
