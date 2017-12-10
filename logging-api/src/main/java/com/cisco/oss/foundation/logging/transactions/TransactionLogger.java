@@ -476,4 +476,8 @@ public abstract class TransactionLogger {
       this.properties.put(key, value);
     }
   }
+
+  public void addCustomProperty(String key , String value) {
+      putProperty(key, value);
+  }
 }
